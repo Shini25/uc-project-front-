@@ -1,0 +1,253 @@
+.container-body {
+  overflow-y: auto;
+  height: 96vh;
+}
+.fixed-header {
+  position: fixed;
+  top: 1vh;
+  width: 81%;
+  z-index: 1000;
+  background-color: #f3f3f330;
+  backdrop-filter: blur(40px); /* Ajoute un effet de flou */
+}
+
+
+.titre {
+  text-align: center;
+  margin-bottom: 10px;
+  color: #1f0090;
+
+}
+
+.search-icon {
+  position: relative;
+  top: 10px;
+  left: 30px;
+  color: #1f009069;
+
+}
+
+.search-container {
+  text-align: center;
+  margin-bottom: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.search-input {
+  padding-left: 40px !important;
+  width: 50%;
+  padding: 10px;
+  color: #1f0090;
+  border: 1px solid #12008a4a;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.search-input::placeholder {
+  color: #1f009084;
+  padding-left: 2px;
+}
+
+.search-input ul li {
+  list-style-type: none !important;
+}
+
+.search-input:focus {
+  outline: none;
+  box-shadow: 0 2px 5px #1f009064;
+}
+
+.search-results {
+  text-align: left;
+  background-color: #030cb81a;
+  width: 58%;
+  margin:  0 auto;
+  margin-top: 10% !important;
+  padding: 16px;
+  margin-top: 80px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+}
+
+.search-results ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.search-results li {
+  margin: 15px 0;
+  padding: 10px;
+}
+
+.search-results li:hover {
+  background-color: #030cb81a;
+  border-radius: 10px;
+
+}
+
+.search-results a {
+  text-decoration: none;
+  color: rgba(22, 22, 22, 0.767);
+  cursor: pointer;
+}
+
+.uc-container {
+  display: flex;
+  justify-content: center;
+  padding: 16px;
+  overflow: hidden !important; 
+  width: 100%;
+  margin-top: 120px;
+}
+
+.uc-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.uc-card-container {
+  display: flex;
+  overflow: hidden;
+  width: 80%;
+  justify-content: center;
+}
+
+.uc-card {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin: 16px;
+  width: 800px;
+  text-align: left;
+  padding: 16px;
+}
+
+.uc-card-content {
+  display: flex;
+  flex-direction: row;
+  align-items: top;
+  margin-bottom: 20px;
+}
+
+.uc-photo {
+  width: 60%;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 8px !important;
+  margin-right: 16px; /* Add some space between the photo and details */
+}
+
+.uc-details {
+  display: flex;
+  flex-direction: column;
+  padding: 0px 0px 0px 16px;
+  width: 50%;
+  background-color: rgb(255, 255, 255);
+  border: 1px solid #ffffff;
+}
+
+.chef-btn {
+  margin-top: auto; /* This will push the button to the bottom */
+  background-color:  #1f0090;
+  color: rgb(255, 255, 255) !important;
+  width: 100%;
+  border-radius: 10px;
+  height: 50px !important;
+  border-bottom: 1px solid #000000;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.6);
+  transition: transform 0.3s ease-in-out;
+}
+
+.chef-btn:hover {
+  background-color: #3200e4;
+  transform: scale(1.05);
+  transition: transform 0.3s ease-in-out;
+
+}
+
+.nav-button {
+  border: none;
+  transition: transform 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.nav-button:hover {
+  background-color: #4e456c00;
+  border-radius: 50%;
+  transform: scale(1.2);
+  transition: transform 0.3s ease-in-out;
+}
+
+.nav-button:disabled {
+  opacity: 0;
+  cursor: not-allowed;
+}
+
+.prev-button mat-icon, .next-button mat-icon {
+  font-size: 100px;
+  height: 100px;
+  width: 100px;
+  padding-bottom: 10px;
+  color: #282828;
+}
+
+mat-sidenav-container {
+  min-height: 100vh;
+  width: 100% !important;
+  overflow: hidden;
+  padding: 40px;
+  scrollbar-width: none; /* Masquer la barre de défilement sur Firefox */
+}
+
+mat-sidenav {
+  width: 100% !important;
+}
+
+.example-container {
+  width: 100%;
+  height: 100%;
+  margin: 12px;
+  border: 1px solid #555;
+}
+
+mat-drawer-content {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.fixed-button {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  z-index: 1000;
+}
+
+.nom {
+  font-weight: bold;
+}
+
+mat-expansion-panel-header mat-panel-title span {
+  font-weight: bold;
+  text-align: center !important;
+}
+
+.attributions li {
+  list-style-type: square;
+}
+
+.matricule {
+  font-weight: bold;
+}
+
+.container-body::-webkit-scrollbar {
+  display: none !important;
+}

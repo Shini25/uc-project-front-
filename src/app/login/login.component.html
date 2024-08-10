@@ -1,0 +1,47 @@
+<div class="login-container">
+
+  <div class="login-form-container">
+    <div class="login-form">
+      <div class="login-header">
+        <h1>S'authentifier</h1>
+      </div>
+      <form [formGroup]="loginForm" (ngSubmit)="login()">
+      <mat-form-field class="mat-form-field-custom" appearance="outline">
+        <mat-label>Matricule</mat-label>
+        <input matInput formControlName="matricule">
+        <mat-error *ngIf="loginForm.get('matricule')?.hasError('required')">
+          Matricule est requis
+        </mat-error>
+        <mat-error *ngIf="loginForm.get('matricule')?.hasError('minlength')">
+          Matricule doit comporter au moins 6 caractères
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Mot de passe</mat-label>
+        <input matInput formControlName="password" type="password">
+        <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+          Mot de passe est requis
+        </mat-error>
+        <mat-error *ngIf="loginForm.get('password')?.hasError('minlength')">
+          Mot de passe doit comporter au moins 8 caractères
+        </mat-error>
+      </mat-form-field>
+      <div class="forgot-password">
+        <a routerLink="/forgot-password">Mot de passe oublié ?</a>
+      </div>
+      <button mat-raised-button type="submit">Accéder</button>
+    </form>
+  </div>
+  <div *ngIf="loading" class="spinner-container">
+    <mat-spinner></mat-spinner>
+  </div>
+  <div class="security-measures">
+    <h6>Mesures de sécurité</h6>
+    <p class="security-measures-text">
+      Pour garantir la sécurité et protéger les données confidentielles, il est impératif que tous les utilisateurs s'authentifient avant d'accéder à la consultation ou à l'insertion de données. Cette mesure de sécurité est mise en place pour assurer que seules les personnes autorisées peuvent manipuler les informations sensibles, minimisant ainsi les risques de violation de données. L'authentification permet également de suivre et de contrôler les actions des utilisateurs.
+    </p>
+    <p>
+      <span>Vous n'avez pas de compte ?</span> <a routerLink="/create-account">Créez-en un !</a>
+    </p>
+  </div>
+</div>

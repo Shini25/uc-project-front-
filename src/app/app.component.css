@@ -1,0 +1,218 @@
+.sidenav {
+  background-color: #f0f0f0;
+  border-radius: 0;
+  width: 16%;
+  height: 98vh;
+  padding: 10px;
+  margin-top: 0.5%;
+  margin-left: 8px;
+  border-radius: 12px 0 0 12px;
+  box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.197);
+}
+.info-finance {
+  height: 10%;
+  width: 100%;
+  background-color: rgb(255, 255, 255);
+  border-radius: 5px;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.info {
+  border-radius: 5px;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  position: absolute;
+  bottom: 0;
+
+}
+
+.logo {
+  min-height: 50px;
+  min-width: 50px;
+  border-radius: 50px;
+  margin-right: 10px;
+  background-color:#080051;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  color: rgb(255, 255, 255);
+  font-weight: bold;
+  padding-bottom: 5px;
+}
+
+.mail {
+  font-size: small;
+  color: #000000;
+}
+.profile-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.info-text {
+  flex-grow: 1;
+}
+
+.name {
+  display: block;
+  font-weight: bold;
+}
+
+.email {
+  display: block;
+  color: gray;
+}
+
+
+.recherche {
+  text-align: center;
+}
+
+.search-container {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.search-input {
+  width: 100%;
+  padding: 8px 8px 8px 32px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  transition: border-color 0.3s;
+  color: #000000dd;
+}
+
+.search-input:focus {
+  border-color: blue;
+  outline: none;
+}
+
+.search-input::placeholder {
+  color: #888; /* Change la couleur du placeholder */
+}
+
+.search-icon {
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+  color: #ccccccad;
+}
+
+.home {
+  border-radius: 10px !important;
+  color: #ffffff;
+  background-color: #ff9800;
+  width: 100%;
+}
+
+.home mat-icon {
+  margin-right: 8px;
+  font-size: 24px;
+  color: #ffffff !important;
+}
+
+.align-start {
+  justify-content: flex-start;
+  padding-left: 16px; /* Adjust padding as needed */
+}
+
+hr{
+  width: 50%;
+  background-color: #000;
+  margin:  auto;
+}
+
+span {
+  margin-top: 5px;
+}
+
+mat-icon {
+  height: 23px;
+  width: 23px;
+}
+
+.custom-sidenav-content {
+  background-color:#f0f0f0;
+  height: 98vh;
+  margin-left: 17% !important;
+  margin-top: 0.5%;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+
+.icon-label-container {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+mat-nav-list .icon-label-container {
+  font-size: 14px;
+  color: #000000;
+  margin-bottom: 20px;
+}
+
+.icon-label-container mat-icon {
+  margin-right: 8px;
+  font-size: 24px;
+  color: #ff9800;
+}
+
+.nav-item span {
+  font-size: 16px;
+  color: #000000;
+}
+
+mat-nav-list {
+  background-color: #ffffff;
+  padding: 8px;
+}
+
+.matricule-display {
+  padding-right: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #000000b5;
+
+}
+
+.logout-icon {
+  cursor: pointer;
+  margin-left: 8px;
+  color: #ff000098;
+  text-align: right;
+  font-size: 20px;
+}
+
+.login-link {
+  text-align: center;
+  margin-top: 20%;
+}
+
+.login-link a {
+  text-decoration: none;
+}
+
+.mat-menu-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+
+.mat-menu-item:hover {
+  background-color: #f0f0f0;
+}

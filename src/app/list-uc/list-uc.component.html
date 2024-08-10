@@ -1,0 +1,60 @@
+<div class="container-body">
+  <div class="fixed-header">
+    <h4 class="titre">Chef uc</h4>
+    <div class="search-container">
+          <mat-icon class="search-icon">search</mat-icon>
+      <input type="text" placeholder="Chef UC ...." class="search-input" (input)="onSearch($event)">
+    </div>
+  </div>
+  
+  <div class="search-results" *ngIf="filteredUcs.length > 0">
+    <ul>
+      <li *ngFor="let uc of filteredUcs" (click)="selectUc(uc)">
+        <a href="javascript:void(0)">{{ uc.nom }} {{ uc.prenoms }}</a>
+      </li>
+    </ul>
+  </div>
+  
+  <div class="uc-container" *ngIf="!searchActive">
+    <div class="uc-wrapper">
+      <button (click)="prevUc()" class="nav-button prev-button" [disabled]="currentIndex === 0">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      <div class="uc-card-container">
+        <mat-card class="uc-card" *ngFor="let uc of getDisplayUcs()">
+          <div class="uc-card-content">
+            <img mat-card-image *ngIf="uc.photos && uc.photos.length > 0" [src]="'data:image/png;base64,' + uc.photos[0]" alt="Photo" class="uc-photo">
+            <div class="uc-details">
+              <p class="nom">{{ uc.nom }} </p>
+              <p>{{ uc.prenoms }}</p>
+              <p class="matricule">{{ uc.matricule }}</p>
+              <p>{{ uc.contact }}</p>
+              <button [routerLink]="['/uc-motduchef', uc.matricule]" [queryParams]="{ nom: uc.nom, prenoms: uc.prenoms }" mat-button class="chef-btn">Mot du chef</button>
+            </div>
+          </div>
+          
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+               <span> Attributions</span> 
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <span>Les attributions du chef de l'unité de coordination incluent:</span>
+            <div class="attributions" *ngFor="let attribution of uc.attributions">
+              <li>{{ attribution.attribution }}</li>
+            </div>
+          </mat-expansion-panel>
+        </mat-card>
+      </div>
+      <button (click)="nextUc()" class="nav-button next-button" [disabled]="currentIndex + itemsPerPage >= ucs.length">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+  </div>
+  
+</div>
+
+<!-- Fixed button to navigate to uc-form -->
+<a mat-fab class="fixed-button" routerLink="/uc-form">
+  <mat-icon>add</mat-icon>
+</a>

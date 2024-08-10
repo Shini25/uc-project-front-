@@ -1,0 +1,47 @@
+<div class="centered-container">
+  <div class="create-account">
+    <h1 class="login-title">Create Account</h1>
+    <form [formGroup]="createAccountForm" (ngSubmit)="onSubmit()" class="create-account-form">
+      <mat-form-field appearance="outline">
+        <mat-label for="matricule">Matricule</mat-label>
+        <input matInput type="text" id="matricule" formControlName="matricule" required>
+        <mat-error *ngIf="createAccountForm.get('matricule')?.hasError('minlength')">
+          Username must be at least 8 characters long.
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label for="password">Password</mat-label>
+        <input matInput type="password" id="password" formControlName="password" required>
+        <mat-error *ngIf="createAccountForm.get('password')?.hasError('minlength')">
+          Password must be at least 8 characters long.
+        </mat-error>
+        <mat-error *ngIf="createAccountForm.get('password')?.hasError('pattern')">
+          Password must contain at least one uppercase letter, one number, and one special character.
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label for="email">Email</mat-label>
+        <input matInput type="email" id="email" formControlName="email" required>
+        <mat-error *ngIf="createAccountForm.get('email')?.invalid && createAccountForm.get('email')?.touched">
+          Please enter a valid email to verify your account.
+        </mat-error>
+      </mat-form-field>
+      <input type="hidden" formControlName="accountStatus" value="OFFLINE">
+      <mat-form-field appearance="outline">
+        <mat-label for="accountType">Account Type</mat-label>
+        <mat-select id="accountType" formControlName="accountType">
+          <mat-option *ngFor="let type of accountTypes" [value]="type">{{type}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <input type="hidden" formControlName="accountState" value="INACTIVE">
+      <button mat-raised-button  class="create-account-button" type="submit">Create Account</button>
+
+      <span class="create-account-link">
+        Already have an account?
+        <a routerLink="/login" class="toggle-form-button">
+          Login
+        </a>
+      </span>
+    </form>
+  </div>
+</div>
