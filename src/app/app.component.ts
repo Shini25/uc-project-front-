@@ -16,6 +16,7 @@ import { MatInputModule } from '@angular/material/input';
 import { User_account } from './models/user.model';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 @Component({
   selector: 'app-root',
@@ -33,7 +34,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatFormFieldModule,
     MatInputModule,
     MatMenuModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatExpansionModule
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
@@ -43,6 +45,8 @@ export class AppComponent implements OnInit {
   pendingLoansCount: number = 0;
   user: User_account | null = null;
   matricule: string | null = null;
+  isLivretOpen = false;
+
 
   constructor(private authService: AuthService, private userService: UserService, private router: Router) {}
 
@@ -64,5 +68,9 @@ export class AppComponent implements OnInit {
 
   isAuthenticated(): boolean {
     return this.authService.isAuthenticated();
+  }
+
+  toggleLivret() {
+    this.isLivretOpen = !this.isLivretOpen;
   }
 }

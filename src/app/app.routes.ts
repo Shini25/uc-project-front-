@@ -7,6 +7,8 @@ import { AccountCreatedDialogComponent } from './create-account/account-created-
 import { CreateAccountComponent } from './create-account/create-account.component';
 import { SuccessDialogComponent } from './uc-form/success-dialog/success-dialog.component';
 import { MotDuChefComponent } from './list-uc/motduchef/motduchef.component';
+import { OrganigrammeDirectionComponent } from './organigramme-direction/organigramme-direction.component';
+import { OrganigrammeServiceComponent } from './organigramme-service/organigramme-service.component';
 
 import { LoginComponent } from './login/login.component';
 import { ListUcComponent } from './list-uc/list-uc.component';
@@ -47,6 +49,14 @@ export const routes: Routes = [
     {
         path: 'uc-motduchef/:ucId',
         component: MotDuChefComponent
+    },
+    {
+        path: 'organigramme-direction',
+        component: OrganigrammeDirectionComponent
+    },
+    {
+        path: 'organigramme-service',
+        component: OrganigrammeServiceComponent
     },
     {
         path: '**',

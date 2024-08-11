@@ -1,0 +1,28 @@
+
+.container {
+
+    height: 96vh;
+    overflow-y: auto;
+
+}
+
+.container::-webkit-scrollbar {
+    display: none !important;
+}
+  
+h4 {
+    text-align: center;
+}
+
+
+.image {
+    width: 100%;
+    overflow: hidden;
+    padding: 40px ;
+}
+
+.image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}

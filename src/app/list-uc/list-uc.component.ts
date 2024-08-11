@@ -14,8 +14,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatDrawerContainer } from '@angular/material/sidenav';
 import { MatDrawer } from '@angular/material/sidenav';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { ActivatedRoute } from '@angular/router';
 import { UcMotDuChefService } from '../services/uc-motduchef.service';
+import { MatRippleModule } from '@angular/material/core';
 
 @Component({
   selector: 'app-list-uc',
@@ -31,6 +31,7 @@ import { UcMotDuChefService } from '../services/uc-motduchef.service';
     MatDrawerContainer,
     MatDrawer,
     MatExpansionModule,
+    MatRippleModule
   ],
   templateUrl: './list-uc.component.html',
   styleUrls: ['./list-uc.component.css']
@@ -42,6 +43,7 @@ export class ListUcComponent implements OnInit {
   currentIndex: number = 0;
   itemsPerPage: number = 1;
   searchActive: boolean = false;
+  firstParagraphs: { [key: string]: string } = {};
 
   constructor(
     private ucService: UcService,
@@ -55,6 +57,17 @@ export class ListUcComponent implements OnInit {
     this.ucService.getAllUcs().subscribe((data: Uc[]) => {
       this.ucs = data;
       this.updateVisibleUcs();
+      this.ucs.forEach(uc => {
+        this.fetchFirstParagraph(uc.matricule);
+      });
+    });
+  }
+
+  fetchFirstParagraph(ucId: string): void {
+    this.ucMotDuChefService.getMotDuChefsByUc(ucId).subscribe(motDuChefs => {
+      if (motDuChefs.length > 0) {
+        this.firstParagraphs[ucId] = motDuChefs[0];
+      }
     });
   }
 

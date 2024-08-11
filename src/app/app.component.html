@@ -22,21 +22,26 @@
     <mat-nav-list>
       <div class="icon-label-container">
         <mat-icon>person</mat-icon>
-        <span>Presentation de l'uc</span>
+        <span> <a routerLink="list-uc"> Presentation de l'uc</a></span>
       </div>
-      <div class="icon-label-container" matTooltip="Chefs de la DSP" [matMenuTriggerFor]="chefsMenu">
+      <div class="icon-label-container" [matMenuTriggerFor]="livretMenu">
+        <mat-icon>bookmark</mat-icon>
+        <span>Livret </span>
+      </div>
+
+      <div class="icon-label-container" [matMenuTriggerFor]="chefsMenu">
         <mat-icon>group</mat-icon>
         <span>Chefs de la DSP</span>
       </div>
-      <div class="icon-label-container">
+      <div class="icon-label-container" [matMenuTriggerFor]="ptactivite">
         <mat-icon>assignment</mat-icon>
         <span>PTA et activités</span>
       </div>
-      <div class="icon-label-container">
+      <div class="icon-label-container" [matMenuTriggerFor]="autredocuments">
         <mat-icon>folder</mat-icon>
         <span>Autres documents</span>
       </div>
-      <div class="icon-label-container">
+      <div class="icon-label-container" [matMenuTriggerFor]="reunions">
         <mat-icon>event</mat-icon>
         <span>Reunion</span>
       </div>
@@ -46,12 +51,79 @@
       </div>
     </mat-nav-list>
 
-    <mat-menu #chefsMenu="matMenu" xPosition="before" class="chefs-menu">
-      <button mat-menu-item [routerLink]="['/organigramme']">Organigramme</button>
-      <button mat-menu-item [routerLink]="['/le-daf']">le DAF</button>
-      <button mat-menu-item [routerLink]="['/chef-uc']">Chef UC</button>
-      <button mat-menu-item [routerLink]="['/liste-des-chefs']">Liste des Chefs</button>
+
+    <!-- livret menue -->
+    <mat-menu #livretMenu="matMenu" xPosition="before" class="livret-menu">
+      <button mat-menu-item>Guides au usager</button>
+      <button mat-menu-item>Manuels de procedures</button>
+      <button mat-menu-item>Circuits de traitement</button>
     </mat-menu>
+
+
+    <!-- chef  menue -->
+    <mat-menu #chefsMenu="matMenu" xPosition="before" class="chefs-menu custom-menu">
+      <button mat-menu-item [matMenuTriggerFor]="organigramme">Organigramme</button>
+      <button mat-menu-item routerLink="list-daf">le DAF</button>
+      <button mat-menu-item routerLink="list-uc">Chef UC</button>
+      <button mat-menu-item [matMenuTriggerFor]="listedeschef">Liste des Chefs</button>
+    </mat-menu>
+
+    <mat-menu #organigramme="matMenu">
+      <button mat-menu-item routerLink="organigramme-direction">Organigramme de la direction </button>
+      <button mat-menu-item routerLink="organigramme-service">Organigramme par service</button>
+    </mat-menu>
+
+    <mat-menu #listedeschef="matMenu">
+      <button mat-menu-item routerLink="chefs-service-centraux">Chef de service centraux</button>
+      <button mat-menu-item routerLink="chefs-service-regionaux">Chef de service Régionaux</button>
+      <button mat-menu-item routerLink="chefs-antennes-cirfin">Chef d'antennes/CIRFIN</button>
+      <button mat-menu-item routerLink="chefs-division">Chef de Division</button>
+      <button mat-menu-item routerLink="chefs-bureaux">Chef de Bureaux</button>
+    </mat-menu>
+
+    <!-- pta/ activite menue -->
+    <mat-menu #ptactivite="matMenu" xPosition="before" class="chefs-menu custom-menu">
+      <button mat-menu-item [matMenuTriggerFor]="pta">PTA</button>
+      <button mat-menu-item [matMenuTriggerFor]="activites">Activités</button>
+      <button mat-menu-item routerLink="recapitulatif-activites">Récapitulatif</button>
+    </mat-menu>
+
+    <mat-menu #pta="matMenu">
+      <button mat-menu-item routerLink="organigramme-direction">Pta de la DSP</button>
+      <button mat-menu-item routerLink="organigramme-service">Pta par service</button>
+    </mat-menu>
+
+    <mat-menu #activites="matMenu">
+      <button mat-menu-item routerLink="activite-reforme">Activité de réforme</button>
+      <button mat-menu-item routerLink="activites-hebdomadaires">Hebdomadaires</button>
+      <button mat-menu-item routerLink="activites-mensuelles">Mensuelles</button>
+      <button mat-menu-item routerLink="activites-trimestrielles">Trimestrielles</button>
+      <button mat-menu-item routerLink="activites-semestrielles">Semestrielles</button>
+    </mat-menu>
+
+    <!-- autre documents -->
+
+    <mat-menu #autredocuments="matMenu" xPosition="before" class="chefs-menu custom-menu">
+      <button mat-menu-item routerLink="calendrier-solde-pensions">Calendrier de la Solde et des pensions</button>
+      <button mat-menu-item routerLink="donnees-eb">Données EB</button>
+      <button mat-menu-item routerLink="tableau-bord-eb">Tableau de bord EB</button>
+      <button mat-menu-item [matMenuTriggerFor]="pv">PV</button>
+      <button mat-menu-item routerLink="autres-cr">Autres CR</button>
+    </mat-menu>
+
+    <mat-menu #pv="matMenu">
+      <button mat-menu-item routerLink="pv-staff-hebdomadaire">PV staff hebdomadaire</button>
+      <button mat-menu-item routerLink="pv-conference-nationale">PV Conférence Nationale</button>
+    </mat-menu>
+
+    <!-- reunion menue -->
+    <mat-menu #reunions="matMenu" xPosition="before" class="chefs-menu custom-menu">
+      <button mat-menu-item routerLink="planification-reunion">Planification de Réunion</button>
+      <button mat-menu-item routerLink="liste-reunions">liste de réunion</button>
+    </mat-menu>
+
+
+
 
     <div class="info mb-1" *ngIf="isAuthenticated(); else loginTemplate">
       <div class="logo">

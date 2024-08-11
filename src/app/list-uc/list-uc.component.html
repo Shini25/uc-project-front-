@@ -25,11 +25,19 @@
           <div class="uc-card-content">
             <img mat-card-image *ngIf="uc.photos && uc.photos.length > 0" [src]="'data:image/png;base64,' + uc.photos[0]" alt="Photo" class="uc-photo">
             <div class="uc-details">
-              <p class="nom">{{ uc.nom }} </p>
-              <p>{{ uc.prenoms }}</p>
-              <p class="matricule">{{ uc.matricule }}</p>
-              <p>{{ uc.contact }}</p>
-              <button [routerLink]="['/uc-motduchef', uc.matricule]" [queryParams]="{ nom: uc.nom, prenoms: uc.prenoms }" mat-button class="chef-btn">Mot du chef</button>
+              <div class="uc-details-content">
+                <p class="nom">{{ uc.nom }} </p>
+                <p>{{ uc.prenoms }}</p>
+                <p class="matricule">{{ uc.matricule }}</p>
+                <p>{{ uc.contact }}</p>
+              </div>
+
+              <div matRipple [routerLink]="['/uc-motduchef', uc.matricule]" [queryParams]="{ nom: uc.nom, prenoms: uc.prenoms }" mat-button class="chef-btn">
+                <span class="chef-btn-text">Mot du chef</span> <br>
+                <span *ngIf="firstParagraphs[uc.matricule]" class="first-paragraph">
+                  {{ firstParagraphs[uc.matricule] | slice:0:200 }}{{ firstParagraphs[uc.matricule].length > 200 ? '... ' : ' ' }}
+                </span>
+              </div>
             </div>
           </div>
           
@@ -39,9 +47,9 @@
                <span> Attributions</span> 
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <span>Les attributions du chef de l'unité de coordination incluent:</span>
+            <span class="attributions-text">Les attributions du chef de l'unité de coordination incluent:</span>
             <div class="attributions" *ngFor="let attribution of uc.attributions">
-              <li>{{ attribution.attribution }}</li>
+              <li>{{ attribution.attribution }} <br><br> </li>
             </div>
           </mat-expansion-panel>
         </mat-card>

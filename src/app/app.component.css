@@ -157,6 +157,13 @@ mat-icon {
   display: flex;
   align-items: center;
   cursor: pointer;
+  width: 100%;
+  height: 40px;
+}
+
+.icon-label-container:hover {
+  background-color: #08005115;
+  border-radius: 5px;
 }
 
 mat-nav-list .icon-label-container {
@@ -206,13 +213,8 @@ mat-nav-list {
 .login-link a {
   text-decoration: none;
 }
-
-.mat-menu-item {
-  display: flex;
-  align-items: center;
-  padding: 10px;
-}
-
-.mat-menu-item:hover {
-  background-color: #f0f0f0;
+ 
+a {
+  text-decoration: none;
+  color: #000000;
 }

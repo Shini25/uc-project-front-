@@ -21,7 +21,10 @@ export class AuthService {
   }
 
   getToken(): string | null {
-    return localStorage.getItem('jwtToken');
+    if (typeof localStorage !== 'undefined') {
+      return localStorage.getItem('jwtToken');
+    }
+    return null;
   }
 
   // Méthode pour supprimer le token lors de la déconnexion
@@ -31,8 +34,8 @@ export class AuthService {
 
   // Méthode pour vérifier si l'utilisateur est authentifié
   isAuthenticated(): boolean {
-    return this.getToken() !== null;
+    const token = this.getToken();
+    return token !== null;
   }
 
-  
 }
