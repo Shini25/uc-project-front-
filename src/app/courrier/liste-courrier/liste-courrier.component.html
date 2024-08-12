@@ -1,0 +1,7 @@
+<mat-list>
+  <mat-list-item *ngFor="let courrier of courriers">
+    <div mat-line>{{ courrier.titre }}</div>
+    <div mat-line>{{ courrier.dateInsertion | date }}</div>
+    <a *ngIf="courrier.contenue" [routerLink]="['/view-pdf', courrier.contenue]">Voir le PDF</a>
+</mat-list-item>
+</mat-list>

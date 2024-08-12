@@ -22,7 +22,7 @@
     <mat-nav-list>
       <div class="icon-label-container">
         <mat-icon>person</mat-icon>
-        <span> <a routerLink="list-uc"> Presentation de l'uc</a></span>
+        <span> <a routerLink="list-chef"> Presentation de l'uc</a></span>
       </div>
       <div class="icon-label-container" [matMenuTriggerFor]="livretMenu">
         <mat-icon>bookmark</mat-icon>
@@ -54,18 +54,15 @@
 
     <!-- livret menue -->
     <mat-menu #livretMenu="matMenu" xPosition="before" class="livret-menu">
-      <button mat-menu-item>Guides au usager</button>
-      <button mat-menu-item>Manuels de procedures</button>
-      <button mat-menu-item>Circuits de traitement</button>
+      <button mat-menu-item routerLink="guide">Guides au usager</button>
+      <button mat-menu-item routerLink="manuel-de-procedure">Manuels de procedures</button>
+      <button mat-menu-item routerLink="circuit-de-traitement">Circuits de traitement</button>
     </mat-menu>
-
 
     <!-- chef  menue -->
     <mat-menu #chefsMenu="matMenu" xPosition="before" class="chefs-menu custom-menu">
       <button mat-menu-item [matMenuTriggerFor]="organigramme">Organigramme</button>
-      <button mat-menu-item routerLink="list-daf">le DAF</button>
-      <button mat-menu-item routerLink="list-uc">Chef UC</button>
-      <button mat-menu-item [matMenuTriggerFor]="listedeschef">Liste des Chefs</button>
+      <button mat-menu-item routerLink="list-chef">Chef</button>
     </mat-menu>
 
     <mat-menu #organigramme="matMenu">
@@ -73,13 +70,6 @@
       <button mat-menu-item routerLink="organigramme-service">Organigramme par service</button>
     </mat-menu>
 
-    <mat-menu #listedeschef="matMenu">
-      <button mat-menu-item routerLink="chefs-service-centraux">Chef de service centraux</button>
-      <button mat-menu-item routerLink="chefs-service-regionaux">Chef de service Régionaux</button>
-      <button mat-menu-item routerLink="chefs-antennes-cirfin">Chef d'antennes/CIRFIN</button>
-      <button mat-menu-item routerLink="chefs-division">Chef de Division</button>
-      <button mat-menu-item routerLink="chefs-bureaux">Chef de Bureaux</button>
-    </mat-menu>
 
     <!-- pta/ activite menue -->
     <mat-menu #ptactivite="matMenu" xPosition="before" class="chefs-menu custom-menu">

@@ -1,0 +1,78 @@
+<div class="container-body">
+  <div class="fixed-header">
+    <h4 class="titre">{{ title }}</h4>
+    <div class="search-container">
+          <mat-icon class="search-icon">search</mat-icon>
+      <input type="text" placeholder="Chef UC ...." class="search-input" (input)="onSearch($event)">
+    </div>
+    <div class="filter-container">
+      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Select type of chef">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item *ngFor="let type of chefTypes" (click)="onTypeChange(type)">
+          <span>{{ type }}</span>
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+  
+  <div class="search-results" *ngIf="filteredChefs.length > 0">
+    <ul>
+      <li *ngFor="let chef of filteredChefs" (click)="selectChef(chef)">
+        <a href="javascript:void(0)">{{ chef.nom }} {{ chef.prenoms }}</a>
+      </li>
+    </ul>
+  </div>
+  
+  <div class="chef-container" *ngIf="!searchActive">
+    <div class="uc-wrapper">
+      <button (click)="prevChef()" class="nav-button prev-button" [disabled]="currentIndex === 0">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      <div class="uc-card-container">
+        <mat-card class="uc-card" *ngFor="let chef of getDisplayChefs()">
+          <div class="uc-card-content">
+            <img mat-card-image *ngIf="chef.photos && chef.photos.length > 0" [src]="'data:image/png;base64,' + chef.photos[0]" alt="Photo" class="uc-photo">
+            <div class="uc-details">
+              <div class="uc-details-content">
+                <p class="nom">{{ chef.nom }} </p>
+                <p>{{ chef.prenoms }}</p>
+                <p class="matricule">{{ chef.matricule }}</p>
+                <p>{{ chef.contact }}</p>
+              </div>
+
+              <div matRipple [routerLink]="['/chef-motduchef', chef.matricule]" [queryParams]="{ nom: chef.nom, prenoms: chef.prenoms }" mat-button class="chef-btn">
+                <span class="chef-btn-text">Mot du chef</span> <br>
+                <span *ngIf="firstParagraphs[chef.matricule]" class="first-paragraph">
+                  {{ firstParagraphs[chef.matricule] | slice:0:200 }}{{ firstParagraphs[chef.matricule].length > 200 ? '... ' : ' ' }}
+                </span>
+              </div>
+            </div>
+          </div>
+          
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+               <span> Attributions</span> 
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <span class="attributions-text">Les attributions du chef de l'unité de coordination incluent:</span>
+            <div class="attributions" *ngFor="let attribution of chef.attributions">
+              <li>{{ attribution.attribution }} <br><br> </li>
+            </div>
+          </mat-expansion-panel>
+        </mat-card>
+      </div>
+      <button (click)="nextChef()" class="nav-button next-button" [disabled]="currentIndex + itemsPerPage >= chefs.length">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+  </div>
+  
+</div>
+
+<!-- Fixed button to navigate to chef-form -->
+<a mat-fab class="fixed-button" routerLink="/chef-form">
+  <mat-icon>add</mat-icon>
+</a>

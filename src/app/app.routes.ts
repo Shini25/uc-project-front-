@@ -1,18 +1,24 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './home/home.component';
+import { HomeComponent } from './accueil/home.component';
 
 //auth 
-import { PageNotFoundComponentComponent } from './page-not-found-component/page-not-found-component.component';
+import { PageNotFoundComponentComponent } from './page-introuvable/page-not-found-component.component';
 import { AccountCreatedDialogComponent } from './create-account/account-created-dialog/account-created-dialog.component';
 import { CreateAccountComponent } from './create-account/create-account.component';
-import { SuccessDialogComponent } from './uc-form/success-dialog/success-dialog.component';
-import { MotDuChefComponent } from './list-uc/motduchef/motduchef.component';
+import { SuccessDialogComponent } from './chef-form/success-dialog/success-dialog.component';
+import { MotDuChefComponent } from './list-chef/motduchef/motduchef.component';
 import { OrganigrammeDirectionComponent } from './organigramme-direction/organigramme-direction.component';
 import { OrganigrammeServiceComponent } from './organigramme-service/organigramme-service.component';
-
+import { CircuitDeTraitementComponent } from './Livret/circuit-de-traitement/circuit-de-traitement.component';
+import { GuideComponent } from './Livret/guide/guide.component';
+import { ManuelDeProcedureComponent } from './Livret/manuel-de-procedure/manuel-de-procedure.component';
+import { ArchivageCourrierComponent } from './courrier/archivage-courrier/archivage-courrier.component';
+import { ListeCourrierComponent } from './courrier/liste-courrier/liste-courrier.component';
 import { LoginComponent } from './login/login.component';
-import { ListUcComponent } from './list-uc/list-uc.component';
-import { UcFormComponent } from './uc-form/uc-form.component';
+import { ListChefComponent } from './list-chef/list-chef.component';
+import { ChefFormComponent } from './chef-form/chef-form.component';
+import { PdfViewerComponent } from './pdf-viewer/pdf-viewer.component';
+
 export const routes: Routes = [
     {
         path: '',
@@ -39,15 +45,15 @@ export const routes: Routes = [
         component: SuccessDialogComponent
     },
     {
-        path: 'uc-form',
-        component: UcFormComponent
+        path: 'chef-form',
+        component: ChefFormComponent
     },
     {
-        path: 'list-uc',
-        component: ListUcComponent
+        path: 'list-chef',
+        component: ListChefComponent
     },
     {
-        path: 'uc-motduchef/:ucId',
+        path: 'chef-motduchef/:chefId',
         component: MotDuChefComponent
     },
     {
@@ -58,6 +64,31 @@ export const routes: Routes = [
         path: 'organigramme-service',
         component: OrganigrammeServiceComponent
     },
+    {
+        path: 'circuit-de-traitement',
+        component: CircuitDeTraitementComponent
+    },
+    {
+        path: 'guide',
+        component: GuideComponent
+    },
+    {
+        path: 'manuel-de-procedure',
+        component: ManuelDeProcedureComponent
+    },
+    {
+        path: 'archivage-courrier',
+        component: ArchivageCourrierComponent
+    },
+    {
+        path: 'liste-courrier',
+        component: ListeCourrierComponent
+    },
+    {
+        path: 'view-pdf/:id',
+        component: PdfViewerComponent
+    },
+
     {
         path: '**',
         component: PageNotFoundComponentComponent

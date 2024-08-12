@@ -1,0 +1,108 @@
+<div class="title">
+  <h5>enregistrement des UC</h5>
+</div>
+
+<!-- <button mat-raised-button (click)="isLinear = !isLinear" id="toggle-linear">
+  {{!isLinear ? 'Activer le mode linéaire' : 'Désactiver le mode linéaire'}}
+</button> -->
+
+<mat-stepper [linear]="isLinear" #stepper>
+  <mat-step [stepControl]="firstFormGroup">
+    <form [formGroup]="firstFormGroup" class="form-container">
+      <ng-template matStepLabel>Informations de base</ng-template>
+      <div class="form-fields">
+        <mat-form-field appearance="outline">
+          <mat-label>Matricule</mat-label>
+          <input matInput formControlName="matricule">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Nom</mat-label>
+          <input matInput formControlName="nom">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Prénoms</mat-label>
+          <input matInput formControlName="prenoms">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" type="email">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Contact</mat-label>
+          <input matInput formControlName="contact">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Type de Chef</mat-label>
+          <mat-select formControlName="typeDeChef">
+            <mat-option value="UC">UC</mat-option>
+            <mat-option value="DAF">DAF</mat-option>
+            <mat-option value="SERVICE_CENTRAUX">SERVICE_CENTRAUX</mat-option>
+            <mat-option value="SERVICE_REGIONAUX">SERVICE_REGIONAUX</mat-option>
+            <mat-option value="DIVISION">DIVISION</mat-option>
+            <mat-option value="BUREAUX">BUREAUX</mat-option>
+            <mat-option value="ANTENNES_CIRFIN">ANTENNES_CIRFIN</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div formArrayName="photos">
+          <input type="file" (change)="onFileChange($event)">
+        </div>
+      </div>
+
+      <div class="form-buttons">
+        <button mat-button matStepperNext>
+          <mat-icon>arrow_forward</mat-icon>
+        </button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl]="secondFormGroup">
+    <form [formGroup]="secondFormGroup" class="form-container">
+      <ng-template matStepLabel>Attributions</ng-template>
+      <div class="form-fields-custom" formArrayName="attributions">
+        <button mat-button type="button" (click)="addAttribution()">Ajouter Attribution</button>
+        <div class="ajustement" *ngFor="let attribution of attributions.controls; let i = index" [formGroupName]="i">
+          <label>Attribution {{i + 1}}</label>
+          <textarea matInput formControlName="attribution"></textarea><br>
+        </div>
+      </div>
+
+      <div class="form-buttons">
+        <button mat-button matStepperPrevious>
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <button mat-button matStepperNext>
+          <mat-icon>arrow_forward</mat-icon>
+        </button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl]="thirdFormGroup">
+    <form [formGroup]="thirdFormGroup" class="form-container">
+      <ng-template matStepLabel>Mot du Chef</ng-template>
+      <div class="form-fields-custom" formArrayName="motDuChefs">
+        <button mat-button type="button" (click)="addMotDuChef()">Ajouter Mot du Chef</button>
+        <div class="ajustement" *ngFor="let motDuChef of motDuChefs.controls; let i = index" [formGroupName]="i">
+          <label>Paragraphe {{i + 1}}</label>
+          <textarea matInput formControlName="paragraphe"></textarea>
+        </div>
+      </div>
+
+      <div class="form-buttons">
+        <button mat-button matStepperPrevious>
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <button mat-button (click)="onSubmit()">
+          <mat-icon>save</mat-icon>
+        </button>
+      </div>
+    </form>
+  </mat-step>
+</mat-stepper>

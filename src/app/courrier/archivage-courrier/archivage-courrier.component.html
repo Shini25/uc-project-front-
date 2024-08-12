@@ -1,0 +1,10 @@
+<form [formGroup]="courrierForm" (ngSubmit)="onSubmit()">
+  <mat-form-field appearance="outline">
+    <mat-label>Titre</mat-label>
+    <input matInput formControlName="titre">
+  </mat-form-field>
+
+  <input type="file" (change)="onFileChange($event)">
+
+  <button mat-raised-button color="primary" type="submit">Submit</button>
+</form>
