@@ -18,6 +18,9 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
+import { ArchivageCourrierComponent } from '../archivage-courrier/archivage-courrier.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-liste-courrier',
@@ -35,7 +38,8 @@ import { MatButtonModule } from '@angular/material/button';
     MatExpansionModule,
     RouterLink,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MatDialogModule
   ],
   templateUrl: './liste-courrier.component.html',
   styleUrls: ['./liste-courrier.component.css'],
@@ -62,7 +66,8 @@ export class ListeCourrierComponent implements OnInit, AfterViewInit {
 
   constructor(
     private courrierService: CourrierService,
-    public sanitizer: DomSanitizer
+    public sanitizer: DomSanitizer,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -128,12 +133,12 @@ export class ListeCourrierComponent implements OnInit, AfterViewInit {
   }
 
   clearSearch(): void {
-  const searchInput = document.getElementById('titre') as HTMLInputElement;
-  if (searchInput) {
-    searchInput.value = '';
-    this.clearFilter();
+    const searchInput = document.getElementById('titre') as HTMLInputElement;
+    if (searchInput) {
+      searchInput.value = '';
+      this.clearFilter();
+    }
   }
-}
 
   openPdfInNewTab(base64pdf: string): void {
     const byteCharacters = atob(base64pdf);
@@ -148,4 +153,15 @@ export class ListeCourrierComponent implements OnInit, AfterViewInit {
   }
 
   isExpansionDetailRow = (index: number, row: Courrier) => row.hasOwnProperty('isExpandedRow');
+
+  openArchivageDialog(): void {
+    const dialogRef = this.dialog.open(ArchivageCourrierComponent, {
+      width: '400px', // Adjust the width as needed
+      height: '400px'
+    });
+
+    dialogRef.componentInstance.courrierArchived.subscribe(() => {
+      this.fetchCourriers(); // Refresh the list when a new courrier is archived
+    });
+  }
 }

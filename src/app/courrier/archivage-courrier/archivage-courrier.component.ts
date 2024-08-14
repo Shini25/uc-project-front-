@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -18,8 +18,11 @@ import { Location } from '@angular/common';
   styleUrls: ['./archivage-courrier.component.css']
 })
 export class ArchivageCourrierComponent {
+  @Output() courrierArchived = new EventEmitter<void>();
+
   courrierForm: FormGroup;
   selectedFile: File | null = null;
+  selectedFileName: string | null = null;
 
   constructor(private fb: FormBuilder, private courrierService: CourrierService, public dialog: MatDialog, private location: Location) {
     this.courrierForm = this.fb.group({
@@ -31,6 +34,7 @@ export class ArchivageCourrierComponent {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length) {
       this.selectedFile = input.files[0];
+      this.selectedFileName = this.selectedFile.name; // Set the selected file name
     }
   }
 
@@ -48,6 +52,7 @@ export class ArchivageCourrierComponent {
           this.courrierService.createCourrier(titre, base64File).subscribe(response => {
             console.log('Courrier created', response);
             this.dialog.open(SuccessDialogComponent);
+            this.courrierArchived.emit(); // Emit the event
           }, error => {
             console.error('Error creating Courrier:', error);
           });

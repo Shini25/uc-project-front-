@@ -1,14 +1,16 @@
+<h5>Archivage de courrier</h5>
 <form [formGroup]="courrierForm" (ngSubmit)="onSubmit()" class="courrier-form">
-  <mat-form-field appearance="outline">
-    <mat-label>Titre</mat-label>
-    <input matInput formControlName="titre">
-  </mat-form-field>
+  <input class="titre-form" id="titre" type="text" placeholder="Titre du courrier" formControlName="titre">
 
-  <input type="file" (change)="onFileChange($event)">
+  <!-- Custom file input -->
+  <label for="file-upload" class="custom-file-upload">
+    <mat-icon>attach_file</mat-icon>
+    Choisir un fichier
+</label>
+<input id="file-upload" class="contenu-input" type="file" (change)="onFileChange($event)" hidden>
 
-  <button mat-raised-button color="primary" type="submit">Submit</button>
+<!-- Display selected file name -->
+<span *ngIf="selectedFileName" class="file-name">{{ selectedFileName }}</span>
+
+  <button mat-raised-button color="primary" type="submit">Archiver</button>
 </form>
-
-<button class="retour" (click)="goBack()">
-  <mat-icon>chevron_left</mat-icon>
-</button>

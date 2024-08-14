@@ -5,7 +5,7 @@
     </div>
 
     <!-- Recherche -->
-    <div class="recherche mb-2">
+    <div class="recherche mb-3">
       <div class="search-container">
         <mat-icon class="search-icon">search</mat-icon>
         <input type="text" placeholder="Rechercher..." class="search-input">
@@ -112,15 +112,12 @@
       <button mat-menu-item routerLink="liste-reunions">liste de réunion</button>
     </mat-menu>
 
-
-
-
     <div class="info mb-1" *ngIf="isAuthenticated(); else loginTemplate">
       <div class="logo">
         <span *ngIf="user">{{ user.accountType.charAt(0) }}</span>
       </div>
       <div class="info-text">
-        <span class="mail">{{ user?.email }}</span>
+        <span class="mail" matTooltip="{{ user?.email }}">{{ user?.email }}</span>
         <div *ngIf="matricule" class="matricule-display">
           {{ matricule }}
           <mat-icon class="logout-icon" (click)="logout()">logout</mat-icon>

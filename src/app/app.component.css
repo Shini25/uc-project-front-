@@ -26,6 +26,8 @@
   align-items: center;
   position: absolute;
   bottom: 0;
+  overflow-x: hidden;
+  width: 92%;
 
 }
 
@@ -45,7 +47,7 @@
 }
 
 .mail {
-  font-size: small;
+  font-size: 16px;
   color: #000000;
 }
 .profile-pic {
@@ -68,6 +70,28 @@
   color: gray;
 }
 
+.info-text .mail {
+  display: inline-block;
+  max-width: 150px; /* Adjust the width as needed */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+  position: relative;
+}
+
+.info-text .mail:hover::after {
+  content: attr(data-full-email);
+  position: absolute;
+  white-space: nowrap;
+  background: #333;
+  color: #fff;
+  padding: 5px;
+  border-radius: 3px;
+  top: 120%; /* Décalage vertical */
+  left: 0;
+  z-index: 10;
+}
 
 .recherche {
   text-align: center;

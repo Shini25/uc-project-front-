@@ -245,7 +245,8 @@ th {
 .consulter-courrier {
   cursor: pointer;
   text-decoration: none;
-  color: darkblue;
+  color: rgba(0, 0, 0, 0.905);
+  font-weight: bold;
 }
 
 .consulter-courrier-container {
