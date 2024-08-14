@@ -1,6 +1,6 @@
 export interface Courrier {
   id?: number;
   titre: string;
-  dateInsertion?: any;
+  dateCourrier?: any;
   contenue: string;
 }

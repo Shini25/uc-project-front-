@@ -29,12 +29,4 @@ export class CourrierService {
     
     return this.http.post<Courrier>(`${this.apiUrl}/archivage/personalise`, formData);
   }
-
-  updateCourrier(id: number, courrier: Courrier): Observable<Courrier> {
-    return this.http.put<Courrier>(`${this.apiUrl}/${id}`, courrier);
-  }
-
-  deleteCourrier(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
-  }
 }

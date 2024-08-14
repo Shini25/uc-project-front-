@@ -1,4 +1,4 @@
-<form [formGroup]="courrierForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="courrierForm" (ngSubmit)="onSubmit()" class="courrier-form">
   <mat-form-field appearance="outline">
     <mat-label>Titre</mat-label>
     <input matInput formControlName="titre">
@@ -8,3 +8,7 @@
 
   <button mat-raised-button color="primary" type="submit">Submit</button>
 </form>
+
+<button class="retour" (click)="goBack()">
+  <mat-icon>chevron_left</mat-icon>
+</button>

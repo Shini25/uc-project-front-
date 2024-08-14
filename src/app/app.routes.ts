@@ -17,7 +17,6 @@ import { ListeCourrierComponent } from './courrier/liste-courrier/liste-courrier
 import { LoginComponent } from './login/login.component';
 import { ListChefComponent } from './list-chef/list-chef.component';
 import { ChefFormComponent } from './chef-form/chef-form.component';
-import { PdfViewerComponent } from './pdf-viewer/pdf-viewer.component';
 
 export const routes: Routes = [
     {
@@ -84,11 +83,6 @@ export const routes: Routes = [
         path: 'liste-courrier',
         component: ListeCourrierComponent
     },
-    {
-        path: 'view-pdf/:id',
-        component: PdfViewerComponent
-    },
-
     {
         path: '**',
         component: PageNotFoundComponentComponent

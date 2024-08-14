@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { CourrierService } from '../../services/courrier.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SuccessDialogComponent } from '../../chef-form/success-dialog/success-dialog.component';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-archivage-courrier',
@@ -20,7 +21,7 @@ export class ArchivageCourrierComponent {
   courrierForm: FormGroup;
   selectedFile: File | null = null;
 
-  constructor(private fb: FormBuilder, private courrierService: CourrierService, public dialog: MatDialog) {
+  constructor(private fb: FormBuilder, private courrierService: CourrierService, public dialog: MatDialog, private location: Location) {
     this.courrierForm = this.fb.group({
       titre: ['', Validators.required]
     });
@@ -56,5 +57,9 @@ export class ArchivageCourrierComponent {
         console.error('File is required');
       }
     }
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 }

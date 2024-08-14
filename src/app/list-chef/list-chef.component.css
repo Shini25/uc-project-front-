@@ -227,7 +227,7 @@ mat-drawer-content {
   align-items: flex-start;
 }
 
-.fixed-button {
+.chef-form {
   position: fixed;
   bottom: 16px;
   right: 16px;
