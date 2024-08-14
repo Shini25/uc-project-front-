@@ -1,0 +1,23 @@
+<h5>insertion de PTA</h5>
+<form [formGroup]="ptaForm" (ngSubmit)="onSubmit()" class="pta-form">
+  <!-- type de pta option : DSP ou SERVICE -->
+  <mat-radio-group formControlName="typeDePta" class="selecte-pta">
+    <mat-radio-button value="DSP">DSP</mat-radio-button>
+    <mat-radio-button value="SERVICE">SERVICE</mat-radio-button>
+  </mat-radio-group>
+
+  <input class="titre-form" id="titre" type="text" placeholder="Titre du PTA" formControlName="titre">
+
+  <!-- Custom file input -->
+  <label for="file-upload" class="custom-file-upload">
+    <mat-icon>attach_file</mat-icon>
+    Choisir un fichier
+  </label>
+
+  <input id="file-upload" class="contenu-input" type="file" (change)="onFileChange($event)" hidden>
+
+  <!-- Display selected file name -->
+  <span *ngIf="selectedFileName" class="file-name">{{ selectedFileName }}</span>
+
+  <button mat-raised-button color="primary" type="submit">Archiver</button>
+</form>

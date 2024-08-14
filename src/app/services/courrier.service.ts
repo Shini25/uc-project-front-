@@ -26,7 +26,6 @@ export class CourrierService {
 
     formData.append('contenue', base64pdf);
 
-    
     return this.http.post<Courrier>(`${this.apiUrl}/archivage/personalise`, formData);
   }
 }

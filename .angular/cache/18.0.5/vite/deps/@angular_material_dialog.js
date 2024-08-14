@@ -4,10 +4,7 @@ import {
   OverlayContainer,
   OverlayModule,
   OverlayRef
-} from "./chunk-YKVUSN2D.js";
-import {
-  CdkScrollable
-} from "./chunk-6ISFRANC.js";
+} from "./chunk-JKLA5PN5.js";
 import {
   BasePortalOutlet,
   CdkPortalOutlet,
@@ -15,6 +12,9 @@ import {
   PortalModule,
   TemplatePortal
 } from "./chunk-2JMXHAJD.js";
+import {
+  CdkScrollable
+} from "./chunk-6ISFRANC.js";
 import {
   animate,
   animateChild,

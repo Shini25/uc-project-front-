@@ -17,6 +17,8 @@ import { ListeCourrierComponent } from './courrier/liste-courrier/liste-courrier
 import { LoginComponent } from './login/login.component';
 import { ListChefComponent } from './list-chef/list-chef.component';
 import { ChefFormComponent } from './chef-form/chef-form.component';
+import { InsertionPtaComponent } from './pta/insertion-pta/insertion-pta.component';
+import { ListePtaComponent } from './pta/liste-pta/liste-pta.component';
 
 export const routes: Routes = [
     {
@@ -82,6 +84,14 @@ export const routes: Routes = [
     {
         path: 'liste-courrier',
         component: ListeCourrierComponent
+    },
+    {
+        path: 'insertion-pta',
+        component: InsertionPtaComponent
+    },
+    {
+        path: 'liste-pta',
+        component: ListePtaComponent
     },
     {
         path: '**',
