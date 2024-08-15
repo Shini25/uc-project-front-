@@ -1,0 +1,41 @@
+<form [formGroup]="reunionForm" (ngSubmit)="onSubmit()">
+    <div>
+      <label for="titre">Titre:</label>
+      <input type="text" id="titre" formControlName="titre" />
+    </div>
+    <div>
+      <label for="dateReunion">Date de Réunion:</label>
+      <input id="dateReunion" type="datetime-local" formControlName="dateReunion" />
+    </div>
+    <div>
+      <label for="lieu">Lieu:</label>
+      <input id="lieu" formControlName="lieu" />
+    </div>
+    <div>
+      <label for="objet">Objet:</label>
+      <input id="objet" formControlName="objet" />
+    </div>
+    <div formArrayName="ordreDuJourDescriptions">
+      <label>Ordre du Jour:</label>
+      <div *ngFor="let control of ordreDuJourDescriptions.controls; let i = index">
+        <input [formControlName]="i" />
+      </div>
+      <button type="button" (click)="addOrdreDuJourDescription()">Ajouter Ordre du Jour</button>
+    </div>
+    <div formArrayName="responsablesMatricules">
+      <label>Responsables Matricules:</label>
+      <div *ngFor="let control of responsablesMatricules.controls; let i = index">
+        <input [formControlName]="i" />
+      </div>
+      <button type="button" (click)="addResponsableMatricule()">Ajouter Responsable</button>
+    </div>
+    <div formArrayName="participantsMatricules">
+      <label>Participants Matricules:</label>
+      <div *ngFor="let control of participantsMatricules.controls; let i = index">
+        <input [formControlName]="i" />
+      </div>
+      <button type="button" (click)="addParticipantMatricule()">Ajouter Participant</button>
+    </div>
+    <button type="submit">Planifier Réunion</button>
+  </form>
+  

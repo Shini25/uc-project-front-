@@ -19,6 +19,9 @@ import { ListChefComponent } from './list-chef/list-chef.component';
 import { ChefFormComponent } from './chef-form/chef-form.component';
 import { InsertionPtaComponent } from './pta/insertion-pta/insertion-pta.component';
 import { ListePtaComponent } from './pta/liste-pta/liste-pta.component';
+import { PlanifierReunionComponent } from './reunion/planifier-reunion/planifier-reunion.component';
+import { ListeReunionComponent } from './reunion/liste-reunion/liste-reunion.component';
+import { DetailsReunionComponent } from './reunion/details-reunion/details-reunion.component';
 
 export const routes: Routes = [
     {
@@ -50,7 +53,7 @@ export const routes: Routes = [
         component: ChefFormComponent
     },
     {
-        path: 'list-chef',
+        path: 'liste-chef',
         component: ListChefComponent
     },
     {
@@ -92,6 +95,18 @@ export const routes: Routes = [
     {
         path: 'liste-pta',
         component: ListePtaComponent
+    },
+    {
+        path: 'planifier-reunion',
+        component: PlanifierReunionComponent
+    },
+    {
+        path: 'liste-reunion',
+        component: ListeReunionComponent
+    },
+    {
+        path: 'details-reunion/:id',
+        component: DetailsReunionComponent
     },
     {
         path: '**',

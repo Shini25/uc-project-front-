@@ -1,0 +1,13 @@
+.reunion-details {
+  width: 100%;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.reunion-details div {
+  margin-bottom: 10px;
+}
+
+.reunion-details label {
+  font-weight: bold;
+}

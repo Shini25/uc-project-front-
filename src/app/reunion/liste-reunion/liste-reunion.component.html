@@ -1,0 +1,19 @@
+<div class="reunion-list">
+  <h2>Liste de Réunion</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Objet de la Réunion</th>
+        <th>Date</th>
+        <th>Détails</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let reunion of reunions">
+        <td>{{ reunion.objet }}</td>
+        <td>{{ reunion.dateReunion | date: 'short' }}</td>
+        <td><button (click)="viewDetails(reunion.id)">Voir les détails</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

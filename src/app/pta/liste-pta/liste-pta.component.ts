@@ -21,8 +21,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatDialogModule } from '@angular/material/dialog';
 import { InsertionPtaComponent } from '../insertion-pta/insertion-pta.component';
-import { MatMenu } from '@angular/material/menu';
-import { MatMenuTrigger } from '@angular/material/menu';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-liste-Pta',
@@ -42,8 +41,9 @@ import { MatMenuTrigger } from '@angular/material/menu';
     MatButtonModule,
     MatIconModule,
     MatDialogModule,
-    MatMenu,
-    MatMenuTrigger
+    MatMenuModule,
+
+  
   ],
   templateUrl: './liste-pta.component.html',
   styleUrls: ['./liste-pta.component.css'],

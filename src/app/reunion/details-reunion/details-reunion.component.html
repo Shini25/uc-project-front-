@@ -1,0 +1,37 @@
+<div *ngIf="reunion" class="reunion-details">
+  <h2>Détails de Réunion</h2>
+  <div>
+    <label>Objet:</label>
+    <span>{{ reunion.objet }}</span>
+  </div>
+  <div>
+    <label>Date:</label>
+    <span>{{ reunion.dateReunion | date: 'short' }}</span>
+  </div>
+  <div>
+    <label>Heure:</label>
+    <span>{{ reunion.dateReunion | date: 'shortTime' }}</span>
+  </div>
+  <div>
+    <label>Lieu:</label>
+    <span>{{ reunion.lieu }}</span>
+  </div>
+  <div>
+    <label>Ordre du Jour:</label>
+    <ul>
+      <li *ngFor="let item of ordreDuJour">{{ item }}</li>
+    </ul>
+  </div>
+  <div>
+    <label>Responsables:</label>
+    <ul>
+      <li *ngFor="let responsable of responsables">{{ responsable }}</li>
+    </ul>
+  </div>
+  <div>
+    <label>Participants:</label>
+    <ul>
+      <li *ngFor="let participant of participants">{{ participant }}</li>
+    </ul>
+  </div>
+</div>
