@@ -1,19 +1,29 @@
 <div class="reunion-list">
-  <h2>Liste de Réunion</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Objet de la Réunion</th>
-        <th>Date</th>
-        <th>Détails</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let reunion of reunions">
-        <td>{{ reunion.objet }}</td>
-        <td>{{ reunion.dateReunion | date: 'short' }}</td>
-        <td><button (click)="viewDetails(reunion.id)">Voir les détails</button></td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+    <h2>Liste de Réunion</h2>
+    <table mat-table [dataSource]="reunions" class="mat-elevation-z8">
+      <!-- Objet de la Réunion Column -->
+      <ng-container matColumnDef="objet">
+        <th mat-header-cell *matHeaderCellDef> Objet de la Réunion </th>
+        <td mat-cell *matCellDef="let reunion"> {{ reunion.objet }} </td>
+      </ng-container>
+  
+      <!-- Date Column -->
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef> Date </th>
+        <td mat-cell *matCellDef="let reunion"> {{ reunion.dateReunion | date: 'short' }} </td>
+      </ng-container>
+  
+      <!-- Détails Column -->
+      <ng-container matColumnDef="details">
+        <th mat-header-cell *matHeaderCellDef> Détails </th>
+        <td mat-cell *matCellDef="let reunion">
+          <button mat-fab color="primary" (click)="viewDetails(reunion.id)">Voir les détails</button>
+        </td>
+      </ng-container>
+  
+      <!-- Header and Row Declarations -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+  

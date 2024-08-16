@@ -6,11 +6,12 @@ import { OrdreDuJourService } from '../../services/reunion/OrdreDuJourService';
 import { ResponsableReunionService } from '../../services/reunion/ResponsableReunionService';
 import { ParticipantService } from '../../services/reunion/ParticipantService';
 import { InfoReunionBase } from '../../models/infoReunionBase.model';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-details-reunion',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatIcon],
   templateUrl: './details-reunion.component.html',
   styleUrls: ['./details-reunion.component.css']
 })

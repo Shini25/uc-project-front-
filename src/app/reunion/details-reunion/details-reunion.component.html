@@ -1,37 +1,67 @@
-<div *ngIf="reunion" class="reunion-details">
-  <h2>Détails de Réunion</h2>
-  <div>
-    <label>Objet:</label>
-    <span>{{ reunion.objet }}</span>
+<div *ngIf="reunion" class="reunion-details ">
+    <h4 class="title ">Détails de Réunion</h4>
+    <div class="objet">
+        <label>Objet:</label>
+        <div class="">
+          <span class="objet-contenu">{{ reunion.objet }}</span>
+        </div>
+      </div>
+    <div class="reunion-content">
+      <div class="left-section">
+        <div class="en-ligne">
+            <label>Titre:</label>
+            <div class="date meme-ligne">
+              <span class="date-contenu">{{ reunion.titre }}</span>
+            </div>
+          </div>
+
+        <div class="en-ligne">
+          <label>Date:</label>
+          <div class="date meme-ligne">
+            <span class="date-contenu">{{ reunion.dateReunion | date: 'short' }}</span>
+          </div>
+        </div>
+
+        <div class="en-ligne">
+          <label>Lieu:</label>
+          <div class="lieu meme-ligne">
+            <span class="lieu-contenu">{{ reunion.lieu }}</span>
+          </div>
+        </div>
+        <div>
+          <label>Ordre du Jour:</label>
+          <div class="ordre-du-jour">
+            <ul>
+              <li *ngFor="let item of ordreDuJour">
+                {{ item }}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="right-section">
+        <div>
+          <label>Responsables:</label>
+          <div class="responsables">
+            <ul>
+              <li *ngFor="let responsable of responsables">
+                {{ responsable }}
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <label>Participants invités:</label>
+          <div class="participants">
+            <ul>
+              <li *ngFor="let participant of participants">
+              {{ participant }}
+              <input type="checkbox" />
+            </li>
+          </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="presence-button">Fiche de présence <mat-icon>arrow_forward</mat-icon></button>
   </div>
-  <div>
-    <label>Date:</label>
-    <span>{{ reunion.dateReunion | date: 'short' }}</span>
-  </div>
-  <div>
-    <label>Heure:</label>
-    <span>{{ reunion.dateReunion | date: 'shortTime' }}</span>
-  </div>
-  <div>
-    <label>Lieu:</label>
-    <span>{{ reunion.lieu }}</span>
-  </div>
-  <div>
-    <label>Ordre du Jour:</label>
-    <ul>
-      <li *ngFor="let item of ordreDuJour">{{ item }}</li>
-    </ul>
-  </div>
-  <div>
-    <label>Responsables:</label>
-    <ul>
-      <li *ngFor="let responsable of responsables">{{ responsable }}</li>
-    </ul>
-  </div>
-  <div>
-    <label>Participants:</label>
-    <ul>
-      <li *ngFor="let participant of participants">{{ participant }}</li>
-    </ul>
-  </div>
-</div>
