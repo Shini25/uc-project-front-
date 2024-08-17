@@ -2,6 +2,9 @@
   <mat-sidenav mode="side" opened class="sidenav">
     <div class="info-finance mb-4">
       <!-- todo -->
+       <span class="logo-uc-u">u</span>
+       <span class="logo-uc-c">c</span>
+       
     </div>
     <!-- Recherche -->
     <div class="recherche mb-3">
@@ -10,14 +13,17 @@
         <input type="text" placeholder="Rechercher..." class="search-input">
       </div>
     </div>
-    <div class="icon-label-container mb-4">
-      <a mat-fab extended class="home align-start" routerLink=".">
+
+    <div class="home-container mb-4">
+      <a mat-fab  class="home align-start" routerLink=".">
         <mat-icon>home</mat-icon>
         Accueil
       </a>
     </div>
+
     <hr class="mb-3">
     <mat-nav-list>
+      <span class="menu-titre">Menu</span>
       <div class="icon-label-container">
         <mat-icon>person</mat-icon>
         <span> <a routerLink="liste-chef"> Presentation de l'uc</a></span>
@@ -82,14 +88,10 @@
       </mat-menu>
 
       <div class="info mb-1" *ngIf="isAuthenticated(); else loginTemplate">
-        <div class="logo">
-          <span *ngIf="user">{{ user.accountType.charAt(0) }}</span>
-        </div>
         <div class="info-text">
-          <span class="mail" matTooltip="{{ user?.email }}">{{ user?.email }}</span>
           <div *ngIf="matricule" class="matricule-display">
             {{ matricule }}
-            <mat-icon class="logout-icon" (click)="logout()">logout</mat-icon>
+            <button class="logout-icon" (click)="logout()">Déconnexion</button>
           </div>
         </div>
       </div>

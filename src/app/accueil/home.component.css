@@ -1,10 +1,8 @@
-
-
 .first-cicle {
   width: 30%;
   height: 50%;
-  background-color: #180949;
-  border-radius: 50%;
+  background-color:  #1e3a8a;
+  border-radius: 5% 5% 40% 40%;
   position: absolute;
   top: 8% ;
   left: 12%;
@@ -13,11 +11,10 @@
 
 .second-cicle {
   z-index: 1;
-  width: 24%;
+  width: 25%;
   height: 45%;
-  background-color:  #f0f0f0;
-  border-radius: 50%;
-
+  background-color:   #e5e7eb;
+  border-radius: 5%;
   position: absolute;
   top: 6%;
   left: 15%;
@@ -27,8 +24,9 @@
   z-index: 2;
   width: 30%;
   height: 50%;
-  background-color:#ff99009c;
-  border-radius: 50%;
+  background-color: #ff99009c;
+  border-radius: 4%;
+  box-shadow: 0 2px 100px #f59f0b7d;
 
   position: absolute;
   top: 45%;
@@ -41,28 +39,15 @@
   padding: 20px;
   z-index: 1;
   width: 30%;
-  height: 38%;
-  background-color: #f0f0f0;
-  border-radius: 50%;
+  height: 40%;
+  background-color: #e5e7eb;
+  border-radius: 5%;
 
   position: absolute;
   top: 25%;
-  left: 42%;
+  left: 35%;
 }
 
-.contenue {
-z-index: 10000 !important;
-  padding: 20px;
-  z-index: 1;
-  width: 40%;
-  height: 35%;
-  background-color: #f0f0f0;
-  border-radius: 50%;
-
-  position: absolute;
-  top: 25%;
-  left: 50%;
-}
 
 
 .titre {
