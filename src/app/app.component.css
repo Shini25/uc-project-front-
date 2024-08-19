@@ -1,13 +1,21 @@
-.sidenav {
+.container-principale {
+  background-color: #ffffff;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+
+
+
+  
+}
+nav {
   background-color: #e5e7eb;
   width: 16%;
-  height: 98vh;
+  height: 100vh;
   padding: 10px;
-  margin-top: 0.5%;
-  margin-left: 8px;
-  border-radius: 12px 0 0 12px;
-  box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.197);
+  border-radius: 0% !important;
 }
+
 .info-finance {
   padding: 10px;
 
@@ -29,7 +37,7 @@
   font-optical-sizing: auto;
   font-weight: bold;
   font-style: normal;
-  color: #1e3a8a;
+  color: #1e40af;
 }
 
 .logo-uc-c {
@@ -47,13 +55,10 @@
 
 
 .info {
-
   background-color: white;
   border-radius: 5px;
-  padding-left: 10px !important;
-  position: absolute;
-  bottom: 0;
-  width: 92%;
+  padding: 10px;
+  margin-top: 30px;
 
 }
 
@@ -145,7 +150,7 @@
 .home {
   border-radius: 10px !important;
   color: #ffffff;
-  background-color: #1e3a8a;
+  background-color: #1e40af;
   width: 100%;
 
 }
@@ -160,7 +165,7 @@
 
 .align-start {
   justify-content: flex-start;
-  padding-left: 16px; /* Adjust padding as needed */
+  padding-left: 16px; /
 }
 
 hr{
@@ -173,13 +178,11 @@ span {
   margin-top: 5px;
 }
 
-
-
-.custom-sidenav-content {
-  height: 98vh;
-  margin-left: 17% !important;
-  margin-top: 0.5%;
-  border: 1px solid #0000000f;
+.contenu-principal {
+  background-color: #e5e7eb;
+  width: 83.5%;
+  margin-left: 0.5%;
+  padding: 10px;
 }
 
 .nav-item {
@@ -203,6 +206,14 @@ span {
   border-radius: 5px;
 }
 
+.liste-menu {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 70%;
+}
+
+
 mat-nav-list .icon-label-container {
   font-size: 14px;
   color: #000000;
@@ -216,7 +227,7 @@ mat-nav-list .icon-label-container {
   background-color: white;
   margin-right: 8px;
   font-size: 20px;
-  color:  #1e3a8a; 
+  color:  #1e40af; 
   border-radius: 50px;
   width: 30px;
   height: 30px;
@@ -233,21 +244,24 @@ mat-nav-list {
   padding: 8px;
   border-radius: 10px;
   display: flex;
+  flex: 1 !important;
   flex-direction: column ;
   justify-content: space-between;
-  gap: 15px;
+  gap: 1px;
   align-items: start;
   backdrop-filter: blur(10px);
 
 }
 
 
-.logout-icon {
+.deconnexion-icon {
   cursor: pointer;
   color: #ff000098;
   font-size: 12px;
   border: none;
   font-weight: bold;
+  background-color:  rgb(255, 255, 255);
+  text-align: right;
 }
 
 .logout-icon:hover {

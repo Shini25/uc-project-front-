@@ -1,58 +1,62 @@
-.first-cicle {
-  width: 30%;
-  height: 50%;
-  background-color:  #1e3a8a;
-  border-radius: 5% 5% 40% 40%;
+
+.premier-container-c {
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background-color:  #1e40af;
   position: absolute;
-  top: 8% ;
-  left: 12%;
-}
-
-
-.second-cicle {
-  z-index: 1;
-  width: 25%;
-  height: 45%;
-  background-color:   #e5e7eb;
-  border-radius: 5%;
-  position: absolute;
-  top: 6%;
-  left: 15%;
-}
-
-.third-cicle {
-  z-index: 2;
-  width: 30%;
-  height: 50%;
-  background-color: #ff99009c;
-  border-radius: 4%;
-  box-shadow: 0 2px 100px #f59f0b7d;
-
-  position: absolute;
-  top: 45%;
+  top: 20%;
   left: 45%;
-  transform: translate(-50%, -50%);
+
 }
 
-.fourth-cicle {
-  z-index: 100 !important;
-  padding: 20px;
-  z-index: 1;
-  width: 30%;
-  height: 40%;
+.deuxieme-container-c {
+  z-index: 100;
+  width: 380px;
+  height: 380px;
+  border-radius:  50%;
   background-color: #e5e7eb;
-  border-radius: 5%;
-
   position: absolute;
-  top: 25%;
+  top: 20.5%;
+  left: 50%;
+  transform: rotate(-25deg);
+}
+
+.deuxieme-container-cc {
+  z-index: 1000;
+  width: 380px;
+  height: 380px;
+  border-radius:  50%;
+  background-color: #104cc437;
+  position: absolute;
+  top: 20%;
   left: 35%;
+  transform: rotate(-30deg);
+  backdrop-filter: blur(2px);
+  
 }
 
 
+.premier-container {
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background-color:  #f59e0b;
+  position: absolute;
+  top: 20%;
+  left: 20%;
 
-.titre {
-  font-family: "Gideon Roman", serif;
-  font-weight: 400;
-  font-style: normal;
+}
+
+.deuxieme-container{
+  z-index: 100;
+  width: 360px;
+  height: 380px;
+  border-radius:  50%;
+  background-color: #e5e7eb;
+  position: absolute;
+  top: 15%;
+  left: 20%;
+  transform: rotate(-30deg);
 }
 

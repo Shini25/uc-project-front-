@@ -1,5 +1,5 @@
-<mat-sidenav-container class="sidenav-container">
-  <mat-sidenav mode="side" opened class="sidenav">
+<div class="container-principale">
+  <nav mode="side" opened >
     <div class="info-finance mb-4">
       <!-- todo -->
        <span class="logo-uc-u">u</span>
@@ -22,37 +22,50 @@
     </div>
 
     <hr class="mb-3">
-    <mat-nav-list>
-      <span class="menu-titre">Menu</span>
-      <div class="icon-label-container">
-        <mat-icon>person</mat-icon>
-        <span> <a routerLink="liste-chef"> Presentation de l'uc</a></span>
-      </div>
-      <div class="icon-label-container" [matMenuTriggerFor]="livretMenu">
-        <mat-icon>bookmark</mat-icon>
-        <span>Livret </span>
-      </div>
-      <div class="icon-label-container" [matMenuTriggerFor]="chefsMenu">
-        <mat-icon>group</mat-icon>
-        <span>Chefs de la DSP</span>
-      </div>
-      <div class="icon-label-container">
-        <mat-icon>assignment</mat-icon>
-        <a class="pta" routerLink="liste-pta">PTA et activités</a>
-      </div>
-      <div class="icon-label-container" [matMenuTriggerFor]="autredocuments">
-        <mat-icon>folder</mat-icon>
-        <span>Autres documents</span>
-      </div>
-      <div class="icon-label-container" [matMenuTriggerFor]="reunions">
-        <mat-icon>event</mat-icon>
-        <span>Reunion</span>
-      </div>
-      <div class="icon-label-container">
-        <mat-icon>lock</mat-icon>
-        <span>Accès réservé</span>
-      </div>
-      </mat-nav-list>
+    <div class="liste-menu">
+      <mat-nav-list>
+        <span class="menu-titre">Menu</span>
+        <div class="icon-label-container">
+          <mat-icon>person</mat-icon>
+          <span> <a routerLink="liste-chef"> Presentation de l'uc</a></span>
+        </div>
+        <div class="icon-label-container" [matMenuTriggerFor]="livretMenu">
+          <mat-icon>bookmark</mat-icon>
+          <span>Livret </span>
+        </div>
+        <div class="icon-label-container" [matMenuTriggerFor]="chefsMenu">
+          <mat-icon>group</mat-icon>
+          <span>Chefs de la DSP</span>
+        </div>
+        <div class="icon-label-container">
+          <mat-icon>assignment</mat-icon>
+          <a class="pta" routerLink="liste-pta">PTA et activités</a>
+        </div>
+        <div class="icon-label-container" [matMenuTriggerFor]="autredocuments">
+          <mat-icon>folder</mat-icon>
+          <span>Autres documents</span>
+        </div>
+        <div class="icon-label-container" [matMenuTriggerFor]="reunions">
+          <mat-icon>event</mat-icon>
+          <span>Reunion</span>
+        </div>
+        <div class="icon-label-container">
+          <mat-icon>lock</mat-icon>
+          <span>Accès réservé</span>
+        </div>
+      </mat-nav-list>  
+
+  
+        <!-- info -->
+        <div class="info mb-1" *ngIf="isAuthenticated(); else loginTemplate">
+          <div class="info-text">
+            <div *ngIf="matricule" class="matricule-display">
+              {{ matricule }}
+              <button class="deconnexion-icon" (click)="logout()">Déconnexion</button>
+            </div>
+          </div>
+        </div>
+    </div>
       <!-- livret menue -->
       <mat-menu #livretMenu="matMenu" xPosition="before" class="livret-menu">
         <button mat-menu-item routerLink="guide">Guides au usager</button>
@@ -86,25 +99,16 @@
         <button mat-menu-item routerLink="planifier-reunion">Planification de Réunion</button>
         <button mat-menu-item routerLink="liste-reunion">liste de réunion</button>
       </mat-menu>
-
-      <div class="info mb-1" *ngIf="isAuthenticated(); else loginTemplate">
-        <div class="info-text">
-          <div *ngIf="matricule" class="matricule-display">
-            {{ matricule }}
-            <button class="logout-icon" (click)="logout()">Déconnexion</button>
-          </div>
-        </div>
-      </div>
       
     <ng-template #loginTemplate>
       <div class="login-link">
         <a routerLink="/login">Connexion</a>
       </div>
     </ng-template>
-  </mat-sidenav>
+  </nav>
 
   <!-- Main navigation window -->
-  <mat-sidenav-content class="custom-sidenav-content">
+  <div class="contenu-principal">
     <router-outlet></router-outlet>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+  </div>
+</div>
