@@ -1,11 +1,6 @@
 <div class="container-principale">
-  <nav mode="side" opened >
-    <div class="info-finance mb-4">
-      <!-- todo -->
-       <span class="logo-uc-u">u</span>
-       <span class="logo-uc-c">c</span>
-       
-    </div>
+  <nav mode="side"  >
+
     <!-- Recherche -->
     <div class="recherche mb-3">
       <div class="search-container">
@@ -65,6 +60,12 @@
             </div>
           </div>
         </div>
+
+        <ng-template #loginTemplate>
+          <div class="login-link">
+            <a routerLink="/login">Connexion</a>
+          </div>
+        </ng-template>
     </div>
       <!-- livret menue -->
       <mat-menu #livretMenu="matMenu" xPosition="before" class="livret-menu">
@@ -99,16 +100,12 @@
         <button mat-menu-item routerLink="planifier-reunion">Planification de Réunion</button>
         <button mat-menu-item routerLink="liste-reunion">liste de réunion</button>
       </mat-menu>
-      
-    <ng-template #loginTemplate>
-      <div class="login-link">
-        <a routerLink="/login">Connexion</a>
-      </div>
-    </ng-template>
   </nav>
 
+  
   <!-- Main navigation window -->
   <div class="contenu-principal">
     <router-outlet></router-outlet>
+
   </div>
 </div>
