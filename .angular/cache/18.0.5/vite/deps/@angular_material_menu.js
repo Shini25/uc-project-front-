@@ -2,22 +2,22 @@ import {
   Overlay,
   OverlayConfig,
   OverlayModule
-} from "./chunk-YKVUSN2D.js";
-import {
-  CdkScrollableModule
-} from "./chunk-6ISFRANC.js";
+} from "./chunk-ZPRAIGQE.js";
 import {
   DomPortalOutlet,
   TemplatePortal
-} from "./chunk-2JMXHAJD.js";
+} from "./chunk-BHSPXV3F.js";
+import {
+  CdkScrollableModule
+} from "./chunk-7EMZM53M.js";
 import {
   animate,
   state,
   style,
   transition,
   trigger
-} from "./chunk-RXU5FA4K.js";
-import "./chunk-IWYBZV6A.js";
+} from "./chunk-KSDCONYJ.js";
+import "./chunk-HN3UMHQ2.js";
 import {
   DOWN_ARROW,
   Directionality,
@@ -36,11 +36,11 @@ import {
   isFakeMousedownFromScreenReader,
   isFakeTouchstartFromScreenReader,
   normalizePassiveListenerOptions
-} from "./chunk-DK2DHTCQ.js";
+} from "./chunk-LF2ZK5PT.js";
 import {
   CommonModule,
   DOCUMENT
-} from "./chunk-QUAITNK4.js";
+} from "./chunk-DSTP4LPH.js";
 import {
   ApplicationRef,
   ChangeDetectionStrategy,
@@ -68,8 +68,6 @@ import {
   ViewChild,
   ViewContainerRef,
   ViewEncapsulation$1,
-  __spreadProps,
-  __spreadValues,
   afterNextRender,
   asapScheduler,
   booleanAttribute,
@@ -113,7 +111,11 @@ import {
   ɵɵrestoreView,
   ɵɵtemplate,
   ɵɵviewQuery
-} from "./chunk-EF4PZH3Q.js";
+} from "./chunk-6VJOYWPE.js";
+import {
+  __spreadProps,
+  __spreadValues
+} from "./chunk-J4B6MK7R.js";
 
 // node_modules/@angular/material/fesm2022/menu.mjs
 var _c0 = ["mat-menu-item", ""];

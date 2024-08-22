@@ -1,111 +1,73 @@
-<div class="container-principale">
-  <nav mode="side"  >
+  <div class="fixed top-0 z-50 w-full h-[8vh] bg-white border-b border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
+    <div class="flex p-2 border-3 border-double  justify-between items-center  h-full">
+      <div class="flex md:hidden">
+        <button type="button" data-drawer-target="sidebar-toggle" data-drawer-toggle="sidebar-toggle" class="" aria-label="Sidebar">
+          <mat-icon class="text-[32px] self-center">
+            menus
+          </mat-icon>
+        </button>
+      </div>
+      <div>
+        <span class="text-5xl mt-0">uc</span>
+      </div>
+      <div class="flex"> 
+        <button type="button" class="w-12 h-12 rounded-full bg-blue-800"> 
+        </button>
+      </div>
+    </div>
+  </div>
 
-    <!-- Recherche -->
-    <div class="recherche mb-3">
-      <div class="search-container">
-        <mat-icon class="search-icon">search</mat-icon>
-        <input type="text" placeholder="Rechercher..." class="search-input">
+  <div id="sidebar-toggle" class="fixed left-0 z-40 w-64 h-screen  pt-20 px-3 transition-transform -translate-x-full  border-r border-gray-200 md:translate-x-0 dark:bg-gray-800 dark:border-gray-700 bg-white" aria-label="Sidebar">
+    <div class="relative w-full h-10 mb-10 border-1 border-blue-800 border-opacity-50 rounded-md flex items-center  cursor-pointer ">
+      <div class="absolute inset-y-0 self-center mt-auto pl-3 ">
+        <mat-icon class="text-gray-400 text-[21px] ">search</mat-icon>
+      </div>
+      <div class="flex pl-10 mb-auto ">
+        <span class="text-lg text-gray-400">
+          Pta, coutiers...
+        </span>
       </div>
     </div>
 
-    <div class="home-container mb-4">
-      <a mat-fab  class="home align-start" routerLink=".">
-        <mat-icon>home</mat-icon>
-        Accueil
-      </a>
+    <!-- home -->
+    <div class="relative w-full h-10 mb-2 border-1 border-blue-800 border-opacity-50 rounded-md flex items-center cursor-pointer ">
+      <div class="absolute inset-y-0 self-center mt-auto pl-3 ">
+        <mat-icon class="text-gray-400 text-[21px] ">home</mat-icon>
+      </div>
+      <div class="flex pl-10 mb-auto ">
+        <span class="text-lg text-gray-400">
+          Accueil
+        </span>
+      </div>
     </div>
 
-    <hr class="mb-3">
-    <div class="liste-menu">
-      <mat-nav-list>
-        <span class="menu-titre">Menu</span>
-        <div class="icon-label-container">
-          <mat-icon>person</mat-icon>
-          <span> <a routerLink="liste-chef"> Presentation de l'uc</a></span>
-        </div>
-        <div class="icon-label-container" [matMenuTriggerFor]="livretMenu">
-          <mat-icon>bookmark</mat-icon>
-          <span>Livret </span>
-        </div>
-        <div class="icon-label-container" [matMenuTriggerFor]="chefsMenu">
-          <mat-icon>group</mat-icon>
-          <span>Chefs de la DSP</span>
-        </div>
-        <div class="icon-label-container">
-          <mat-icon>assignment</mat-icon>
-          <a class="pta" routerLink="liste-pta">PTA et activités</a>
-        </div>
-        <div class="icon-label-container" [matMenuTriggerFor]="autredocuments">
-          <mat-icon>folder</mat-icon>
-          <span>Autres documents</span>
-        </div>
-        <div class="icon-label-container" [matMenuTriggerFor]="reunions">
-          <mat-icon>event</mat-icon>
-          <span>Reunion</span>
-        </div>
-        <div class="icon-label-container">
-          <mat-icon>lock</mat-icon>
-          <span>Accès réservé</span>
-        </div>
-      </mat-nav-list>  
-
-  
-        <!-- info -->
-        <div class="info mb-1" *ngIf="isAuthenticated(); else loginTemplate">
-          <div class="info-text">
-            <div *ngIf="matricule" class="matricule-display">
-              {{ matricule }}
-              <button class="deconnexion-icon" (click)="logout()">Déconnexion</button>
-            </div>
+    <!-- menus -->
+     <div class="h-3/4 bg-gray-200 px-3">
+      <span class="text-left text-bold">menus</span>
+      <div class="flex flex-col h-full justify-around gap-3 px-3">
+        <a class="relative w-full h-10 border-1 border-blue-800 border-opacity-50 rounded-md flex items-center cursor-pointer">
+          <div class="absolute inset-y-0 self-center mt-auto pl-3 ">
+            <mat-icon class="text-gray-400 text-[21px] ">search</mat-icon>
+          </div>
+        </a>
+        <div class="relative w-full h-10 border-1 border-blue-800 border-opacity-50 rounded-md flex items-center ">
+          <div class="absolute inset-y-0 self-center mt-auto pl-3 ">
+            <mat-icon class="text-gray-400 text-[21px] ">search</mat-icon>
           </div>
         </div>
-
-        <ng-template #loginTemplate>
-          <div class="login-link">
-            <a routerLink="/login">Connexion</a>
+        <div class="relative w-full h-10 border-1 border-blue-800 border-opacity-50 rounded-md flex items-center ">
+          <div class="absolute inset-y-0 self-center mt-auto pl-3 ">
+            <mat-icon class="text-gray-400 text-[21px] ">search</mat-icon>
           </div>
-        </ng-template>
-    </div>
-      <!-- livret menue -->
-      <mat-menu #livretMenu="matMenu" xPosition="before" class="livret-menu">
-        <button mat-menu-item routerLink="guide">Guides au usager</button>
-        <button mat-menu-item routerLink="manuel-de-procedure">Manuels de procedures</button>
-        <button mat-menu-item routerLink="circuit-de-traitement">Circuits de traitement</button>
-      </mat-menu>
-      <!-- chef  menue -->
-      <mat-menu #chefsMenu="matMenu" xPosition="before" class="chefs-menu custom-menu">
-        <button mat-menu-item [matMenuTriggerFor]="organigramme">Organigramme</button>
-        <button mat-menu-item routerLink="liste-chef">Chef</button>
-      </mat-menu>
-      <mat-menu #organigramme="matMenu">
-        <button mat-menu-item routerLink="organigramme-direction">Organigramme de la direction </button>
-        <button mat-menu-item routerLink="organigramme-service">Organigramme par service</button>
-      </mat-menu>
-      <!-- autre documents -->
-      <mat-menu #autredocuments="matMenu" xPosition="before" class="chefs-menu custom-menu">
-        <button mat-menu-item routerLink="calendrier-solde-pensions">Calendrier de la Solde et des pensions</button>
-        <button mat-menu-item routerLink="donnees-eb">Données EB</button>
-        <button mat-menu-item routerLink="tableau-bord-eb">Tableau de bord EB</button>
-        <button mat-menu-item [matMenuTriggerFor]="pv">PV</button>
-        <button mat-menu-item routerLink="autres-cr">Autres CR</button>
-      </mat-menu>
-        <!-- PV -->
-      <mat-menu #pv="matMenu">
-        <button mat-menu-item routerLink="pv-staff-hebdomadaire">PV staff hebdomadaire</button>
-        <button mat-menu-item routerLink="pv-conference-nationale">PV Conférence Nationale</button>
-      </mat-menu>
-      <!-- reunion menue -->
-      <mat-menu #reunions="matMenu" xPosition="before" class="chefs-menu custom-menu">
-        <button mat-menu-item routerLink="planifier-reunion">Planification de Réunion</button>
-        <button mat-menu-item routerLink="liste-reunion">liste de réunion</button>
-      </mat-menu>
-  </nav>
-
+        </div>
+       </div>
   
-  <!-- Main navigation window -->
-  <div class="contenu-principal">
-    <router-outlet></router-outlet>
+
+      </div>
 
   </div>
-</div>
+  
+  <section class="md:ml-64 h-screen pt-[10vh]">
+
+    <router-outlet></router-outlet>
+  </section>
