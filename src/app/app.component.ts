@@ -74,4 +74,15 @@ export class AppComponent implements OnInit {
   toggleLivret() {
     this.isLivretOpen = !this.isLivretOpen;
   }
+
+  isDarkMode = false;
+
+  toggleDarkMode() {
+    this.isDarkMode = !this.isDarkMode;
+    if (this.isDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }
 }
