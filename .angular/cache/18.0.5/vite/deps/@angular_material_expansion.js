@@ -2,17 +2,17 @@ import {
   CdkPortalOutlet,
   PortalModule,
   TemplatePortal
-} from "./chunk-BHSPXV3F.js";
+} from "./chunk-HYSZ2DE2.js";
 import {
   animate,
   state,
   style,
   transition,
   trigger
-} from "./chunk-KSDCONYJ.js";
+} from "./chunk-LCPN63A5.js";
 import {
   UniqueSelectionDispatcher
-} from "./chunk-HN3UMHQ2.js";
+} from "./chunk-5FGWC3K7.js";
 import {
   ENTER,
   FocusKeyManager,
@@ -20,10 +20,10 @@ import {
   MatCommonModule,
   SPACE,
   hasModifierKey
-} from "./chunk-LF2ZK5PT.js";
+} from "./chunk-F42IQ6XG.js";
 import {
   DOCUMENT
-} from "./chunk-DSTP4LPH.js";
+} from "./chunk-SOUDJXGB.js";
 import {
   ANIMATION_MODULE_TYPE,
   Attribute,
@@ -33,7 +33,6 @@ import {
   ContentChild,
   ContentChildren,
   Directive,
-  EMPTY,
   ElementRef,
   EventEmitter,
   Host,
@@ -45,19 +44,13 @@ import {
   Output,
   QueryList,
   SkipSelf,
-  Subject,
-  Subscription,
   TemplateRef,
   ViewChild,
   ViewContainerRef,
   ViewEncapsulation$1,
   booleanAttribute,
-  filter,
-  merge,
   numberAttribute,
   setClassMetadata,
-  startWith,
-  take,
   ɵɵInheritDefinitionFeature,
   ɵɵInputTransformsFeature,
   ɵɵNgOnChangesFeature,
@@ -92,7 +85,16 @@ import {
   ɵɵstyleProp,
   ɵɵtemplate,
   ɵɵviewQuery
-} from "./chunk-6VJOYWPE.js";
+} from "./chunk-PK7Y25PZ.js";
+import {
+  EMPTY,
+  Subject,
+  Subscription,
+  filter,
+  merge,
+  startWith,
+  take
+} from "./chunk-4J25ECOH.js";
 import "./chunk-J4B6MK7R.js";
 
 // node_modules/@angular/cdk/fesm2022/accordion.mjs

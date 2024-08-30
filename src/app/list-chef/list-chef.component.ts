@@ -19,6 +19,7 @@ import { MatRippleModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
+import { FlowbiteService } from '../services/flowbite.service';
 
 @Component({
   selector: 'app-list-chef',
@@ -59,10 +60,15 @@ export class ListChefComponent implements OnInit {
     private chefPhotoService: photoService,
     private chefAttributionService: attributionService,
     private router: Router,
-    private chefMotDuChefService: motDuChefService
+    private chefMotDuChefService: motDuChefService,
+    private flowbiteService: FlowbiteService
   ) {}
 
   ngOnInit(): void {
+      this.flowbiteService.loadFlowbite(flowbite => {
+        console.log('Flowbite loaded:', flowbite);
+      });
+    
     this.fetchChefsByType(this.selectedType);
   }
 

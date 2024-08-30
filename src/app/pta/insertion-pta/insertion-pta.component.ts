@@ -24,6 +24,7 @@ export class InsertionPtaComponent {
   ptaForm: FormGroup;
   selectedFile: File | null = null;
   selectedFileName: string | null = null;
+  fileType: string | null = null; // Variable pour stocker le type de contenu
 
   constructor(private fb: FormBuilder, private ptaService: PtaService, public dialog: MatDialog, private location: Location) {
     this.ptaForm = this.fb.group({
@@ -36,33 +37,37 @@ export class InsertionPtaComponent {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length) {
       this.selectedFile = input.files[0];
-      this.selectedFileName = this.selectedFile.name; // Set the selected file name
+      this.selectedFileName = this.selectedFile.name;
+      this.fileType = this.selectedFile.type; // Capturer le type MIME du fichier
     }
   }
 
   onSubmit(): void {
-    if (this.ptaForm.valid) {
+    if (this.ptaForm.valid && this.selectedFile) {
       const { titre, typeDePta } = this.ptaForm.value;
 
-      if (this.selectedFile) {
-        const reader = new FileReader();
-        reader.onload = () => {
-          const base64File = reader.result as string;
-          console.log('Pta:', { titre, typeDePta });
-          console.log('Base64 File:', base64File);
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64File = reader.result as string;
+        console.log('Pta:', { titre, typeDePta });
+        console.log('Base64 File:', base64File);
+        console.log('File Type:', this.fileType);
 
-          this.ptaService.createPta(titre, base64File, typeDePta).subscribe(response => {
+        if (this.fileType) {
+          this.ptaService.createPtaPersonalise(titre, base64File, typeDePta, this.fileType).subscribe(response => {
             console.log('Pta created', response);
             this.dialog.open(SuccessDialogComponent);
             this.ptaArchived.emit(); // Emit the event
           }, error => {
             console.error('Error creating Pta:', error);
           });
-        };
-        reader.readAsDataURL(this.selectedFile);
-      } else {
-        console.error('File is required');
-      }
+        } else {
+          console.error('Unable to determine file type');
+        }
+      };
+      reader.readAsDataURL(this.selectedFile);
+    } else {
+      console.error('Form is invalid or file is missing');
     }
   }
 

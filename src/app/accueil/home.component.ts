@@ -45,7 +45,6 @@ export class HomeComponent implements OnInit {
     ngOnInit(): void {
       this.flowbiteService.loadFlowbite(flowbite => {
         console.log('Flowbite loaded:', flowbite);
-        // Any additional Flowbite initialization if needed
       });
     }
 

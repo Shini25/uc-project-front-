@@ -4,4 +4,5 @@ export interface Pta {
   datePta?: any;
   contenue: string;
   typeDePta: string;
+  typeDeContenue: string;
 }

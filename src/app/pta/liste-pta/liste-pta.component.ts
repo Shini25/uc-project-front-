@@ -22,6 +22,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatDialogModule } from '@angular/material/dialog';
 import { InsertionPtaComponent } from '../insertion-pta/insertion-pta.component';
 import { MatMenuModule } from '@angular/material/menu';
+import { MimeService } from '../../services/mime.service';
 
 @Component({
   selector: 'app-liste-Pta',
@@ -68,18 +69,21 @@ export class ListePtaComponent implements OnInit, AfterViewInit {
   selectedType: string = 'DSP';
   title: string = 'PTA de DSP';
 
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
     private PtaService: PtaService,
+    private mimeService: MimeService,
     public sanitizer: DomSanitizer,
     public dialog: MatDialog
+    
   ) {}
 
   ngOnInit(): void {
-    this.filterType = 'titre'; // Set default filter type to 'titre'
-    this.setFilterPredicate(); // Initialize the filter predicate
+    this.filterType = 'titre'; 
+    this.setFilterPredicate(); 
     this.fetchPtas();
   }
 
@@ -146,24 +150,45 @@ export class ListePtaComponent implements OnInit, AfterViewInit {
       this.clearFilter();
     }
   }
-
-  openPdfInNewTab(base64pdf: string): void {
-    const byteCharacters = atob(base64pdf);
+  openFileInNewTab(base64file: string, typeDeContenu: string): void {
+    const byteCharacters = atob(base64file);
     const byteNumbers = new Array(byteCharacters.length);
     for (let i = 0; i < byteCharacters.length; i++) {
       byteNumbers[i] = byteCharacters.charCodeAt(i);
     }
     const byteArray = new Uint8Array(byteNumbers);
-    const blob = new Blob([byteArray], { type: 'application/pdf' });
+    const blob = new Blob([byteArray], { type: typeDeContenu });
     const url = URL.createObjectURL(blob);
     window.open(url, '_blank');
+  }
+
+  downloadFile(base64file: string, filename: string, typeDeContenu: string): void {
+    const byteCharacters = atob(base64file);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    const blob = new Blob([byteArray], { type: typeDeContenu });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a); 
+  }
+  
+  getFileExtension(mimeType: string): string {
+    return this.mimeService.getFileExtension(mimeType);
   }
 
   isExpansionDetailRow = (index: number, row: Pta) => row.hasOwnProperty('isExpandedRow');
 
   openArchivageDialog(): void {
     const dialogRef = this.dialog.open(InsertionPtaComponent, {
-      width: '400px', // Adjust the width as needed
+      width: '400px', 
       height: '400px'
     });
 

@@ -1,40 +1,35 @@
-
-<div class="fixed z-0 h-64 w-64 bg-blue-800 rounded-br-full">
-</div>
-<div class="fixed z-0 h-64 w-64 bg-amber-300 right-0 bottom-0 rounded-tl-full">
-</div>
-<div class="h-full w-full flex flex-col justify-center items-center  bg-blue-800/5 ">
+<div class="h-full w-full flex flex-col justify-center items-center z-1 backdrop-blur-sm  ">
     <div class="h-32 w-full "></div>
-    <div class="flex flex-1  w-full justify-center items-center ">
-        <div class="h-full w-1/2 flex flex-col gap-6">
-            <div class="flex flex-col gap-4">
-                <div class="">
-                    <span class="font-bold text-4xl text-start">
-                        Plateforme de gestion des données avec visualisation et archivage simplifiés.
-                    </span>
+        <div class="flex flex-1  w-full justify-center items-center z-6">
+            <div class="h-full w-full p-3 md:p-10 lg:w-1/2  flex flex-col gap-6 bg-white/10 backdrop-blur-lg z-20">
+                <div class="flex flex-col gap-4">
+                    <div class="">
+                        <span class="font-bold text-4xl text-start ">
+                            Plateforme de gestion des données avec visualisation et archivage simplifiés.
+                        </span>
+                    </div>
+                    <div>
+                        <span class="font-normal text-lg text-start ">
+                            Grâce à une interface intuitive et des outils de visualisation avancés, cette plateforme assure une gestion efficace et une conservation optimale des données.
+                        </span> 
+                    </div>
                 </div>
-                <div>
-                    <span class="font-normal text-lg text-start ">
-                        Grâce à une interface intuitive et des outils de visualisation avancés, cette plateforme assure une gestion efficace et une conservation optimale de vos données.
-                    </span> 
+                <div class="flex justify-between gap-4">
+                    <button class="w-1/2 h-11 p-4 bg-white  rounded-full  flex shadow-md shadow-blue-800 justify-between items-center" routerLink="liste-courrier">
+                        <span class="font-bold">Courrier</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 font-bold">
+                            <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
+                        </svg>                     
+                    </button>
+                    <button class="w-1/2 h-11 p-4 rounded-full bg-gradient-to-r from-amber-300 to-amber-400 flex shadow-md shadow-amber-300  font-bold justify-between items-center" routerLink="liste-pta">
+                        <span class="text-black">Pta</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 text-black font-bold">
+                            <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
+                        </svg>                     
+                    </button>
                 </div>
-            </div>
-            <div class="flex justify-between gap-4">
-                <button class="w-1/2 h-11 p-4 bg-white  rounded-full  flex shadow-md shadow-blue-600 justify-between items-center">
-                    <span>Courier</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-                        <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
-                    </svg>                     
-                </button>
-                <button class="w-1/2 h-11 p-4 rounded-full bg-gradient-to-r from-amber-200 to-amber-500 flex shadow-md shadow-amber-600 justify-between items-center">
-                    <span class="text-black">Pta</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 text-white">
-                        <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
-                    </svg>                     
-                </button>
             </div>
         </div>
-    </div>
     <div class="h-32 w-full "></div>
-
 </div>
+
