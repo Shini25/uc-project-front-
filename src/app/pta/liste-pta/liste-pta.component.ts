@@ -65,7 +65,23 @@ export class ListePtaComponent implements OnInit, AfterViewInit {
   filterType: string = 'titre';
   expandedElement: Pta | null = null;
   noResults: boolean = false;
-  ptaTypes: string[] = ['DSP', 'SERVICE'];
+  ptaTypes: string[] = [
+    'DGBF',
+    'DSP',
+    'SERVICE',
+    'MEF',
+    'PROG_130',
+    'EXECUTION_DAAF',
+    'EXECUTION_SSB',
+    'FEUILLE_DE_ROUTE',
+    'PIP',
+    'PSMFP',
+    'EXECUTION_BUDGETAIRE_DSP_DGEAE',
+    'GRANDES_REALISATIONS',
+    'CEB',
+    'CODE_DE_LA_SOLDE',
+    'AUTRE'
+  ];  
   selectedType: string = 'DSP';
   title: string = 'PTA de DSP';
 

@@ -29,7 +29,7 @@ export class InsertionPtaComponent {
   constructor(private fb: FormBuilder, private ptaService: PtaService, public dialog: MatDialog, private location: Location) {
     this.ptaForm = this.fb.group({
       titre: ['', Validators.required],
-      typeDePta: ['', Validators.required]
+      typeDePta: ['DSP', Validators.required]
     });
   }
 

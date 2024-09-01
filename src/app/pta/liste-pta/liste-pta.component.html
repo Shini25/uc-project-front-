@@ -76,7 +76,7 @@
           <td mat-cell *matCellDef="let pta">
             <div class="consulter-courrier-container">
               <a class="consulter-courrier" *ngIf="pta.contenue" (click)="downloadFile(pta.contenue, pta.fileName, pta.typeDeContenue) ">
-                {{ getFileExtension(pta.typeDeContenue) }} - Consulter le pta
+                {{ getFileExtension(pta.typeDeContenue) }} - Consulter 
               </a>
             </div>
           </td>
