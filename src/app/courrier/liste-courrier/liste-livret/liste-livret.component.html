@@ -1,0 +1,58 @@
+<div class="container mx-auto px-4 py-6">
+    <h1 class="text-2xl font-bold mb-4">Liste des Livrets</h1>
+    
+    <div class="mb-4">
+        <label for="livretTypeSelect" class="block text-sm font-medium text-gray-700">Filtrer par type de livret</label>
+        <select id="livretTypeSelect" (change)="onTypeChange($event)" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+            <option *ngFor="let type of livretTypes" [value]="type">{{ type }}</option>
+        </select>
+    </div>
+
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="px-6 py-3">
+                        Titre
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Date d'insertion
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Type
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                      Données insérées par
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Action
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let livret of filteredLivrets" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <td class="px-6 py-4">
+                        {{ livret.titre }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ livret.dateInsertion | date:'medium' }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ livret.type }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ livret.user_account.numero }}
+                    </td>
+                    <td class="px-6 py-4">
+                        <button 
+                            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                            (click)="downloadLivret(livret)"
+                        >
+                            Télécharger
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

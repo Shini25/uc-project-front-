@@ -28,7 +28,6 @@ import { RouterLink } from '@angular/router';
     MatOptionModule,
     AccountCreatedDialogComponent,
     RouterLink
-    
   ]
 })
 export class CreateAccountComponent {
@@ -43,7 +42,7 @@ export class CreateAccountComponent {
     private dialog: MatDialog
   ) {
     this.createAccountForm = this.fb.group({
-      matricule: ['', [Validators.required, Validators.minLength(8)]],
+      numero: ['', [Validators.required, Validators.minLength(8)]],
       password: ['', [
         Validators.required,
         Validators.minLength(8),
@@ -58,10 +57,10 @@ export class CreateAccountComponent {
 
   onSubmit() {
     if (this.createAccountForm.valid) {
-      const matriculeControl = this.createAccountForm.get('matricule');
-      if (matriculeControl) {
-        const matricule = matriculeControl.value;
-        this.userService.checkUsernameExists(matricule).subscribe(
+      const numeroControl = this.createAccountForm.get('numero');
+      if (numeroControl) {
+        const numero = numeroControl.value;
+        this.userService.checkUsernameExists(numero).subscribe(
           exists => {
             if (exists) {
               console.error('Username already exists');
@@ -88,7 +87,7 @@ export class CreateAccountComponent {
             }
           },
           error => {
-            console.error('Error checking matricule', error.message);
+            console.error('Error checking numero', error.message);
           }
         );
       }

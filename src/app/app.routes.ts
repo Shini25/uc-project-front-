@@ -9,19 +9,14 @@ import { SuccessDialogComponent } from './chef-form/success-dialog/success-dialo
 import { MotDuChefComponent } from './list-chef/motduchef/motduchef.component';
 import { OrganigrammeDirectionComponent } from './organigramme-direction/organigramme-direction.component';
 import { OrganigrammeServiceComponent } from './organigramme-service/organigramme-service.component';
-import { CircuitDeTraitementComponent } from './Livret/circuit-de-traitement/circuit-de-traitement.component';
-import { GuideComponent } from './Livret/guide/guide.component';
-import { ManuelDeProcedureComponent } from './Livret/manuel-de-procedure/manuel-de-procedure.component';
 import { ArchivageCourrierComponent } from './courrier/archivage-courrier/archivage-courrier.component';
-import { ListeCourrierComponent } from './courrier/liste-courrier/liste-courrier.component';
 import { LoginComponent } from './login/login.component';
 import { ListChefComponent } from './list-chef/list-chef.component';
 import { ChefFormComponent } from './chef-form/chef-form.component';
-import { InsertionPtaComponent } from './pta/insertion-pta/insertion-pta.component';
-import { ListePtaComponent } from './pta/liste-pta/liste-pta.component';
 import { PlanifierReunionComponent } from './reunion/planifier-reunion/planifier-reunion.component';
 import { ListeReunionComponent } from './reunion/liste-reunion/liste-reunion.component';
 import { DetailsReunionComponent } from './reunion/details-reunion/details-reunion.component';
+import { ListeLivretComponent } from './courrier/liste-courrier/liste-livret/liste-livret.component';
 
 export const routes: Routes = [
     {
@@ -69,32 +64,8 @@ export const routes: Routes = [
         component: OrganigrammeServiceComponent
     },
     {
-        path: 'circuit-de-traitement',
-        component: CircuitDeTraitementComponent
-    },
-    {
-        path: 'guide',
-        component: GuideComponent
-    },
-    {
-        path: 'manuel-de-procedure',
-        component: ManuelDeProcedureComponent
-    },
-    {
         path: 'archivage-courrier',
         component: ArchivageCourrierComponent
-    },
-    {
-        path: 'liste-courrier',
-        component: ListeCourrierComponent
-    },
-    {
-        path: 'insertion-pta',
-        component: InsertionPtaComponent
-    },
-    {
-        path: 'liste-pta',
-        component: ListePtaComponent
     },
     {
         path: 'planifier-reunion',
@@ -109,7 +80,11 @@ export const routes: Routes = [
         component: DetailsReunionComponent
     },
     {
+        path: 'liste-livret',
+        component: ListeLivretComponent
+    },
+    {
         path: '**',
         component: PageNotFoundComponentComponent
     },
-];
+]

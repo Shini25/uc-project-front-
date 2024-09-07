@@ -45,17 +45,17 @@ export class AppComponent implements OnInit {
   title = 'FrontBankLoan';
   pendingLoansCount: number = 0;
   user: User_account | null = null;
-  matricule: string | null = null;
+  numero: string | null = null;
   isLivretOpen = false;
 
 
   constructor(private authService: AuthService, private userService: UserService, private router: Router) {}
 
   ngOnInit() {
-    this.matricule = this.userService.getMatricule();
-    console.log('Matricule in AppComponent:', this.matricule); // Log the matricule in AppComponent
-    if (this.matricule) {
-      this.userService.getUserByMatricule(this.matricule).subscribe(user => {
+    this.numero = this.userService.getNumero();
+    console.log('Numero in AppComponent:', this.numero); // Log the numero in AppComponent
+    if (this.numero) {
+      this.userService.getUserByNumero(this.numero).subscribe(user => {
         this.user = user;
         console.log('User retrieved:', this.user); // Log the retrieved user
       });

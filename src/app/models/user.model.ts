@@ -1,5 +1,5 @@
 export class User_account {
-    matricule: string;
+    numero: string;
     password: string;
     email: string;
     verificationCode: string;
@@ -8,7 +8,7 @@ export class User_account {
     accountState: string;
 
     constructor(
-        matricule: string,
+        numero: string,
         password: string,
         email: string,
         verificationCode: string,
@@ -16,7 +16,7 @@ export class User_account {
         accountType: string,
         accountState: string
     ) {
-        this.matricule = matricule;
+        this.numero = numero;
         this.password = password;
         this.email = email;
         this.verificationCode = verificationCode;

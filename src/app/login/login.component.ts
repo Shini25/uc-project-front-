@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   loading = false;
 
-  matricule: string = '';
+  numero: string = '';
   password: string = '';
   errorMessage: string = '';
 
@@ -54,7 +54,7 @@ export class LoginComponent implements OnInit {
 
   constructor(private router: Router, private userService: UserService, private authService: AuthService, private location: Location) {
     this.loginForm = new FormGroup({
-      matricule: new FormControl('', [Validators.required, Validators.minLength(6)]),
+      numero: new FormControl('', [Validators.required, Validators.minLength(6)]),
       password: new FormControl('', [Validators.required, Validators.minLength(8)])
     });
   }
@@ -70,14 +70,14 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    const { matricule, password } = this.loginForm.value;
+    const { numero, password } = this.loginForm.value;
 
     this.loading = true;
-    this.authService.login({ matricule, password }).subscribe(
+    this.authService.login({ numero, password }).subscribe(
       data => {
         this.authService.saveToken(data.jwt);
-        this.userService.setMatricule(matricule); // Store the matricule
-        console.log('Matricule set in login:', matricule); // Log the matricule set in login
+        this.userService.setNumero(numero); // Store the numero
+        console.log('Numero set in login:', numero); // Log the numero set in login
         setTimeout(() => {
           this.loading = false;
           this.router.navigate(['/home']);
