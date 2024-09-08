@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Livret, LivretType } from '../../../models/courriers/livret.model';
+import { Livret } from '../../../models/courriers/livret.model';
 import { LivretService } from '../../../services/courrier/livret.service';
 import { MimeService } from '../../../services/mime.service';
 import { CommonModule } from '@angular/common';
@@ -15,14 +15,18 @@ import { DatePipe } from '@angular/common';
 export class ListeLivretComponent implements OnInit {
   livrets: Livret[] = [];
   filteredLivrets: Livret[] = [];
-  selectedType: LivretType = LivretType.CIRCUIT_DE_TRAITEMENT;
-  LivretType = LivretType; // Expose LivretType to the template
-  livretTypes = Object.keys(LivretType); // Get the enum keys
+  paginatedLivrets: Livret[] = [];
+  selectedType: string = '';
+  livretTypes: string[] = ['GUIDE_AU_USAGERS', 'CIRCUIT_DE_TRAITEMENT', 'MANUELS_DE_PROCEDURES', 'CODES_DE_LA_SOLDE', 'SGAP'];
+  searchQuery: string = '';
+  searchDate: string = ''; // For date filter
+  searchType: string = 'title';
 
-  constructor(
-    private livretService: LivretService,
-    private mimeService: MimeService,
-  ) {}
+  currentPage: number = 1;
+  rowsPerPage: number = 10;
+  totalPages: number = 1;
+
+  constructor(private livretService: LivretService, private mimeService: MimeService) {}
 
   ngOnInit(): void {
     this.getAllLivrets();
@@ -36,17 +40,78 @@ export class ListeLivretComponent implements OnInit {
   }
 
   filterLivrets(): void {
-    this.filteredLivrets = this.livrets.filter(livret => livret.type === this.selectedType);
+    this.filteredLivrets = this.livrets.filter(livret => {
+      // Check livret type first
+      const typeMatches = this.selectedType === '' || livret.type.toString() === this.selectedType;
+  
+      let searchMatches = true;
+      if (this.searchType === 'title') {
+        searchMatches = livret.titre.toLowerCase().includes(this.searchQuery.toLowerCase());
+      } else if (this.searchType === 'date' && this.searchDate) {
+        const livretDate = new Date(livret.dateInsertion).toISOString().split('T')[0];
+        searchMatches = livretDate === this.searchDate;
+      }
+  
+      return typeMatches && searchMatches;
+    });
+  
+    this.updatePagination();
   }
+  
 
-  onTypeChange(event: Event): void {
-    const selectElement = event.target as HTMLSelectElement;
-    this.selectedType = LivretType[selectElement.value as keyof typeof LivretType];
+  onSearch(event: Event): void {
+    this.searchQuery = (event.target as HTMLInputElement).value;
     this.filterLivrets();
   }
 
-  getFileExtension(typeContenue: string): string {
-    return this.mimeService.getFileExtension(typeContenue);
+  onDateChange(event: Event): void {
+    this.searchDate = (event.target as HTMLInputElement).value;
+    this.filterLivrets();
+  }
+
+  onSearchTypeChange(event: Event): void {
+    this.searchType = (event.target as HTMLSelectElement).value;
+    this.filterLivrets();
+  }
+
+  onTypeChange(event: Event): void {
+    this.selectedType = (event.target as HTMLSelectElement).value;
+    this.filterLivrets();
+  }
+
+  onRowsPerPageChange(event: Event): void {
+    this.rowsPerPage = +(event.target as HTMLSelectElement).value;
+    this.currentPage = 1;
+    this.updatePagination();
+  }
+
+  resetFilters(): void {
+    this.searchQuery = '';
+    this.searchDate = '';
+    this.selectedType = '';
+    this.searchType = 'title';
+    this.getAllLivrets();
+  }
+
+  previousPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.updatePagination();
+    }
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.updatePagination();
+    }
+  }
+
+  updatePagination(): void {
+    this.totalPages = Math.ceil(this.filteredLivrets.length / this.rowsPerPage);
+    const start = (this.currentPage - 1) * this.rowsPerPage;
+    const end = start + this.rowsPerPage;
+    this.paginatedLivrets = this.filteredLivrets.slice(start, end);
   }
 
   downloadLivret(livret: Livret): void {

@@ -1,7 +1,7 @@
 import {
   ScrollingModule,
   ViewportRuler
-} from "./chunk-6JK5644Z.js";
+} from "./chunk-3YU5MJKE.js";
 import {
   DataSource,
   _DisposeViewRepeaterStrategy,
@@ -9,16 +9,16 @@ import {
   _VIEW_REPEATER_STRATEGY,
   _ViewRepeaterOperation,
   isDataSource
-} from "./chunk-ETNNQANO.js";
+} from "./chunk-25DZZR27.js";
 import {
   Directionality,
   MatCommonModule,
   Platform,
   _isNumberValue
-} from "./chunk-YEZJA7VL.js";
+} from "./chunk-X2XZH4J5.js";
 import {
   DOCUMENT
-} from "./chunk-TGOHR3GI.js";
+} from "./chunk-SRWQRC57.js";
 import {
   Attribute,
   BehaviorSubject,
@@ -89,8 +89,7 @@ import {
   ɵɵtext,
   ɵɵtextInterpolate1,
   ɵɵviewQuery
-} from "./chunk-C5B4PMNR.js";
-import "./chunk-WINX6U5G.js";
+} from "./chunk-SRDYJ54B.js";
 import "./chunk-J4B6MK7R.js";
 
 // node_modules/@angular/cdk/fesm2022/table.mjs
