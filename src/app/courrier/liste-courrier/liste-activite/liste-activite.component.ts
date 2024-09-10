@@ -1,23 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import { Livret } from '../../../models/courriers/livret.model';
-import { LivretService } from '../../../services/courrier/livret.service';
+import { ActiviteService } from '../../../services/courrier/activite.service';
+import { Activite } from '../../../models/courriers/activite.model';
 import { MimeService } from '../../../services/mime.service';
 import { CommonModule } from '@angular/common';
 import { DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'app-liste-livret',
+  selector: 'app-liste-activite',
   standalone: true,
   imports: [CommonModule, DatePipe],
-  templateUrl: './liste-livret.component.html',
-  styleUrls: ['./liste-livret.component.css']
+  templateUrl: './liste-activite.component.html',
+  styleUrl: './liste-activite.component.css'
 })
-export class ListeLivretComponent implements OnInit {
-  livrets: Livret[] = [];
-  filteredLivrets: Livret[] = [];
-  paginatedLivrets: Livret[] = [];
+export class ListeActiviteComponent implements OnInit {
+  activites: Activite[] = [];
+  filteredActivites: Activite[] = [];
+  paginatedActivites: Activite[] = [];
   selectedType: string = '';
-  livretTypes: string[] = ['GUIDE_AU_USAGERS', 'CIRCUIT_DE_TRAITEMENT', 'MANUELS_DE_PROCEDURES', 'CODES_DE_LA_SOLDE', 'SGAP'];
+  activiteTypes: string[] = ['GUIDE_AU_USAGERS', 'CIRCUIT_DE_TRAITEMENT', 'MANUELS_DE_PROCEDURES', 'CODES_DE_LA_SOLDE', 'SGAP'];
   searchQuery: string = '';
   searchDate: string = '';
   searchType: string = 'title';
@@ -26,30 +26,30 @@ export class ListeLivretComponent implements OnInit {
   rowsPerPage: number = 10;
   totalPages: number = 1;
 
-  constructor(private livretService: LivretService, private mimeService: MimeService) {}
+  constructor(private activiteService: ActiviteService, private mimeService: MimeService) {}
 
   ngOnInit(): void {
-    this.getAllLivrets();
+    this.getAllActivites();
   }
 
-  getAllLivrets(): void {
-    this.livretService.getAllLivrets().subscribe((data: Livret[]) => {
-      this.livrets = data;
-      this.filterLivrets();
+  getAllActivites(): void {
+    this.activiteService.getAllActivites().subscribe((data: Activite[]) => {
+      this.activites = data;
+      this.filterActivites();
     });
   }
 
-  filterLivrets(): void {
-    this.filteredLivrets = this.livrets.filter(livret => {
-      // Check livret type first
-      const typeMatches = this.selectedType === '' || livret.type.toString() === this.selectedType;
+  filterActivites(): void {
+    this.filteredActivites = this.activites.filter(activite => {
+      // Check activite type first
+      const typeMatches = this.selectedType === '' || activite.type.toString() === this.selectedType;
   
       let searchMatches = true;
       if (this.searchType === 'title') {
-        searchMatches = livret.titre.toLowerCase().includes(this.searchQuery.toLowerCase());
+        searchMatches = activite.titre.toLowerCase().includes(this.searchQuery.toLowerCase());
       } else if (this.searchType === 'date' && this.searchDate) {
-        const livretDate = new Date(livret.dateInsertion).toISOString().split('T')[0];
-        searchMatches = livretDate === this.searchDate;
+        const activiteDate = new Date(activite.dateInsertion).toISOString().split('T')[0];
+        searchMatches = activiteDate === this.searchDate;
       }
   
       return typeMatches && searchMatches;
@@ -61,22 +61,22 @@ export class ListeLivretComponent implements OnInit {
 
   onSearch(event: Event): void {
     this.searchQuery = (event.target as HTMLInputElement).value;
-    this.filterLivrets();
+    this.filterActivites();
   }
 
   onDateChange(event: Event): void {
     this.searchDate = (event.target as HTMLInputElement).value;
-    this.filterLivrets();
+    this.filterActivites();
   }
 
   onSearchTypeChange(event: Event): void {
     this.searchType = (event.target as HTMLSelectElement).value;
-    this.filterLivrets();
+    this.filterActivites();
   }
 
   onTypeChange(event: Event): void {
     this.selectedType = (event.target as HTMLSelectElement).value;
-    this.filterLivrets();
+    this.filterActivites();
   }
 
   onRowsPerPageChange(event: Event): void {
@@ -90,7 +90,7 @@ export class ListeLivretComponent implements OnInit {
     this.searchDate = '';
     this.selectedType = '';
     this.searchType = 'title';
-    this.getAllLivrets();
+    this.getAllActivites();
   }
 
   previousPage(): void {
@@ -108,18 +108,18 @@ export class ListeLivretComponent implements OnInit {
   }
 
   updatePagination(): void {
-    this.totalPages = Math.ceil(this.filteredLivrets.length / this.rowsPerPage);
+    this.totalPages = Math.ceil(this.filteredActivites.length / this.rowsPerPage);
     const start = (this.currentPage - 1) * this.rowsPerPage;
     const end = start + this.rowsPerPage;
-    this.paginatedLivrets = this.filteredLivrets.slice(start, end);
+    this.paginatedActivites = this.filteredActivites.slice(start, end);
   }
 
-  downloadLivret(livret: Livret): void {
-    const fileType = livret.typeContenue;
+  downloadActivite(activite: Activite): void {
+    const fileType = activite.typeContenue;
     const extension = this.mimeService.getFileExtension(fileType);
-    const fileName = `${livret.titre}.${extension.toLowerCase()}`;
+    const fileName = `${activite.titre}.${extension.toLowerCase()}`;
 
-    const byteCharacters = atob(livret.contenue);
+    const byteCharacters = atob(activite.contenue);
     const byteNumbers = new Array(byteCharacters.length);
     for (let i = 0; i < byteCharacters.length; i++) {
       byteNumbers[i] = byteCharacters.charCodeAt(i);

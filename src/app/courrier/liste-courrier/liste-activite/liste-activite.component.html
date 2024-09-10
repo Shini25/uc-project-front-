@@ -2,7 +2,7 @@
 
     <!-- header -->
      <div class="flex flex-col  w-full ">
-        <div class="w-full  "><h6 class="text-gray-800 text-2xl font-bold m-0">Liste des Livrets</h6></div>
+        <div class="w-full  "><h6 class="text-gray-800 text-2xl font-bold m-0">Liste des Activites</h6></div>
         <div class="flex flex-row flex-1  justify-between">
             <div class="w-1/2 h-12 ">
                 <div class="flex">
@@ -46,16 +46,16 @@
             </div>
             <div class="w-1/2 h-12 ">
                 <div class="w-full  flex justify-end">
-                    <select id="livretTypeSelect" (change)="onTypeChange($event)" 
+                    <select id="activiteTypeSelect" (change)="onTypeChange($event)" 
                             class="block w-1/2 pl-3 pr-10 text-base text-gray-800 bg-gray-50 border-gray-600 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
-                    <option *ngFor="let type of livretTypes" [value]="type">{{ type }}</option>
+                    <option *ngFor="let type of activiteTypes" [value]="type">{{ type }}</option>
                     </select>
                 </div>    
             </div>
         </div>
      </div>
   
-    <!-- Livret Table -->
+    <!-- Activite Table -->
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg overflow-auto max-h-[520px] ">
       <table class="w-full text-sm text-left text-gray-400 dark:text-gray-400">
         <thead class="text-xs text-gray-800 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -68,13 +68,13 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let livret of paginatedLivrets" class="bg-white text-gray-800 border-b border-gray-700">
-            <td class="px-6 py-4">{{ livret.titre }}</td>
-            <td class="px-6 py-4">{{ livret.dateInsertion | date:'medium' }}</td>
-            <td class="px-6 py-4">{{ livret.type }}</td>
-            <td class="px-6 py-4">{{ livret.user_account.numero }}</td>
+          <tr *ngFor="let activite of paginatedActivites" class="bg-white text-gray-800 border-b border-gray-700">
+            <td class="px-6 py-4">{{ activite.titre }}</td>
+            <td class="px-6 py-4">{{ activite.dateInsertion | date:'medium' }}</td>
+            <td class="px-6 py-4">{{ activite.type }}</td>
+            <td class="px-6 py-4">{{ activite.user_account.numero }}</td>
             <td class="px-6 py-4">
-              <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" (click)="downloadLivret(livret)">
+              <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" (click)="downloadActivite(activite)">
                 Consulter
               </button>
             </td>
@@ -83,7 +83,7 @@
       </table>
   
       <!-- No Results Message -->
-      <div *ngIf="filteredLivrets.length === 0" class="text-center text-red-500 font-semibold ">
+      <div *ngIf="filteredActivites.length === 0" class="text-center text-red-500 font-semibold ">
         Aucun résultat trouvé.
       </div>
     </div>
@@ -102,7 +102,6 @@
         </select>
       </div>
   
-      <!-- Pagination Buttons -->
       <div>
         <button class="px-4 py-2  text-gray-400 rounded-md" [disabled]="currentPage === 1" (click)="previousPage()">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">

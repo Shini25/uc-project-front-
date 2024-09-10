@@ -1,10 +1,11 @@
 import { Courrier } from "./courrier.model";
+import { User_account } from "../user.model";
 
 export class AccesReserve extends Courrier {
     type: AccesReserveType;
 
-    constructor(titre: string, contenue: string, typeDeContenue: string, userId: string, typeDocument: string, type: AccesReserveType) {
-        super(titre, contenue, typeDeContenue, userId, typeDocument);
+    constructor(titre: string, contenue: string, typeDeContenue: string, user_account: User_account, type: AccesReserveType) {
+        super(titre, contenue, typeDeContenue, user_account);
         this.type = type;
     }
 }

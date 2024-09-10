@@ -1,4 +1,5 @@
 import { Courrier } from "./courrier.model";
+import { User_account } from "../user.model";
 
 export enum TexteType {
     TEXTES_LEGISLATIF
@@ -7,8 +8,8 @@ export enum TexteType {
 export class Texte extends Courrier {
     type: TexteType;
 
-    constructor(titre: string, contenue: string, typeDeContenue: string, userId: string, typeDocument: string, type: TexteType) {
-        super(titre, contenue, typeDeContenue, userId, typeDocument);
+    constructor(titre: string, contenue: string, typeDeContenue: string, type: TexteType, user_account: User_account) {
+        super(titre, contenue, typeDeContenue, user_account);
         this.type = type;
     }
 }

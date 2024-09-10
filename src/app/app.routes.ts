@@ -17,6 +17,10 @@ import { PlanifierReunionComponent } from './reunion/planifier-reunion/planifier
 import { ListeReunionComponent } from './reunion/liste-reunion/liste-reunion.component';
 import { DetailsReunionComponent } from './reunion/details-reunion/details-reunion.component';
 import { ListeLivretComponent } from './courrier/liste-courrier/liste-livret/liste-livret.component';
+import { ListeTexteComponent } from './courrier/liste-courrier/liste-texte/liste-texte.component';
+import { ListePtaComponent } from './courrier/liste-courrier/liste-pta/liste-pta.component';
+import { ListeAutreDocumentComponent } from './courrier/liste-courrier/liste-autre-document/liste-autre-document.component';
+import { ListeActiviteComponent } from './courrier/liste-courrier/liste-activite/liste-activite.component';
 
 export const routes: Routes = [
     {
@@ -82,6 +86,22 @@ export const routes: Routes = [
     {
         path: 'liste-livret',
         component: ListeLivretComponent
+    },
+    {
+        path: 'liste-texte',
+        component: ListeTexteComponent
+    },
+    {
+        path: 'liste-pta',
+        component: ListePtaComponent
+    },
+    {
+        path: 'liste-autre-document',
+        component: ListeAutreDocumentComponent
+    },
+    {
+        path: 'liste-activite',
+        component: ListeActiviteComponent
     },
     {
         path: '**',

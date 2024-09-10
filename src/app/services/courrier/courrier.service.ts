@@ -96,7 +96,7 @@ export class CourrierService {
     formData.append('typeDeContenue', typeDeContenue);
     formData.append('userId', userId);
 
-    return this.http.post<Courrier>(`${this.apiUrl}/autreDocument/insertion/personalise`, formData);
+    return this.http.post<Courrier>(`${this.apiUrl}/autre-documents/insertion/personalise`, formData);
   }
 
   createTableauDeBord(

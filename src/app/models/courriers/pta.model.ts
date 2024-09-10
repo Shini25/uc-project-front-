@@ -1,4 +1,5 @@
 import { Courrier } from "./courrier.model";
+import { User_account } from "../user.model";
 
 export enum PtaType {
     DSP,
@@ -20,8 +21,8 @@ export enum PtaType {
 export class Pta extends Courrier {
     type: PtaType;
 
-    constructor(titre: string, contenue: string, typeDeContenue: string, userId: string, typeDocument: string, type: PtaType) {
-        super(titre, contenue, typeDeContenue, userId, typeDocument);
+    constructor(titre: string, contenue: string, typeDeContenue: string, user_account: User_account, type: PtaType) {
+        super(titre, contenue, typeDeContenue, user_account);
         this.type = type;
     }
 }
