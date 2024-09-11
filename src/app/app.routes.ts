@@ -21,6 +21,7 @@ import { ListeTexteComponent } from './courrier/liste-courrier/liste-texte/liste
 import { ListePtaComponent } from './courrier/liste-courrier/liste-pta/liste-pta.component';
 import { ListeAutreDocumentComponent } from './courrier/liste-courrier/liste-autre-document/liste-autre-document.component';
 import { ListeActiviteComponent } from './courrier/liste-courrier/liste-activite/liste-activite.component';
+import { ListeTableauDeBordEBComponent } from './courrier/liste-courrier/liste-tableau-de-bord-eb/liste-tableau-de-bord-eb.component';
 
 export const routes: Routes = [
     {
@@ -102,6 +103,10 @@ export const routes: Routes = [
     {
         path: 'liste-activite',
         component: ListeActiviteComponent
+    },
+    {
+        path: 'liste-tableau-de-bord',
+        component: ListeTableauDeBordEBComponent
     },
     {
         path: '**',

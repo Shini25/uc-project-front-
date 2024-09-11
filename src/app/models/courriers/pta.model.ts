@@ -20,9 +20,10 @@ export enum PtaType {
 
 export class Pta extends Courrier {
     type: PtaType;
-
-    constructor(titre: string, contenue: string, typeDeContenue: string, user_account: User_account, type: PtaType) {
+    valide: boolean;
+    constructor(titre: string, contenue: string, typeDeContenue: string, user_account: User_account, type: PtaType, valide: boolean) {
         super(titre, contenue, typeDeContenue, user_account);
-        this.type = type;
+        this.type = type || PtaType.AUTRES;
+        this.valide = valide;
     }
 }

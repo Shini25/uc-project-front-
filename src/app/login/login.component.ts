@@ -70,21 +70,22 @@ export class LoginComponent implements OnInit {
       return;
     }
 
+
     const { numero, password } = this.loginForm.value;
 
     this.loading = true;
     this.authService.login({ numero, password }).subscribe(
       data => {
         this.authService.saveToken(data.jwt);
-        this.userService.setNumero(numero); // Store the numero
-        console.log('Numero set in login:', numero); // Log the numero set in login
+        this.userService.setNumero(numero);
+        console.log('Numero set in login:', numero);
         setTimeout(() => {
           this.loading = false;
           this.router.navigate(['/home']);
         }, 2000);
       },
       err => {
-        console.error('Login error:', err); // Log the error details for debugging
+        console.error('Login error:', err);
         if (err.status === 404) {
           this.errorMessage = 'User not found';
         } else if (err.status === 401) {

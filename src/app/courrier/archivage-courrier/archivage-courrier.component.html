@@ -1,101 +1,102 @@
-<div class="p-4 space-y-4">
-  <!-- Partie Sélection type de document -->
-  <div class="flex items-center space-x-2">
-    <span class="text-lg font-bold">Sélectionnez le type de document</span>
-    <label for="document_type_select" class="sr-only">Type de document : </label>
-    <select id="document_type_select" (change)="onDocumentTypeChange($event)" class="py-2.5 px-4 w-64 text-sm text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-      <option value="LIVRET" selected>LIVRET</option>
-      <option value="PTA">PTA</option>
-      <option value="TABLEAU_DE_BORD">TABLEAU DE BORD</option>
-      <option value="AUTRE_DOCUMENT">AUTRE DOCUMENT</option>
-      <option value="ACTIVITE">ACTIVITE</option>
-      <option value="TEXTE">TEXTE</option>
-    </select>
-  </div>
+<div class="h-full w-full flex flex-col justify-center items-center z-1 backdrop-blur-sm  ">
+  <div class="h-64 w-full  "></div>
+      <div class="flex flex-1  w-full justify-center items-center z-6 p-2">
+          <div class="h-full w-full md:w-1/2 bg-white rounded-xl shadow-lg p-4">
+            <h6 class="text-center text-2xl font-bold">Informations du courrier</h6>
+              <div class="h-12 w-full flex flex-row justify-center items-center space-x-0">
+                <div class="w-1/2 ">
+                  <select id="document_type_select" (change)="onDocumentTypeChange($event)" class="py-2.5 px-4 w-full text-sm text-gray-700 bg-gray-100 border border-gray-300 rounded-s-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer">
+                    <option value="LIVRET" selected>LIVRET</option>
+                    <option value="PTA">PTA</option>
+                    <option value="TABLEAU_DE_BORD">TABLEAU DE BORD</option>
+                    <option value="AUTRE_DOCUMENT">AUTRE DOCUMENT</option>
+                    <option value="ACTIVITE">ACTIVITE</option>
+                    <option value="TEXTE">TEXTE</option>
+                  </select>
+                </div>
+                <div class="w-1/2">
 
-  <!-- Partie Formulaire du courrier -->
-  <div>
-    <h5 class="text-lg font-bold mb-4">Informations du courrier</h5>
-    <form [formGroup]="courrierForm" (ngSubmit)="onSubmit()">
-      <div class="mb-4">
-        <input class="w-full p-2 border rounded" id="titre" type="text" placeholder="Titre du courrier" formControlName="titre">
+                  <div *ngIf="selectedDocumentType === 'LIVRET'" >
+                    <select id="livret_select" formControlName="type" class="py-2.5 px-4 w-full text-sm text-gray-700 bg-white border border-gray-300 rounded-e-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer">
+                      <option value="GUIDE_AU_USAGERS" selected>GUIDE_AU_USAGERS</option>
+                      <option value="CIRCUIT_DE_TRAITEMENT">CIRCUIT_DE_TRAITEMENT</option>
+                      <option value="MANUELS_DE_PROCEDURES">MANUELS_DE_PROCEDURES</option>
+                      <option value="CODES_DE_LA_SOLDE">CODES_DE_LA_SOLDE</option>
+                      <option value="SGAP">SGAP</option>
+                    </select>
+                  </div>
+
+                  <div *ngIf="selectedDocumentType === 'TEXTE'">
+                            <select id="texte_select" formControlName="type" class="block py-2.5 px-4 w-full text-sm text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer">
+                      <option value="TEXTES_LEGISLATIF" selected>TEXTES_LEGISLATIF</option>
+                    </select>
+                  </div>
+
+                  <div *ngIf="selectedDocumentType === 'TABLEAU_DE_BORD'">
+                    <select id="tableau_select" formControlName="type" class="block py-2.5 px-4 w-full text-sm text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer">
+                      <option value="TABLEAU_DE_BORD_EXECUTION_BUDGETAIRE" selected>TABLEAU_DE_BORD_EXECUTION_BUDGETAIRE</option>
+                    </select>
+                  </div>
+
+                  <div *ngIf="selectedDocumentType === 'AUTRE_DOCUMENT'">
+                    <select id="autre_doc_select" formControlName="type" class="block py-2.5 px-4 w-full text-sm text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer">
+                      <option value="CALENDRIER_SOLDE_PENSION" selected>Calendrier de la solde & pension</option>
+                      <option value="REMARQUES_OBSERVATION" >Remarques & observation</option>
+                      <option value="LETTRE_NOTE" >Lettre & note</option>
+                    </select>
+                  </div>
+
+                  <div *ngIf="selectedDocumentType === 'ACTIVITE'">
+                    <select id="activite_select" formControlName="type" class="block py-2.5 px-4 w-full text-sm text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer">
+                      <option value="REFORMES" selected>REFORMES</option>
+                      <option value="HEBDOMADAIRE">HEBDOMADAIRE</option>
+                      <option value="MENSUELLE">MENSUELLE</option>
+                      <option value="TRIMESTRIELLE">TRIMESTRIELLE</option>
+                      <option value="SEMESTRIELLE">SEMESTRIELLE</option>
+                    </select>
+                  </div>
+                  
+                  <div *ngIf="selectedDocumentType === 'PTA'">
+                    <select id="pta_select" formControlName="type" class="block py-2.5 px-4 w-full text-sm text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer">
+                      <option value="DSP" selected>DSP</option>
+                      <option value="DGBF">DGBF</option>
+                      <option value="MEF">MEF</option>
+                      <option value="SERVICE">SERVICE</option>
+                      <option value="PROG_130">PROG_130</option>
+                      <option value="EXECUTION_DAAF">EXECUTION_DAAF</option>
+                      <option value="EXECUTION_SSB">EXECUTION_SSB</option>
+                      <option value="FEUILLE_DE_ROUTE">FEUILLE_DE_ROUTE</option>
+                      <option value="PIP">PIP</option>
+                      <option value="PSMFP">PSMFP</option>
+                      <option value="EXECUTION_BUDGETAIRE_DSP_DGEAE">EXECUTION_BUDGETAIRE_DSP_DGEAE</option>
+                      <option value="GRANDES_REALISATIONS">GRANDES_REALISATIONS</option>
+                      <option value="CEB">CEB</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="w-full mt-4 h- ">
+                <input class="w-full p-2 border rounded" id="titre" type="text" placeholder="Titre du courrier" formControlName="titre">
+              </div>
+              
+              <div class="w-full mt-4 h- ">
+                <label for="file-upload" class="flex items-center cursor-pointer mb-4">
+                  <mat-icon>attach_file</mat-icon>
+                  <span class="ml-2">Choisir un fichier</span>
+                </label>
+                <input id="file-upload" type="file" (change)="onFileChange($event)" hidden>
+                <span *ngIf="selectedFileName" class="block mb-4">{{ selectedFileName }}</span>
+              </div>
+
+              <div class="w-full mt-4 h- ">
+                <button mat-raised-button color="primary" type="submit" class="bg-blue-500 w-full text-gray-800 p-2 rounded">Archiver</button>
+              </div>
+          </div>          
       </div>
-
-      <!-- Options based on document type -->
-      <div *ngIf="selectedDocumentType === 'LIVRET'">
-        <label for="livret_select" class="sr-only">Type de contenu : </label>
-        <select id="livret_select" formControlName="type" class="block py-2.5 px-4 w-full text-sm text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-          <option value="GUIDE_AU_USAGERS" selected>GUIDE_AU_USAGERS</option>
-          <option value="CIRCUIT_DE_TRAITEMENT">CIRCUIT_DE_TRAITEMENT</option>
-          <option value="MANUELS_DE_PROCEDURES">MANUELS_DE_PROCEDURES</option>
-          <option value="CODES_DE_LA_SOLDE">CODES_DE_LA_SOLDE</option>
-          <option value="SGAP">SGAP</option>
-        </select>
-      </div>
-
-      <div *ngIf="selectedDocumentType === 'TEXTE'">
-        <label for="texte_select" class="sr-only">Type de contenu : </label>
-        <select id="texte_select" formControlName="type" class="block py-2.5 px-4 w-full text-sm text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-          <option value="TEXTES_LEGISLATIF" selected>TEXTES_LEGISLATIF</option>
-        </select>
-      </div>
-
-      <div *ngIf="selectedDocumentType === 'TABLEAU_DE_BORD'">
-        <label for="tableau_select" class="sr-only">Type de contenu : </label>
-        <select id="tableau_select" formControlName="type" class="block py-2.5 px-4 w-full text-sm text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-          <option value="TABLEAU_DE_BORD_EXECUTION_BUDGETAIRE" selected>TABLEAU_DE_BORD_EXECUTION_BUDGETAIRE</option>
-        </select>
-      </div>
-
-      <div *ngIf="selectedDocumentType === 'AUTRE_DOCUMENT'">
-        <label for="autre_doc_select" class="sr-only">Type de contenu : </label>
-        <select id="autre_doc_select" formControlName="type" class="block py-2.5 px-4 w-full text-sm text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-          <option value="CALENDRIER_SOLDE_PENSION" selected>Calendrier de la solde & pension</option>
-          <option value="REMARQUES_OBSERVATION" >Remarques & observation</option>
-          <option value="LETTRE_NOTE" >Lettre & note</option>
-        </select>
-      </div>
-
-      <div *ngIf="selectedDocumentType === 'ACTIVITE'">
-        <label for="activite_select" class="sr-only">Type de contenu : </label>
-        <select id="activite_select" formControlName="type" class="block py-2.5 px-4 w-full text-sm text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-          <option value="REFORMES" selected>REFORMES</option>
-          <option value="HEBDOMADAIRE">HEBDOMADAIRE</option>
-          <option value="MENSUELLE">MENSUELLE</option>
-          <option value="TRIMESTRIELLE">TRIMESTRIELLE</option>
-          <option value="SEMESTRIELLE">SEMESTRIELLE</option>
-        </select>
-      </div>
-
-      <div *ngIf="selectedDocumentType === 'PTA'">
-        <label for="pta_select" class="sr-only">Type de contenu : </label>
-        <select id="pta_select" formControlName="type" class="block py-2.5 px-4 w-full text-sm text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-          <option value="DSP" selected>DSP</option>
-          <option value="DGBF">DGBF</option>
-          <option value="MEF">MEF</option>
-          <option value="SERVICE">SERVICE</option>
-          <option value="PROG_130">PROG_130</option>
-          <option value="EXECUTION_DAAF">EXECUTION_DAAF</option>
-          <option value="EXECUTION_SSB">EXECUTION_SSB</option>
-          <option value="FEUILLE_DE_ROUTE">FEUILLE_DE_ROUTE</option>
-          <option value="PIP">PIP</option>
-          <option value="PSMFP">PSMFP</option>
-          <option value="EXECUTION_BUDGETAIRE_DSP_DGEAE">EXECUTION_BUDGETAIRE_DSP_DGEAE</option>
-          <option value="GRANDES_REALISATIONS">GRANDES_REALISATIONS</option>
-          <option value="CEB">CEB</option>
-        </select>
-      </div>
-
-      <input type="text" id="user-id" class="user-id outline-none border-0" formControlName="userId" placeholder="numero">
-      
-      <label for="file-upload" class="flex items-center cursor-pointer mb-4">
-        <mat-icon>attach_file</mat-icon>
-        <span class="ml-2">Choisir un fichier</span>
-      </label>
-      <input id="file-upload" type="file" (change)="onFileChange($event)" hidden>
-      <span *ngIf="selectedFileName" class="block mb-4">{{ selectedFileName }}</span>
-
-      <button mat-raised-button color="primary" type="submit" class="bg-blue-500 text-white p-2 rounded">Archiver</button>
-    </form>
-  </div>
+  <div class="h-64 w-full"></div>
 </div>
+
+
+
+

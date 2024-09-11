@@ -1,50 +1,46 @@
-<!-- <div class="login-container">
-  <div class="login-form-container">
-    <div class="login-form">
-      <div class="login-header">
-        <h1>S'authentifier</h1>
+<div class="h-full w-full z-50" > 
+  <div class="w-full h-full max-w-md mx-auto  flex justify-center items-center">
+    <div class="w-full h-auto bg-white backdrop-blur-lg shadow-lg rounded-lg p-6 m-3 ">
+        <!-- Titre de la section -->
+    <p class="text-xl font-bold  text-left">Connectez-vous à votre compte</p>
+  
+    <!-- Formulaire de login -->
+    <form [formGroup]="loginForm" (ngSubmit)="login()" class="space-y-6 mt-6">
+      <!-- Champ email -->
+      <div>
+        <label for="numero" class="block text-sm font-medium text-gray-700">Votre numero</label>
+        <input id="numero" formControlName="numero" type="email" placeholder="+261 xx xx xxx xx" class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+        <p *ngIf="loginForm.get('numero')?.hasError('required')" class="text-red-500 text-xs mt-1">Le numero est requis</p>
+        <p *ngIf="loginForm.get('numero')?.hasError('minlength')" class="text-red-500 text-xs mt-1">Le numero doit comporter au moins 8 caractères</p>
       </div>
-      <form [formGroup]="loginForm" (ngSubmit)="login()">
-      <mat-form-field class="mat-form-field-custom" appearance="outline">
-        <mat-label>Matricule</mat-label>
-        <input matInput formControlName="matricule">
-        <mat-error *ngIf="loginForm.get('matricule')?.hasError('required')">
-          Matricule est requis
-        </mat-error>
-        <mat-error *ngIf="loginForm.get('matricule')?.hasError('minlength')">
-          Matricule doit comporter au moins 6 caractères
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Mot de passe</mat-label>
-        <input matInput formControlName="password" type="password">
-        <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
-          Mot de passe est requis
-        </mat-error>
-        <mat-error *ngIf="loginForm.get('password')?.hasError('minlength')">
-          Mot de passe doit comporter au moins 8 caractères
-        </mat-error>
-      </mat-form-field>
-      <div class="forgot-password">
-        <a routerLink="/forgot-password">Mot de passe oublié ?</a>
+  
+      <!-- Champ mot de passe -->
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-700">Mot de passe</label>
+        <input id="password" formControlName="password" placeholder="••••••••" type="password" class="mt-1 block w-full px-3 py-2 border bg-gray-50 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+        <p *ngIf="loginForm.get('password')?.hasError('required')" class="text-red-500 text-xs mt-1">Le mot de passe est requis</p>
+        <p *ngIf="loginForm.get('password')?.hasError('minlength')" class="text-red-500 text-xs mt-1">Le mot de passe doit comporter au moins 8 caractères</p>
       </div>
-      <button mat-raised-button type="submit">Accéder</button>
+  
+      <!-- Lien mot de passe oublié -->
+      <div class="text-left">
+        <a routerLink="/forgot-password" class="text-sm text-blue-800 no-underline text-right">Mot de passe oublié ?</a>
+      </div>
+  
+      <!-- Bouton de soumission -->
+      <div>
+        <button type="submit" class="w-full bg-blue-800 text-white py-2 rounded-md hover:bg-blue-900 transition duration-300">Se connecter</button>
+      </div>
     </form>
+  
+    <!-- Lien inscription -->
+    <div class=" mt-6">
+      <p class="text-sm police-clair text-gray-500 foncé:texte-gris-400 ">Vous n'avez pas encore de compte ? <a routerLink="/create-account" class="text-blue-800 no-underline">Inscrivez-vous</a></p>
+    </div>
+  
+    </div>
   </div>
-  <div *ngIf="loading" class="spinner-container">
-    <mat-spinner></mat-spinner>
-  </div>
-  <div class="security-measures">
-    <h6>Mesures de sécurité</h6>
-    <p class="security-measures-text">
-      Pour garantir la sécurité et protéger les données confidentielles, il est impératif que tous les utilisateurs s'authentifient avant d'accéder à la consultation ou à l'insertion de données. Cette mesure de sécurité est mise en place pour assurer que seules les personnes autorisées peuvent manipuler les informations sensibles, minimisant ainsi les risques de violation de données. L'authentification permet également de suivre et de contrôler les actions des utilisateurs.
-    </p>
-    <p>
-      <span>Vous n'avez pas de compte ?</span> <a routerLink="/create-account">Créez-en un !</a>
-    </p>
-  </div>
-</div> -->
-
-<div>
   
 </div>
+
+

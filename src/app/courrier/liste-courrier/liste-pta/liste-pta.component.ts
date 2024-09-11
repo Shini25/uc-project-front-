@@ -4,16 +4,20 @@ import { PtaService } from '../../../services/courrier/pta.service';
 import { MimeService } from '../../../services/mime.service';
 import { CommonModule } from '@angular/common';
 import { DatePipe } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-liste-pta',
   standalone: true,
-  imports: [CommonModule, DatePipe],
+  imports: [CommonModule, DatePipe, FormsModule],
   templateUrl: './liste-pta.component.html',
   styleUrl: './liste-pta.component.css'
 })
 export class ListePtaComponent implements OnInit {
     ptas: Pta[] = [];
+    selectedPta!: Pta;
     filteredPtas: Pta[] = [];
     paginatedPtas: Pta[] = [];
     selectedType: string = '';
@@ -132,4 +136,33 @@ export class ListePtaComponent implements OnInit {
       link.download = fileName;
       link.click();
     }
+  
+  openUpdateModal(pta: Pta): void {
+
+    console.log(pta);
+    this.selectedPta = {...pta}; 
+    const modal = document.getElementById('updateModal');
+    modal?.classList.remove('hidden');
   }
+
+  // Close the modal
+  closeModal(): void {
+    const modal = document.getElementById('updateModal');
+    modal?.classList.add('hidden');
+  }
+
+  // Update the PTA
+  updatePta(): void {
+    if (this.selectedPta) {
+      this.ptaService.updatePta(this.selectedPta).subscribe(
+        (updatedPta) => {
+          this.getAllPtas(); 
+          this.closeModal();
+        },
+        (error) => {
+          console.error('Error updating PTA:', error);
+        }
+      );
+    }
+  }
+}

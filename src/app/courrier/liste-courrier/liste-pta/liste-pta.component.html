@@ -9,8 +9,8 @@
                     <div class="w-1/6">
                         <select id="searchTypeSelect" (change)="onSearchTypeChange($event)" 
                                 class="block w-full pl-3 pr-10 py-2 text-base text-gray-800 bg-gray-50 border-gray-600 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-s-md cursor-pointer">
-                          <option value="title">titre</option>
-                          <option value="date">date</option>
+                          <option value="title">Titre</option>
+                          <option value="date">Date</option>
                         </select>
                     </div>
                     <div class="relative w-full " *ngIf="searchType === 'title'">
@@ -64,6 +64,8 @@
             <th scope="col" class="px-6 py-3">Date d'insertion</th>
             <th scope="col" class="px-6 py-3">Type</th>
             <th scope="col" class="px-6 py-3">Données insérées par</th>
+            <th scope="col" class="px-6 py-3">Validation</th>
+            <th scope="col" class="px-6 py-3">Contenu</th>
             <th scope="col" class="px-6 py-3">Action</th>
           </tr>
         </thead>
@@ -73,9 +75,18 @@
             <td class="px-6 py-4">{{ pta.dateInsertion | date:'medium' }}</td>
             <td class="px-6 py-4">{{ pta.type }}</td>
             <td class="px-6 py-4">{{ pta.user_account.numero }}</td>
+            <td class="px-6 py-4">{{ pta.valide ? 'Validé' : 'Non validé' }}</td>
             <td class="px-6 py-4">
               <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" (click)="downloadPta(pta)">
                 Consulter
+              </button>
+              <!-- Bouton Modifier -->
+            </td>
+            <!-- Update button inside the table rows -->
+            <td class="px-6 py-4">
+              <button class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded" 
+                      (click)="openUpdateModal(pta)">
+                Update
               </button>
             </td>
           </tr>
@@ -119,3 +130,58 @@
     </div>
   </div>
   
+<!-- Flowbite Modal for Editing PTA -->
+<div id="updateModal" tabindex="-1" class="hidden overflow-y-auto fixed flex justify-center items-center top-0 right-0  z-50 w-full h-full bg-black bg-opacity-50">
+  <div class="relative p-4 w-full max-w-md h-full md:h-auto">
+    <!-- Modal content -->
+    <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+      <!-- Modal header -->
+      <div class="flex justify-between items-center p-5 border-b rounded-t">
+        <h3 class="text-xl font-medium text-gray-900">
+          Update PTA
+        </h3>
+        <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" 
+                (click)="closeModal()">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <!-- Modal body -->
+      <div class="p-6 space-y-6">
+        <form #updateForm="ngForm">
+          <div>
+            <label for="titre" class="block mb-2 text-sm font-medium text-gray-900">Titre</label>
+            <input type="text" id="titre" name="titre" [(ngModel)]="selectedPta.titre" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+          </div>
+          <div>
+            <label for="type" class="block mb-2 text-sm font-medium text-gray-900">Type</label>
+            <select id="type" name="type" [(ngModel)]="selectedPta.type" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+              <option *ngFor="let type of ptaTypes" [value]="type">{{ type }}</option>
+            </select>
+          </div>
+          <!-- Additional fields like 'valide', 'user_account' can be added similarly -->
+          <div>
+            <label for="valide" class="block mb-2 text-sm font-medium text-gray-900">Valide</label>
+            <input type="checkbox" id="valide" name="valide" [(ngModel)]="selectedPta.valide" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+          </div>
+          <div>
+            <label for="contenue" class="block mb-2 text-sm font-medium text-gray-900">Contenu</label>
+            <textarea id="contenue" name="contenue" [(ngModel)]="selectedPta.contenue" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"></textarea>
+          </div>
+          <div>
+            <label for="typeContenue" class="block mb-2 text-sm font-medium text-gray-900">Type de contenu</label>
+            <input type="text" id="typeContenue" name="typeContenue" [(ngModel)]="selectedPta.typeContenue" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+          </div>
+        </form>
+      </div>
+      <!-- Modal footer -->
+      <div class="flex justify-end p-6 space-x-2 border-t">
+        <button type="button" class="text-gray-500 bg-white hover:bg-gray-100 rounded-lg border border-gray-200 text-sm px-5 py-2.5" 
+                (click)="closeModal()">Cancel</button>
+        <button type="button" class="text-white bg-blue-600 hover:bg-blue-700 rounded-lg text-sm px-5 py-2.5" 
+                (click)="updatePta()">Update</button>
+      </div>
+    </div>
+  </div>
+</div>

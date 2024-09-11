@@ -1,47 +1,56 @@
-<div class="centered-container">
-  <div class="create-account">
-    <h1 class="login-title">Create Account</h1>
-    <form [formGroup]="createAccountForm" (ngSubmit)="onSubmit()" class="create-account-form">
-      <mat-form-field appearance="outline">
-        <mat-label for="numero">Numero</mat-label>
-        <input matInput type="text" id="numero" formControlName="numero" required>
-        <mat-error *ngIf="createAccountForm.get('numero')?.hasError('minlength')">
-          Username must be at least 8 characters long.
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label for="password">Password</mat-label>
-        <input matInput type="password" id="password" formControlName="password" required>
-        <mat-error *ngIf="createAccountForm.get('password')?.hasError('minlength')">
-          Password must be at least 8 characters long.
-        </mat-error>
-        <mat-error *ngIf="createAccountForm.get('password')?.hasError('pattern')">
-          Password must contain at least one uppercase letter, one number, and one special character.
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label for="email">Email</mat-label>
-        <input matInput type="email" id="email" formControlName="email" required>
-        <mat-error *ngIf="createAccountForm.get('email')?.invalid && createAccountForm.get('email')?.touched">
-          Please enter a valid email to verify your account.
-        </mat-error>
-      </mat-form-field>
-      <input type="hidden" formControlName="accountStatus" value="OFFLINE">
-      <mat-form-field appearance="outline">
-        <mat-label for="accountType">Account Type</mat-label>
-        <mat-select id="accountType" formControlName="accountType">
-          <mat-option *ngFor="let type of accountTypes" [value]="type">{{type}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <input type="hidden" formControlName="accountState" value="INACTIVE">
-      <button mat-raised-button  class="create-account-button" type="submit">Create Account</button>
+<div class="h-full w-full z-50">
+  <div class="w-full h-full max-w-md mx-auto flex justify-center items-center">
+    <div class="w-full h-auto bg-white backdrop-blur-lg shadow-lg rounded-lg p-6 m-3">
+      <!-- Titre de la section -->
+      <p class="text-xl font-bold text-left">Créer un compte</p>
 
-      <span class="create-account-link">
-        Already have an account?
-        <a routerLink="/login" class="toggle-form-button">
-          Login
-        </a>
-      </span>
-    </form>
+      <!-- Formulaire de création de compte -->
+      <form [formGroup]="createAccountForm" (ngSubmit)="onSubmit()" class="space-y-6 mt-6">
+        
+        <!-- Champ numéro -->
+        <div>
+          <label for="numero" class="block text-sm font-medium text-gray-700">Numéro</label>
+          <input id="numero" formControlName="numero" type="text" placeholder="+261 xx xx xxx xx" class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+          <p *ngIf="createAccountForm.get('numero')?.hasError('minlength')" class="text-red-500 text-xs mt-1">Le numéro doit comporter au moins 8 caractères</p>
+        </div>
+
+        <!-- Champ mot de passe -->
+        <div>
+          <label for="password" class="block text-sm font-medium text-gray-700">Mot de passe</label>
+          <input id="password" formControlName="password" type="password" placeholder="••••••••" class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+          <p *ngIf="createAccountForm.get('password')?.hasError('minlength')" class="text-red-500 text-xs mt-1">Le mot de passe doit comporter au moins 8 caractères</p>
+          <p *ngIf="createAccountForm.get('password')?.hasError('pattern')" class="text-red-500 text-xs mt-1">Le mot de passe doit contenir au moins une majuscule, un chiffre et un caractère spécial</p>
+        </div>
+
+        <!-- Champ email -->
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+          <input id="email" formControlName="email" type="email" placeholder="votre-email@example.com" class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+          <p *ngIf="createAccountForm.get('email')?.invalid && createAccountForm.get('email')?.touched" class="text-red-500 text-xs mt-1">Veuillez entrer un email valide</p>
+        </div>
+
+        <!-- Champ type de compte -->
+        <div>
+          <label for="accountType" class="block text-sm font-medium text-gray-700">Type de compte</label>
+          <select id="accountType" formControlName="accountType" class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+            <option *ngFor="let type of accountTypes" [value]="type">{{ type }}</option>
+          </select>
+        </div>
+
+        <!-- Champs cachés -->
+        <input type="hidden" formControlName="accountStatus" value="OFFLINE">
+        <input type="hidden" formControlName="accountState" value="INACTIVE">
+
+        <!-- Bouton de soumission -->
+        <div>
+          <button type="submit" class="w-full bg-blue-800 text-white py-2 rounded-md hover:bg-blue-900 transition duration-300">Créer un compte</button>
+        </div>
+      </form>
+
+      <!-- Lien connexion -->
+      <div class="mt-6">
+        <p class="text-sm text-gray-500">Vous avez déjà un compte ? <a routerLink="/login" class="text-blue-800 no-underline">Connexion</a></p>
+      </div>
+    </div>
   </div>
 </div>

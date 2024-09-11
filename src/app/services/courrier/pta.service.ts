@@ -15,4 +15,9 @@ export class PtaService {
   getAllPtas(): Observable<Pta[]> {
     return this.http.get<Pta[]>(`${this.apiUrl}/all`);
   }
+
+  updatePta(pta: Pta): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${pta.idCourrier}`, pta);
+  }
+
 }
