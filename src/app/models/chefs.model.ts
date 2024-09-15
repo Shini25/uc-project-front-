@@ -11,7 +11,7 @@ export interface UcMotDuChef {
 }
 
 export interface Chefs {
-  matricule: string;
+  numero: string;
   nom: string;
   prenoms: string;
   email: string;

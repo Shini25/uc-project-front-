@@ -10,7 +10,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { SuccessDialogComponent } from '../../chef-form/success-dialog/success-dialog.component';
 import { Location } from '@angular/common';
 
-
 @Component({
   selector: 'app-archivage-courrier',
   standalone: true,
@@ -43,7 +42,7 @@ export class ArchivageCourrierComponent {
     this.courrierForm = this.fb.group({
       titre: ['', Validators.required],
       type: ['', Validators.required],
-      userId: ['', Validators.required]
+      userId: ['Julio0808']
     });
   }
 

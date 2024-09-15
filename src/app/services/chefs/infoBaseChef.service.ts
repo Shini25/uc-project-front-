@@ -34,20 +34,20 @@ export class InfoBaseChefService {
     return this.http.get<Chefs[]>(`${this.apiUrl}/list?order=${order}`);
   }
 
-  getChefsById(matricule: string): Observable<Chefs> {
-    return this.http.get<Chefs>(`${this.apiUrl}/${matricule}`);
+  getChefsById(numero: string): Observable<Chefs> {
+    return this.http.get<Chefs>(`${this.apiUrl}/${numero}`);
   }
 
-  updateChefs(matricule: string, chef: Chefs): Observable<Chefs> {
+  updateChefs(numero: string, chef: Chefs): Observable<Chefs> {
     const chefBlob = new Blob([JSON.stringify(chef)], { type: 'application/json' });
     const formData = new FormData();
     formData.append('chef', chefBlob);
 
-    return this.http.put<Chefs>(`${this.apiUrl}/${matricule}`, formData);
+    return this.http.put<Chefs>(`${this.apiUrl}/${numero}`, formData);
   }
 
-  deleteChefs(matricule: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${matricule}`);
+  deleteChefs(numero: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${numero}`);
   }
 
   getChefsByTypeDeChef(typeDeChef: string): Observable<Chefs[]> {

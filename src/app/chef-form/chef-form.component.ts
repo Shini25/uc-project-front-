@@ -41,7 +41,7 @@ export class ChefFormComponent {
 
   constructor(private fb: FormBuilder, private chefcService: InfoBaseChefService, public dialog: MatDialog) {
     this.chefsForm = this.fb.group({
-      matricule: ['', Validators.required],
+      numero: ['', Validators.required],
       nom: ['', Validators.required],
       prenoms: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -53,7 +53,7 @@ export class ChefFormComponent {
     });
 
     this.firstFormGroup = this.fb.group({
-      matricule: ['', Validators.required],
+      numero: ['', Validators.required],
       nom: ['', Validators.required],
       prenoms: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],

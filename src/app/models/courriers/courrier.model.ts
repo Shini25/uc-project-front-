@@ -1,7 +1,7 @@
 import { User_account } from "../user.model";
 
 export class Courrier {
-  idCourrier?: number;
+  idCourrier?: any ;
   titre: string;
   dateInsertion?: any;
   contenue: string;

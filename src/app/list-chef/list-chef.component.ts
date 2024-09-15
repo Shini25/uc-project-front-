@@ -77,7 +77,7 @@ export class ListChefComponent implements OnInit {
       this.chefs = data;
       this.updateVisibleChefs();
       this.chefs.forEach(chef => {
-        this.fetchFirstParagraph(chef.matricule);
+        this.fetchFirstParagraph(chef.numero);
       });
     });
   }
@@ -93,10 +93,10 @@ export class ListChefComponent implements OnInit {
   updateVisibleChefs(): void {
     this.visibleChefs = this.chefs.slice(this.currentIndex, this.currentIndex + this.itemsPerPage);
     this.visibleChefs.forEach(chef => {
-      this.chefPhotoService.getPhotosByChef(chef.matricule).subscribe(photos => {
+      this.chefPhotoService.getPhotosByChef(chef.numero).subscribe(photos => {
         chef.photos = photos;
       });
-      this.chefAttributionService.getAttributionsByChef(chef.matricule).subscribe(attributions => {
+      this.chefAttributionService.getAttributionsByChef(chef.numero).subscribe(attributions => {
         chef.attributions = attributions.map(attr => ({ attribution: attr }));
       });
     });
@@ -130,7 +130,7 @@ export class ListChefComponent implements OnInit {
       this.filteredChefs = this.chefs.filter(chef =>
         chef.nom.toLowerCase().includes(searchTerm) ||
         chef.prenoms.toLowerCase().includes(searchTerm) ||
-        chef.matricule.toLowerCase().includes(searchTerm) ||
+        chef.numero.toLowerCase().includes(searchTerm) ||
         `${chef.nom.toLowerCase()} ${chef.prenoms.toLowerCase()}`.includes(searchTerm)
       );
       this.searchActive = true;
@@ -141,10 +141,10 @@ export class ListChefComponent implements OnInit {
   }
 
   selectChef(chef: Chefs): void {
-    this.chefPhotoService.getPhotosByChef(chef.matricule).subscribe(photos => {
+    this.chefPhotoService.getPhotosByChef(chef.numero).subscribe(photos => {
       chef.photos = photos;
     });
-    this.chefAttributionService.getAttributionsByChef(chef.matricule).subscribe(attributions => {
+    this.chefAttributionService.getAttributionsByChef(chef.numero).subscribe(attributions => {
       chef.attributions = attributions.map(attr => ({ attribution: attr }));
     });
     this.visibleChefs = [chef];
