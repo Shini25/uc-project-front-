@@ -42,7 +42,8 @@ export class ArchivageCourrierComponent {
     this.courrierForm = this.fb.group({
       titre: ['', Validators.required],
       type: ['', Validators.required],
-      userId: ['Julio0808']
+      userId: ['Julio0808'],
+      sousType: ['']
     });
   }
 
@@ -64,7 +65,7 @@ export class ArchivageCourrierComponent {
 
   onSubmit(): void {
     if (this.courrierForm.valid && this.selectedFile) {
-      const { titre, type, userId } = this.courrierForm.value;
+      const { titre, type, userId, sousType } = this.courrierForm.value;
       
       const reader = new FileReader();
       reader.onload = () => {
@@ -76,6 +77,7 @@ export class ArchivageCourrierComponent {
         console.log(type);
         console.log(this.fileType);
         console.log(userId);
+        console.log(sousType);
 
         // Submit logic based on the selected document type
         switch (this.selectedDocumentType) {
@@ -85,7 +87,7 @@ export class ArchivageCourrierComponent {
             });
             break;
           case 'PTA':
-            this.courrierService.creationPta(titre, base64File, type, this.fileType!, userId).subscribe(response => {
+            this.courrierService.creationPta(titre, base64File, type, sousType, this.fileType!, userId).subscribe(response => {
               this.handleSuccess(response);
             });
             break;

@@ -34,6 +34,7 @@ export class CourrierService {
     titre: string, 
     base64pdf: string, 
     type: string, 
+    sousType: string,
     typeDeContenue: string, 
     userId: string
   ): Observable<Courrier> {
@@ -41,6 +42,7 @@ export class CourrierService {
     formData.append('titre', titre);
     formData.append('contenue', base64pdf);
     formData.append('type', type);
+    formData.append('sousType', sousType);
     formData.append('typeDeContenue', typeDeContenue);
     formData.append('userId', userId);
 
@@ -118,5 +120,4 @@ export class CourrierService {
 
 
 }
-
 

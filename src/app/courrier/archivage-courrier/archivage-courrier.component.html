@@ -60,18 +60,7 @@
                   <div *ngIf="selectedDocumentType === 'PTA'">
                     <select id="pta_select" formControlName="type" class="block py-2.5 px-4 w-full text-sm text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer">
                       <option value="DSP" selected>DSP</option>
-                      <option value="DGBF">DGBF</option>
-                      <option value="MEF">MEF</option>
-                      <option value="SERVICE">SERVICE</option>
-                      <option value="PROG_130">PROG_130</option>
-                      <option value="EXECUTION_DAAF">EXECUTION_DAAF</option>
-                      <option value="EXECUTION_SSB">EXECUTION_SSB</option>
-                      <option value="FEUILLE_DE_ROUTE">FEUILLE_DE_ROUTE</option>
-                      <option value="PIP">PIP</option>
-                      <option value="PSMFP">PSMFP</option>
-                      <option value="EXECUTION_BUDGETAIRE_DSP_DGEAE">EXECUTION_BUDGETAIRE_DSP_DGEAE</option>
-                      <option value="GRANDES_REALISATIONS">GRANDES_REALISATIONS</option>
-                      <option value="CEB">CEB</option>
+                      <option value="GLOBAL">GLOBAL</option>
                     </select>
                   </div>
                 </div>
@@ -80,6 +69,14 @@
               <div class="w-full mt-4 h- ">
                 <input class="w-full p-2 border rounded" id="titre" type="text" placeholder="Titre du courrier" formControlName="titre">
               </div>
+
+
+              <div class="w-full mt-4 h- ">
+                <input class="w-full p-2 border rounded" id="sousType" type="text" placeholder="Titre du courrier" formControlName="sousType">
+              </div>
+
+
+
               
               <div class="w-full mt-4 h- ">
                 <label for="file-upload" class="flex items-center cursor-pointer mb-4">
@@ -98,7 +95,6 @@
       </div>
   <div class="h-64 w-full"></div>
 </div>
-
 
 
 
