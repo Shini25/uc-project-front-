@@ -57,25 +57,56 @@
                     </select>
                   </div>
                   
-                  <div *ngIf="selectedDocumentType === 'PTA'">
-                    <select id="pta_select" formControlName="type" class="block py-2.5 px-4 w-full text-sm text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer">
-                      <option value="DSP" selected>DSP</option>
-                      <option value="GLOBAL">GLOBAL</option>
-                    </select>
+                  <div *ngIf="selectedDocumentType === 'PTA'" class="ml-2">
+                    <div class="flex space-x-4 flex-row justify-between ">
+                      <label class="inline-flex items-center">
+                        <input type="radio" formControlName="sousType" value="SERVICE" (change)="onSousTypeChange('SERVICE')" class="form-radio text-blue-600">
+                        <span class="ml-2 text-gray-700">SERVICE</span>
+                      </label>
+                      <label class="inline-flex items-center">
+                        <input type="radio" formControlName="sousType" value="GLOBAL" (change)="onSousTypeChange('GLOBAL')" class="form-radio text-blue-600">
+                        <span class="ml-2 text-gray-700">GLOBAL</span>
+                      </label>
+                    </div>
                   </div>
+                  
+                  
                 </div>
+              </div>
+
+              <div *ngIf="selectedSousType === 'SERVICE'">
+                <select id="service_select" formControlName="type" class="block py-2.5 px-4 w-full text-sm text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer">
+                  <option value="SLP">SLP</option>
+                  <option value="SODP">SODP</option>
+                  <option value="SSDO">SSDO</option>
+                  <option value="SVSP">SVSP</option>
+                  <option value="SNSA">SNSA</option>
+                  <option value="SCS">SCS</option>
+                  <option value="SCPDE">SCPDE</option>
+                </select>
+              </div>
+              
+              <div *ngIf="selectedSousType === 'GLOBAL'">
+                <select id="global_select" formControlName="type" class="block py-2.5 px-4 w-full text-sm text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer">
+                  <option value="DSP">DSP</option>
+                  <option value="DGBF">DGBF</option>
+                  <option value="MEF">MEF</option>
+                  <option value="PROG_130">PROG_130</option>
+                  <option value="EXECUTION_DAAF">EXECUTION_DAAF</option>
+                  <option value="EXECUTION_SSB">EXECUTION_SSB</option>
+                  <option value="FEUILLE_DE_ROUTE">FEUILLE_DE_ROUTE</option>
+                  <option value="PIP">PIP</option>
+                  <option value="PSMFP">PSMFP</option>
+                  <option value="EXECUTION_BUDGETAIRE_DSP_DGEAE">EXECUTION_BUDGETAIRE_DSP_DGEAE</option>
+                  <option value="GRANDES_REALISATIONS">GRANDES_REALISATIONS</option>
+                  <option value="CEB">CEB</option>
+                  <option value="AUTRES">AUTRES</option>
+                </select>
               </div>
 
               <div class="w-full mt-4 h- ">
                 <input class="w-full p-2 border rounded" id="titre" type="text" placeholder="Titre du courrier" formControlName="titre">
               </div>
-
-
-              <div class="w-full mt-4 h- ">
-                <input class="w-full p-2 border rounded" id="sousType" type="text" placeholder="Titre du courrier" formControlName="sousType">
-              </div>
-
-
 
               
               <div class="w-full mt-4 h- ">

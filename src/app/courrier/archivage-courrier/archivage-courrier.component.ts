@@ -9,6 +9,7 @@ import { CourrierService } from '../../services/courrier/courrier.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SuccessDialogComponent } from '../../chef-form/success-dialog/success-dialog.component';
 import { Location } from '@angular/common';
+import { UserSessionService } from '../../services/userSessionService';
 
 @Component({
   selector: 'app-archivage-courrier',
@@ -32,19 +33,27 @@ export class ArchivageCourrierComponent {
   selectedFileName: string | null = null;
   fileType: string | null = null;
   selectedDocumentType: string = 'LIVRET'; 
+  selectedSousType: string | null = null;
 
   constructor(
     private fb: FormBuilder,
     private courrierService: CourrierService,
     public dialog: MatDialog,
-    private location: Location
+    private location: Location,
+    private userSessionService: UserSessionService
   ) {
+    const userId = this.userSessionService.getNumero();
+    console.log('Retrieved userId in ArchivageCourrierComponent:', userId); // Debug log
     this.courrierForm = this.fb.group({
       titre: ['', Validators.required],
       type: ['', Validators.required],
-      userId: ['Julio0808'],
+      userId: [userId],
       sousType: ['']
     });
+  }
+
+  onSousTypeChange(sousType: string): void {
+    this.selectedSousType = sousType;
   }
 
   onFileChange(event: Event): void {

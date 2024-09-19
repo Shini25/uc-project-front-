@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User_account } from '../models/user.model';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class UserService {
   private numeroKey = 'userNumero';
   
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   addUser(user_account: User_account): Observable<User_account> {
     return this.http.post<User_account>(`${this.apiUrl}/adduser`, user_account);
@@ -44,4 +45,13 @@ export class UserService {
   getUserByNumero(numero: string): Observable<User_account> {
     return this.http.get<User_account>(`${this.apiUrl}/${numero}`);
   }
+
+  getUserInfo(): Observable<User_account> {
+    return this.http.get<User_account>(`${this.apiUrl}/user-info`, {
+      headers: {
+        Authorization: `Bearer ${this.authService.getToken()}`
+      }
+    });
+  }
+  
 }

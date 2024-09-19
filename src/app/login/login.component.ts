@@ -16,6 +16,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
+import { UserSessionService } from '../services/userSessionService';
 
 @Component({
   selector: 'app-login',
@@ -52,7 +53,13 @@ export class LoginComponent implements OnInit {
 
   showLoginForm = true;
 
-  constructor(private router: Router, private userService: UserService, private authService: AuthService, private location: Location) {
+  constructor(
+    private router: Router,
+    private userService: UserService,
+    private authService: AuthService,
+    private location: Location,
+    private userSessionService: UserSessionService
+  ) {
     this.loginForm = new FormGroup({
       numero: new FormControl('', [Validators.required, Validators.minLength(6)]),
       password: new FormControl('', [Validators.required, Validators.minLength(8)])
@@ -69,16 +76,16 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.invalid) {
       return;
     }
-
-
+  
     const { numero, password } = this.loginForm.value;
-
+  
     this.loading = true;
     this.authService.login({ numero, password }).subscribe(
       data => {
         this.authService.saveToken(data.jwt);
-        this.userService.setNumero(numero);
-        console.log('Numero set in login:', numero);
+        this.userSessionService.setNumero(numero);
+        console.log('Numero set in login:', numero); 
+        console.log('JWT Token:', data.jwt); // Log the token
         setTimeout(() => {
           this.loading = false;
           this.router.navigate(['/home']);
@@ -99,10 +106,11 @@ export class LoginComponent implements OnInit {
         }
       }
     );
-  }
-
+}
+  
   logout() {
     this.authService.logout();
+    this.userSessionService.clearNumero();
     this.router.navigate(['/login']);
   }
 

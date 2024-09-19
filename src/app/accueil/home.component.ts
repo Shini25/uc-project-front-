@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -8,7 +8,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { CommonModule } from '@angular/common';
 import { FlowbiteService } from '../services/flowbite.service';
-declare const AOS: any;
+import { User_account } from '../models/user.model';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-home',
@@ -30,22 +31,30 @@ export class HomeComponent implements OnInit {
     // angular tester
     isvisible: boolean = false
     isvisiblemenu: boolean = false
-
-    // array
-    valeurs = [
-      { value: 'item 1'},
-      { value: 'item 2'},
-      { value: 'item 3'},
-      { value: 'item 4'},
-      { value: 'item 5'},
-      { value: 'item 6'},
-    ]
-    constructor(private flowbiteService: FlowbiteService) {}
+    user: any;
+    finaluser: any;
+    constructor(private flowbiteService: FlowbiteService, private userService: UserService, private router: Router) {}
 
     ngOnInit(): void {
       this.flowbiteService.loadFlowbite(flowbite => {
         console.log('Flowbite loaded:', flowbite);
       });
+      this.userService.getUserInfo().subscribe(
+        data => {
+          this.user = data;
+          console.log('User info:', this.user.username);
+          this.userService.getUserByNumero(this.user.username).subscribe(user => {
+            this.finaluser = user;
+            console.log('User info:', this.finaluser.numero);
+          });
+        },
+        err => {
+          console.error('Error fetching user info', err);
+          if (err.status === 403) {
+            this.router.navigate(['/login']);
+          }
+        }
+      );
     }
 
     onMouseOver(event: Event) {
