@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlowbiteService } from '../../../services/flowbite.service';
+import { UserService } from '../../../services/user.service'; // Import UserService
 
 @Component({
   selector: 'app-liste-pta',
@@ -16,8 +17,8 @@ import { FlowbiteService } from '../../../services/flowbite.service';
   styleUrls: ['./liste-pta.component.css']
 })
 export class ListePtaComponent implements OnInit, AfterViewInit {
-  ptas: Pta[] = [];
-  selectedPta!: Pta;
+  ptas: Pta[] = [] ;
+  selectedPta!: Pta | null;
   filteredPtas: Pta[] = [];
   paginatedPtas: Pta[] = [];
   selectedType: string = '';
@@ -35,12 +36,17 @@ export class ListePtaComponent implements OnInit, AfterViewInit {
   selectedFile!: File;
   selectedFileName!: string;
   fileType!: string;
+  userNumero!: string; 
+  user: any;
+  finaluser: any;
+  expandedRowIndex: number | null = null;  // Pour garder la trace de l'index de la ligne ouverte
 
   constructor(
     private ptaService: PtaService, 
     private mimeService: MimeService, 
     private flowbiteService: FlowbiteService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private userService: UserService // Inject UserService
   ) {
     this.updateForm = this.fb.group({
       idCourrier: ['', Validators.required],
@@ -54,6 +60,16 @@ export class ListePtaComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.getAllPtas();
+    this.getUserNumero(); 
+
+  }
+  toggleRow(index: number) {
+    // Si la ligne est déjà ouverte, la refermer
+    if (this.expandedRowIndex === index) {
+      this.expandedRowIndex = null;
+    } else {
+      this.expandedRowIndex = index;  // Ouvrir une nouvelle ligne
+    }
   }
 
   ngAfterViewInit(): void {
@@ -62,12 +78,38 @@ export class ListePtaComponent implements OnInit, AfterViewInit {
     });
   }
 
+
+  getUserNumero(): void {
+    this.userService.getUserInfo().subscribe(
+      data => {
+
+        this.user = data;
+
+        console.log(this.user.username);
+        this.userService.getUserByNumero(this.user.username).subscribe(user => {
+          this.finaluser = user;
+          console.log(this.finaluser.numero);
+          this.userNumero = this.finaluser.numero;
+        });
+      }
+    );
+  }
+
   getAllPtas(): void {
     this.ptaService.getAllPtas().subscribe((data: Pta[]) => {
       this.ptas = data.sort((a, b) => new Date(b.dateInsertion).getTime() - new Date(a.dateInsertion).getTime());
       this.filterPtas();
     });
   }
+
+  toggleDetails(pta: Pta): void {
+    // Toggle the selected PTA or close if the same one is clicked again
+    this.selectedPta = this.selectedPta === pta ? null : pta;
+  }
+
+  
+
+  
 
   filterPtas(): void {
     this.filteredPtas = this.ptas.filter(pta => {
@@ -203,7 +245,7 @@ export class ListePtaComponent implements OnInit, AfterViewInit {
 
         console.log(idCourrier);
         console.log(base64File);
-        this.ptaService.updatePta(idCourrier, base64File).subscribe(
+        this.ptaService.updatePta(idCourrier, base64File, this.userNumero).subscribe( // Pass userNumero as modifyby
           () => {
             this.getAllPtas();
             this.closeUpdateForm();

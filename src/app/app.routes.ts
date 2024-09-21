@@ -22,94 +22,50 @@ import { ListePtaComponent } from './courrier/liste-courrier/liste-pta/liste-pta
 import { ListeAutreDocumentComponent } from './courrier/liste-courrier/liste-autre-document/liste-autre-document.component';
 import { ListeActiviteComponent } from './courrier/liste-courrier/liste-activite/liste-activite.component';
 import { ListeTableauDeBordEBComponent } from './courrier/liste-courrier/liste-tableau-de-bord-eb/liste-tableau-de-bord-eb.component';
+import { AuthGuard } from './services/auth.guard';
+
 
 export const routes: Routes = [
     {
-        path: '',
-        component: HomeComponent
+      path: '',
+      component: HomeComponent
     },
     {
-        path: 'home',
-        component: HomeComponent
+      path: 'auth',
+      canActivate: [AuthGuard],
+      children: [
+        { path: 'chef-form', component: ChefFormComponent },
+        { path: 'liste-chef', component: ListChefComponent },
+        { path: 'chef-motduchef/:chefId', component: MotDuChefComponent },
+        { path: 'organigramme-direction', component: OrganigrammeDirectionComponent },
+        { path: 'organigramme-service', component: OrganigrammeServiceComponent },
+        { path: 'archivage-courrier', component: ArchivageCourrierComponent },
+        { path: 'planifier-reunion', component: PlanifierReunionComponent },
+        { path: 'liste-reunion', component: ListeReunionComponent },
+        { path: 'details-reunion/:id', component: DetailsReunionComponent },
+        { path: 'liste-livret', component: ListeLivretComponent },
+        { path: 'liste-texte', component: ListeTexteComponent },
+        { path: 'liste-pta', component: ListePtaComponent },
+        { path: 'liste-autre-document', component: ListeAutreDocumentComponent },
+        { path: 'liste-activite', component: ListeActiviteComponent },
+        { path: 'liste-tableau-de-bord', component: ListeTableauDeBordEBComponent },
+      ]
     },
     {
-        path: 'create-account',
-        component: CreateAccountComponent
+      path: 'create-account',
+      component: CreateAccountComponent
     },
     {
-        path: 'login',
-        component: LoginComponent
+      path: 'login',
+      component: LoginComponent
     },
     {
-        path: 'compte-cree-avec-succes',
-        component: AccountCreatedDialogComponent
+      path: 'compte-cree-avec-succes',
+      component: AccountCreatedDialogComponent
     },
     {
-        path: 'success-dialog',
-        component: SuccessDialogComponent
+      path: '**',
+      component: PageNotFoundComponentComponent
     },
-    {
-        path: 'chef-form',
-        component: ChefFormComponent
-    },
-    {
-        path: 'liste-chef',
-        component: ListChefComponent
-    },
-    {
-        path: 'chef-motduchef/:chefId',
-        component: MotDuChefComponent
-    },
-    {
-        path: 'organigramme-direction',
-        component: OrganigrammeDirectionComponent
-    },
-    {
-        path: 'organigramme-service',
-        component: OrganigrammeServiceComponent
-    },
-    {
-        path: 'archivage-courrier',
-        component: ArchivageCourrierComponent
-    },
-    {
-        path: 'planifier-reunion',
-        component: PlanifierReunionComponent
-    },
-    {
-        path: 'liste-reunion',
-        component: ListeReunionComponent
-    },
-    {
-        path: 'details-reunion/:id',
-        component: DetailsReunionComponent
-    },
-    {
-        path: 'liste-livret',
-        component: ListeLivretComponent
-    },
-    {
-        path: 'liste-texte',
-        component: ListeTexteComponent
-    },
-    {
-        path: 'liste-pta',
-        component: ListePtaComponent
-    },
-    {
-        path: 'liste-autre-document',
-        component: ListeAutreDocumentComponent
-    },
-    {
-        path: 'liste-activite',
-        component: ListeActiviteComponent
-    },
-    {
-        path: 'liste-tableau-de-bord',
-        component: ListeTableauDeBordEBComponent
-    },
-    {
-        path: '**',
-        component: PageNotFoundComponentComponent
-    },
-]
+  ];
+  

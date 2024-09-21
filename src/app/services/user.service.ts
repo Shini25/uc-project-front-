@@ -43,13 +43,33 @@ export class UserService {
   }
 
   getUserByNumero(numero: string): Observable<User_account> {
-    return this.http.get<User_account>(`${this.apiUrl}/${numero}`);
+    // header token
+    const token = this.authService.getToken();
+    console.log('Token ito ilay  token:', token);
+    if (!token) {
+      console.error('No token found');
+      throw new Error('No token found');
+    }
+    return this.http.get<User_account>(`${this.apiUrl}/${numero}`, {
+      headers: {
+        Authorization: `Bearer ${token}`  // Ajout du token dans l'en-tête
+      } 
+    });
   }
 
+  // Requête pour récupérer les informations utilisateur avec token JWT
   getUserInfo(): Observable<User_account> {
+    const token = this.authService.getToken(); // Récupération du token JWT
+    console.log('Token ito ilay  token:', token);
+    if (!token) {
+      console.error('No token found');
+      throw new Error('No token found');
+    }
+
+    // Ajout du token à l'entête de la requête
     return this.http.get<User_account>(`${this.apiUrl}/user-info`, {
       headers: {
-        Authorization: `Bearer ${this.authService.getToken()}`
+        Authorization: `Bearer ${token}`  // Ajout du token dans l'en-tête
       }
     });
   }

@@ -8,8 +8,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { CommonModule } from '@angular/common';
 import { FlowbiteService } from '../services/flowbite.service';
-import { User_account } from '../models/user.model';
 import { UserService } from '../services/user.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -28,12 +28,17 @@ import { UserService } from '../services/user.service';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {  
-    // angular tester
     isvisible: boolean = false
     isvisiblemenu: boolean = false
     user: any;
     finaluser: any;
-    constructor(private flowbiteService: FlowbiteService, private userService: UserService, private router: Router) {}
+
+    constructor(
+        private flowbiteService: FlowbiteService, 
+        private userService: UserService, 
+        private router: Router,
+        private authService: AuthService
+    ) {}
 
     ngOnInit(): void {
       this.flowbiteService.loadFlowbite(flowbite => {
@@ -71,4 +76,8 @@ export class HomeComponent implements OnInit {
       this.isvisiblemenu = true
     }
 
-  }
+    logout() {
+      this.authService.logout();
+      this.router.navigate(['/login']);
+    }
+}
