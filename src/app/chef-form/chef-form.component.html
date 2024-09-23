@@ -1,108 +1,131 @@
+
 <div class="title">
-  <h5>enregistrement des UC</h5>
+  <h5 class="text-lg font-semibold">Enregistrement des UC</h5>
 </div>
 
-<!-- <button mat-raised-button (click)="isLinear = !isLinear" id="toggle-linear">
-  {{!isLinear ? 'Activer le mode linéaire' : 'Désactiver le mode linéaire'}}
-</button> -->
+<div class="w-full max-w-2xl mx-auto">
+  <div class="flowbite-stepper">
+    <ol class="flex items-center w-full text-sm font-medium text-center text-gray-500 dark:text-gray-400 sm:text-base">
+      <li class="flex md:w-full items-center" [ngClass]="{'text-blue-600 dark:text-blue-500': currentStep === 1, 'text-gray-500 dark:text-gray-400': currentStep !== 1}">
+        <span class="flex items-center after:content-[''] sm:after:hidden after:mx-2 after:text-gray-200 dark:after:text-gray-500">
+          <svg *ngIf="currentStep === 1" class="w-3.5 h-3.5 sm:w-4 sm:h-4 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+          </svg>
+          <span *ngIf="currentStep !== 1" class="me-2">1</span>
+          Informations de base
+        </span>
+        <div class="flex-1 border-t border-gray-300 mx-4"></div>
+      </li>
+      <li class="flex md:w-full items-center" [ngClass]="{'text-blue-600 dark:text-blue-500': currentStep === 2, 'text-gray-500 dark:text-gray-400': currentStep !== 2}">
+        <span class="flex items-center after:content-[''] sm:after:hidden after:mx-2 after:text-gray-200 dark:after:text-gray-500">
+          <svg *ngIf="currentStep === 2" class="w-3.5 h-3.5 sm:w-4 sm:h-4 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+          </svg>
+          <span *ngIf="currentStep !== 2" class="me-2">2</span>
+          Attributions
+        </span>
+        <div class="flex-1 border-t border-gray-300 mx-4"></div>
+      </li>
+      <li class="flex items-center" [ngClass]="{'text-blue-600 dark:text-blue-500': currentStep === 3, 'text-gray-500 dark:text-gray-400': currentStep !== 3}">
+        <svg *ngIf="currentStep === 3" class="w-3.5 h-3.5 sm:w-4 sm:h-4 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+        </svg>
+        <span *ngIf="currentStep !== 3" class="me-2">3</span>
+        Mot 
+      </li>
+    </ol>
 
-<mat-stepper [linear]="isLinear" #stepper>
-  <mat-step [stepControl]="firstFormGroup">
-    <form [formGroup]="firstFormGroup" class="form-container">
-      <ng-template matStepLabel>Informations de base</ng-template>
-      <div class="form-fields">
-        <mat-form-field appearance="outline">
-          <mat-label>Numero</mat-label>
-          <input matInput formControlName="numero">
-        </mat-form-field>
+    <div class="stepper-content mt-8">
+      <div *ngIf="currentStep === 1">
+        <form [formGroup]="firstFormGroup" class="space-y-4">
+          <div class="form-group">
+            <label class="block text-sm font-medium text-gray-700">Numero</label>
+            <input type="text" formControlName="numero" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+          </div>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Nom</mat-label>
-          <input matInput formControlName="nom">
-        </mat-form-field>
+          <div class="form-group">
+            <label class="block text-sm font-medium text-gray-700">Nom</label>
+            <input type="text" formControlName="nom" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+          </div>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Prénoms</mat-label>
-          <input matInput formControlName="prenoms">
-        </mat-form-field>
+          <div class="form-group">
+            <label class="block text-sm font-medium text-gray-700">Prénoms</label>
+            <input type="text" formControlName="prenoms" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+          </div>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Email</mat-label>
-          <input matInput formControlName="email" type="email">
-        </mat-form-field>
+          <div class="form-group">
+            <label class="block text-sm font-medium text-gray-700">Email</label>
+            <input type="email" formControlName="email" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+          </div>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Contact</mat-label>
-          <input matInput formControlName="contact">
-        </mat-form-field>
+          <div class="form-group">
+            <label class="block text-sm font-medium text-gray-700">Contact</label>
+            <input type="text" formControlName="contact" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+          </div>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Type de Chef</mat-label>
-          <mat-select formControlName="typeDeChef">
-            <mat-option value="UC">UC</mat-option>
-            <mat-option value="DAF">DAF</mat-option>
-            <mat-option value="SERVICE_CENTRAUX">SERVICE_CENTRAUX</mat-option>
-            <mat-option value="SERVICE_REGIONAUX">SERVICE_REGIONAUX</mat-option>
-            <mat-option value="DIVISION">DIVISION</mat-option>
-            <mat-option value="BUREAUX">BUREAUX</mat-option>
-            <mat-option value="ANTENNES_CIRFIN">ANTENNES_CIRFIN</mat-option>
-          </mat-select>
-        </mat-form-field>
+          <div class="form-group">
+            <label class="block text-sm font-medium text-gray-700">Type de Chef</label>
+            <select formControlName="typeDeChef" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+              <option value="UC">UC</option>
+              <option value="DAF">DAF</option>
+              <option value="SERVICE_CENTRAUX">SERVICE_CENTRAUX</option>
+              <option value="SERVICE_REGIONAUX">SERVICE_REGIONAUX</option>
+              <option value="DIVISION">DIVISION</option>
+              <option value="BUREAUX">BUREAUX</option>
+              <option value="ANTENNES_CIRFIN">ANTENNES_CIRFIN</option>
+            </select>
+          </div>
 
-        <div formArrayName="photos">
-          <input type="file" (change)="onFileChange($event)">
-        </div>
+          <div class="form-group">
+            <label class="block text-sm font-medium text-gray-700">Photos</label>
+            <input type="file" (change)="onFileChange($event)" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+          </div>
+
+
+          <div class="flex justify-between">
+            <button type="button" (click)="prevStep()" class="px-4 py-2 bg-gray-600 text-white rounded-md">Précédent</button>
+            <button type="button" (click)="nextStep()" class="px-4 py-2 bg-blue-600 text-white rounded-md">Suivant</button>
+          </div>
+        </form>
       </div>
 
-      <div class="form-buttons">
-        <button mat-button matStepperNext>
-          <mat-icon>arrow_forward</mat-icon>
-        </button>
-      </div>
-    </form>
-  </mat-step>
+      <div *ngIf="currentStep === 2">
+        <form [formGroup]="secondFormGroup" class="space-y-4">
+          <div class="form-group">
+            <button type="button" (click)="addAttribution()" class="px-4 py-2 bg-green-600 text-white rounded-md">Ajouter Attribution</button>
+          </div>
+          <div class="form-group" formArrayName="attributions">
+            <div *ngFor="let attribution of attributions.controls; let i = index" [formGroupName]="i" class="space-y-2">
+              <label class="block text-sm font-medium text-gray-700">Attribution {{i + 1}}</label>
+              <textarea formControlName="attribution" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"></textarea>
+            </div>
+          </div>
 
-  <mat-step [stepControl]="secondFormGroup">
-    <form [formGroup]="secondFormGroup" class="form-container">
-      <ng-template matStepLabel>Attributions</ng-template>
-      <div class="form-fields-custom" formArrayName="attributions">
-        <button mat-button type="button" (click)="addAttribution()">Ajouter Attribution</button>
-        <div class="ajustement" *ngFor="let attribution of attributions.controls; let i = index" [formGroupName]="i">
-          <label>Attribution {{i + 1}}</label>
-          <textarea matInput formControlName="attribution"></textarea><br>
-        </div>
-      </div>
-
-      <div class="form-buttons">
-        <button mat-button matStepperPrevious>
-          <mat-icon>arrow_back</mat-icon>
-        </button>
-        <button mat-button matStepperNext>
-          <mat-icon>arrow_forward</mat-icon>
-        </button>
-      </div>
-    </form>
-  </mat-step>
-
-  <mat-step [stepControl]="thirdFormGroup">
-    <form [formGroup]="thirdFormGroup" class="form-container">
-      <ng-template matStepLabel>Mot du Chef</ng-template>
-      <div class="form-fields-custom" formArrayName="motDuChefs">
-        <button mat-button type="button" (click)="addMotDuChef()">Ajouter Mot du Chef</button>
-        <div class="ajustement" *ngFor="let motDuChef of motDuChefs.controls; let i = index" [formGroupName]="i">
-          <label>Paragraphe {{i + 1}}</label>
-          <textarea matInput formControlName="paragraphe"></textarea>
-        </div>
+          <div class="flex justify-between">
+            <button type="button" (click)="prevStep()" class="px-4 py-2 bg-gray-600 text-white rounded-md">Précédent</button>
+            <button type="button" (click)="nextStep()" class="px-4 py-2 bg-blue-600 text-white rounded-md">Suivant</button>
+          </div>
+        </form>
       </div>
 
-      <div class="form-buttons">
-        <button mat-button matStepperPrevious>
-          <mat-icon>arrow_back</mat-icon>
-        </button>
-        <button mat-button (click)="onSubmit()">
-          <mat-icon>save</mat-icon>
-        </button>
+      <div *ngIf="currentStep === 3">
+        <form [formGroup]="thirdFormGroup" class="space-y-4">
+          <div class="form-group">
+            <button type="button" (click)="addMotDuChef()" class="px-4 py-2 bg-green-600 text-white rounded-md">Ajouter Mot du Chef</button>
+          </div>
+          <div class="form-group" formArrayName="motDuChefs">
+            <div *ngFor="let motDuChef of motDuChefs.controls; let i = index" [formGroupName]="i" class="space-y-2">
+              <label class="block text-sm font-medium text-gray-700">Paragraphe {{i + 1}}</label>
+              <textarea formControlName="paragraphe" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"></textarea>
+            </div>
+          </div>
+
+          <div class="flex justify-between">
+            <button type="button" (click)="prevStep()" class="px-4 py-2 bg-gray-600 text-white rounded-md">Précédent</button>
+            <button type="button" (click)="onSubmit()" class="px-4 py-2 bg-blue-600 text-white rounded-md">Enregistrer</button>
+          </div>
+        </form>
       </div>
-    </form>
-  </mat-step>
-</mat-stepper>
+    </div>
+  </div>
+</div>

@@ -7,6 +7,7 @@ export class Courrier {
   contenue: string;
   typeContenue: string;
   user_account: User_account;
+  dateModification?: any;
 
 
   //constructeur

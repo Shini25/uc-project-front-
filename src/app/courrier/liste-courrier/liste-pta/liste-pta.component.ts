@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Pta } from '../../../models/courriers/pta.model';
+import { PtaAudit } from '../../../models/courriers/ptaAudit.model';
 import { PtaService } from '../../../services/courrier/pta.service';
 import { MimeService } from '../../../services/mime.service';
 import { CommonModule } from '@angular/common';
@@ -8,6 +9,7 @@ import { DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlowbiteService } from '../../../services/flowbite.service';
 import { UserService } from '../../../services/user.service'; // Import UserService
+import { PtaAuditService } from '../../../services/courrier/ptaAudit.service'; // Import PtaAuditService
 
 @Component({
   selector: 'app-liste-pta',
@@ -17,12 +19,17 @@ import { UserService } from '../../../services/user.service'; // Import UserServ
   styleUrls: ['./liste-pta.component.css']
 })
 export class ListePtaComponent implements OnInit, AfterViewInit {
+  ptasAudit: PtaAudit[] = [];
   ptas: Pta[] = [] ;
   selectedPta!: Pta | null;
   filteredPtas: Pta[] = [];
   paginatedPtas: Pta[] = [];
   selectedType: string = '';
-  ptaTypes: string[] = ['DSP', 'DGBF', 'MEF', 'SERVICE', 'PROG_130', 'EXECUTION_DAAF', 'EXECUTION_SSB', 'FEUILLE_DE_ROUTE', 'PIP', 'PSMFP', 'EXECUTION_BUDGETAIRE_DSP_DGEAE', 'GRANDES_REALISATIONS', 'CEB', 'AUTRES'];
+  selectedSousType: string = '';
+  ptaTypes: string[] = ['SERVICE', 'GLOBAL'];
+  sousTypesGlobal: string[] = ['DSP', 'DGBF', 'MEF', 'PROG_130', 'EXECUTION_DAAF', 'EXECUTION_SSB', 'FEUILLE_DE_ROUTE', 'PIP', 'PSMFP', 'EXECUTION_BUDGETAIRE_DSP_DGEAE', 'GRANDES_REALISATIONS', 'CEB', 'AUTRES'];
+  sousTypesService: string[] = ['SODP', 'SSDO', 'SVSP', 'SNSA', 'SCS', 'SCPDE'];
+  currentSousTypes: string[] = [];
   searchQuery: string = '';
   searchDate: string = ''; 
   searchType: string = 'title';
@@ -46,7 +53,8 @@ export class ListePtaComponent implements OnInit, AfterViewInit {
     private mimeService: MimeService, 
     private flowbiteService: FlowbiteService,
     private fb: FormBuilder,
-    private userService: UserService // Inject UserService
+    private userService: UserService, // Inject UserService
+    private ptaAuditService: PtaAuditService // Inject PtaAuditService
   ) {
     this.updateForm = this.fb.group({
       idCourrier: ['', Validators.required],
@@ -59,17 +67,22 @@ export class ListePtaComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.selectedType = 'SERVICE';
+    this.currentSousTypes = this.sousTypesService;
     this.getAllPtas();
     this.getUserNumero(); 
-
   }
-  toggleRow(index: number) {
+
+  toggleRow(index: number, pta: Pta) {
     // Si la ligne est déjà ouverte, la refermer
     if (this.expandedRowIndex === index) {
       this.expandedRowIndex = null;
     } else {
       this.expandedRowIndex = index;  // Ouvrir une nouvelle ligne
     }
+    this.ptaAuditService.getAllPtasAuditByCourrierId(pta.idCourrier).subscribe((data: PtaAudit[]) => {
+      this.ptasAudit = data;
+    });
   }
 
   ngAfterViewInit(): void {
@@ -78,13 +91,10 @@ export class ListePtaComponent implements OnInit, AfterViewInit {
     });
   }
 
-
   getUserNumero(): void {
     this.userService.getUserInfo().subscribe(
       data => {
-
         this.user = data;
-
         console.log(this.user.username);
         this.userService.getUserByNumero(this.user.username).subscribe(user => {
           this.finaluser = user;
@@ -102,18 +112,10 @@ export class ListePtaComponent implements OnInit, AfterViewInit {
     });
   }
 
-  toggleDetails(pta: Pta): void {
-    // Toggle the selected PTA or close if the same one is clicked again
-    this.selectedPta = this.selectedPta === pta ? null : pta;
-  }
-
-  
-
-  
-
   filterPtas(): void {
     this.filteredPtas = this.ptas.filter(pta => {
       const typeMatches = this.selectedType === '' || pta.type.toString() === this.selectedType;
+      const sousTypeMatches = this.selectedSousType === '' || pta.sousType.toString() === this.selectedSousType;
       let searchMatches = true;
       if (this.searchType === 'title') {
         searchMatches = pta.titre.toLowerCase().includes(this.searchQuery.toLowerCase());
@@ -121,7 +123,7 @@ export class ListePtaComponent implements OnInit, AfterViewInit {
         const ptaDate = new Date(pta.dateInsertion).toISOString().split('T')[0];
         searchMatches = ptaDate === this.searchDate;
       }
-      return typeMatches && searchMatches;
+      return typeMatches && sousTypeMatches && searchMatches;
     });
     this.updatePagination();
   }
@@ -143,6 +145,13 @@ export class ListePtaComponent implements OnInit, AfterViewInit {
 
   onTypeChange(event: Event): void {
     this.selectedType = (event.target as HTMLSelectElement).value;
+    this.currentSousTypes = this.selectedType === 'GLOBAL' ? this.sousTypesGlobal : this.sousTypesService;
+    this.selectedSousType = ''; // Reset the selected subtype
+    this.filterPtas();
+  }
+
+  onSousTypeChange(event: Event): void {
+    this.selectedSousType = (event.target as HTMLSelectElement).value;
     this.filterPtas();
   }
 
@@ -156,6 +165,7 @@ export class ListePtaComponent implements OnInit, AfterViewInit {
     this.searchQuery = '';
     this.searchDate = '';
     this.selectedType = '';
+    this.selectedSousType = '';
     this.searchType = 'title';
     this.getAllPtas();
   }
@@ -187,6 +197,25 @@ export class ListePtaComponent implements OnInit, AfterViewInit {
     const fileName = `${pta.titre}.${extension.toLowerCase()}`;
 
     const byteCharacters = atob(pta.contenue);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    const blob = new Blob([byteArray], { type: fileType });
+
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = fileName;
+    link.click();
+  }
+
+  downloadPtaAudit(ptaAudit: PtaAudit): void {
+    const fileType = ptaAudit.typeContenue;
+    const extension = this.mimeService.getFileExtension(fileType);
+    const fileName = `${ptaAudit.titre}.${extension.toLowerCase()}`;
+
+    const byteCharacters = atob(ptaAudit.contenue);
     const byteNumbers = new Array(byteCharacters.length);
     for (let i = 0; i < byteCharacters.length; i++) {
       byteNumbers[i] = byteCharacters.charCodeAt(i);

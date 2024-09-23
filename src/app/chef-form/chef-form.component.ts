@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { InfoBaseChefService } from '../services/chefs/infoBaseChef.service';
@@ -12,6 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
 import { SuccessDialogComponent } from './success-dialog/success-dialog.component';
 import { MatSelectModule } from '@angular/material/select';
+import { FlowbiteService } from '../services/flowbite.service';
 
 @Component({
   selector: 'app-chef-form',
@@ -31,15 +32,16 @@ import { MatSelectModule } from '@angular/material/select';
     MatSelectModule
   ]
 })
-export class ChefFormComponent {
+export class ChefFormComponent implements AfterViewInit {
   chefsForm: FormGroup;
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
   thirdFormGroup: FormGroup;
   selectedPhoto: File | null = null;
   isLinear = true;
+  currentStep = 1;
 
-  constructor(private fb: FormBuilder, private chefcService: InfoBaseChefService, public dialog: MatDialog) {
+  constructor(private fb: FormBuilder, private chefcService: InfoBaseChefService, public dialog: MatDialog, private flowbiteService: FlowbiteService) {
     this.chefsForm = this.fb.group({
       numero: ['', Validators.required],
       nom: ['', Validators.required],
@@ -68,6 +70,12 @@ export class ChefFormComponent {
 
     this.thirdFormGroup = this.fb.group({
       motDuChefs: this.fb.array([]),
+    });
+  }
+
+  ngAfterViewInit(): void {
+    this.flowbiteService.loadFlowbite(flowbite => {
+      console.log('Flowbite loaded:', flowbite);
     });
   }
 
@@ -103,6 +111,18 @@ export class ChefFormComponent {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length) {
       this.selectedPhoto = input.files[0];
+    }
+  }
+
+  nextStep(): void {
+    if (this.currentStep < 3) {
+      this.currentStep++;
+    }
+  }
+
+  prevStep(): void {
+    if (this.currentStep > 1) {
+      this.currentStep--;
     }
   }
 

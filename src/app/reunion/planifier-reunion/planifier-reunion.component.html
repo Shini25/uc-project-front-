@@ -1,41 +1,40 @@
-<form [formGroup]="reunionForm" (ngSubmit)="onSubmit()">
-    <div>
-      <label for="titre">Titre:</label>
-      <input type="text" id="titre" formControlName="titre" />
+<form [formGroup]="reunionForm" (ngSubmit)="onSubmit()" class="space-y-6 bg-white p-6 rounded-lg shadow-md">
+    <div class="flex flex-col">
+      <label for="titre" class="mb-2 font-semibold text-gray-700">Titre:</label>
+      <input type="text" id="titre" formControlName="titre" class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
     </div>
-    <div>
-      <label for="dateReunion">Date de Réunion:</label>
-      <input id="dateReunion" type="datetime-local" formControlName="dateReunion" />
+    <div class="flex flex-col">
+      <label for="dateReunion" class="mb-2 font-semibold text-gray-700">Date de Réunion:</label>
+      <input id="dateReunion" type="datetime-local" formControlName="dateReunion" class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
     </div>
-    <div>
-      <label for="lieu">Lieu:</label>
-      <input id="lieu" formControlName="lieu" />
+    <div class="flex flex-col">
+      <label for="lieu" class="mb-2 font-semibold text-gray-700">Lieu:</label>
+      <input id="lieu" formControlName="lieu" class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
     </div>
-    <div>
-      <label for="objet">Objet:</label>
-      <input id="objet" formControlName="objet" />
+    <div class="flex flex-col">
+      <label for="objet" class="mb-2 font-semibold text-gray-700">Objet:</label>
+      <input id="objet" formControlName="objet" class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
     </div>
-    <div formArrayName="ordreDuJourDescriptions">
-      <label>Ordre du Jour:</label>
-      <div *ngFor="let control of ordreDuJourDescriptions.controls; let i = index">
-        <input [formControlName]="i" />
+    <div formArrayName="ordreDuJourDescriptions" class="flex flex-col space-y-2">
+      <label class="mb-2 font-semibold text-gray-700">Ordre du Jour:</label>
+      <div *ngFor="let control of ordreDuJourDescriptions.controls; let i = index" class="flex items-center space-x-2">
+        <input [formControlName]="i" class="flex-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
       </div>
-      <button type="button" (click)="addOrdreDuJourDescription()">Ajouter Ordre du Jour</button>
+      <button type="button" (click)="addOrdreDuJourDescription()" class="mt-2 p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Ajouter Ordre du Jour</button>
     </div>
-    <div formArrayName="responsablesMatricules">
-      <label>Responsables Matricules:</label>
-      <div *ngFor="let control of responsablesMatricules.controls; let i = index">
-        <input [formControlName]="i" />
+    <div formArrayName="responsablesMatricules" class="flex flex-col space-y-2">
+      <label class="mb-2 font-semibold text-gray-700">Responsables Matricules:</label>
+      <div *ngFor="let control of responsablesMatricules.controls; let i = index" class="flex items-center space-x-2">
+        <input [formControlName]="i" class="flex-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
       </div>
-      <button type="button" (click)="addResponsableMatricule()">Ajouter Responsable</button>
+      <button type="button" (click)="addResponsableMatricule()" class="mt-2 p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Ajouter Responsable</button>
     </div>
-    <div formArrayName="participantsMatricules">
-      <label>Participants Matricules:</label>
-      <div *ngFor="let control of participantsMatricules.controls; let i = index">
-        <input [formControlName]="i" />
+    <div formArrayName="participantsMatricules" class="flex flex-col space-y-2">
+      <label class="mb-2 font-semibold text-gray-700">Participants Matricules:</label>
+      <div *ngFor="let control of participantsMatricules.controls; let i = index" class="flex items-center space-x-2">
+        <input [formControlName]="i" class="flex-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
       </div>
-      <button type="button" (click)="addParticipantMatricule()">Ajouter Participant</button>
+      <button type="button" (click)="addParticipantMatricule()" class="mt-2 p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Ajouter Participant</button>
     </div>
-    <button type="submit">Planifier Réunion</button>
+    <button type="submit" class="w-full p-2 bg-green-500 text-white rounded-md hover:bg-green-600">Planifier Réunion</button>
   </form>
-  
