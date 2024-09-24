@@ -12,22 +12,24 @@ export class ReunionService {
   constructor(private http: HttpClient) {}
 
   planifierReunion(
-    titre: string,
     dateReunion: Date,
     lieu: string,
     objet: string,
-    ordreDuJourDescriptions: string[],
-    responsablesMatricules: string[],
-    participantsMatricules: string[]
+    reunionType: string,
+    logistique: string[],
+    observations: string[],
+    responsablesMail: string[],
+    participantsMail: string[]
   ): Observable<InfoReunionBase> {
     const formData = new FormData();
-    formData.append('titre', titre);
     formData.append('dateReunion', dateReunion.toISOString());
     formData.append('lieu', lieu);
     formData.append('objet', objet);
-    ordreDuJourDescriptions.forEach(description => formData.append('ordreDuJourDescriptions', description));
-    responsablesMatricules.forEach(matricule => formData.append('responsablesMatricules', matricule));
-    participantsMatricules.forEach(matricule => formData.append('participantsMatricules', matricule));
+    formData.append('reunionType', reunionType);
+    logistique.forEach(logistique => formData.append('logistique', logistique));
+    observations.forEach(observations => formData.append('observations', observations));
+    responsablesMail.forEach(responsableMail => formData.append('responsablesMail', responsableMail));
+    participantsMail.forEach(participantMail => formData.append('participantsMail', participantMail));
 
     return this.http.post<InfoReunionBase>(`${this.apiUrl}/planifier`, formData);
   }

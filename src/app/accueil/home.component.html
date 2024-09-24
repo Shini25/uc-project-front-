@@ -15,13 +15,6 @@
                 </div>
             </div>
 
-            <div *ngIf="user">
-                <h2>Welcome, {{ finaluser.numero }}</h2>
-                <p>Account Type: {{ finaluser.accountType }}</p>
-                <p>Account Status: {{ finaluser.accountStatus }}</p>
-            </div>
-              
-
             <div class="flex justify-between gap-4">
                 <button class="w-1/2 h-11 p-4 bg-white rounded-full flex shadow-md shadow-blue-800 justify-between items-center" routerLink="liste-courrier" routerLink="/archivage-courrier">
                     <span class="font-bold">Courrier</span>
@@ -37,12 +30,7 @@
                 </button>
             </div>
 
-            <!-- Logout Button -->
-            <div class="flex justify-center mt-4">
-                <button class="w-1/2 h-11 p-4 bg-red-600 text-white rounded-full flex shadow-md justify-center items-center" (click)="logout()">
-                    <span class="font-bold">Logout</span>
-                </button>
-            </div>
+
         </div>
     </div>
     <div class="h-32 w-full"></div>

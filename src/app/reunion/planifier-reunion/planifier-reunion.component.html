@@ -1,40 +1,139 @@
-<form [formGroup]="reunionForm" (ngSubmit)="onSubmit()" class="space-y-6 bg-white p-6 rounded-lg shadow-md">
-    <div class="flex flex-col">
-      <label for="titre" class="mb-2 font-semibold text-gray-700">Titre:</label>
-      <input type="text" id="titre" formControlName="titre" class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
-    </div>
-    <div class="flex flex-col">
-      <label for="dateReunion" class="mb-2 font-semibold text-gray-700">Date de Réunion:</label>
-      <input id="dateReunion" type="datetime-local" formControlName="dateReunion" class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
-    </div>
-    <div class="flex flex-col">
-      <label for="lieu" class="mb-2 font-semibold text-gray-700">Lieu:</label>
-      <input id="lieu" formControlName="lieu" class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
-    </div>
+<div class="flex justify-center items-center mt-5">
+  <form [formGroup]="reunionForm" (ngSubmit)="onSubmit()" class="space-y-6 bg-white w-[50%] p-6 rounded-lg shadow-xl">
+    <!-- Objet -->
     <div class="flex flex-col">
       <label for="objet" class="mb-2 font-semibold text-gray-700">Objet:</label>
       <input id="objet" formControlName="objet" class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
     </div>
-    <div formArrayName="ordreDuJourDescriptions" class="flex flex-col space-y-2">
-      <label class="mb-2 font-semibold text-gray-700">Ordre du Jour:</label>
-      <div *ngFor="let control of ordreDuJourDescriptions.controls; let i = index" class="flex items-center space-x-2">
-        <input [formControlName]="i" class="flex-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+
+    <!-- Type de Réunion -->
+    <div class="flex flex-col justify-center items-center">
+      <div class="flex items-center space-x-4">
+        <label for="interne" class="flex items-center">
+          <input id="interne" type="radio" formControlName="reunionType" value="interne" class="mr-2" />
+          Interne
+        </label>
+        <label for="externe" class="flex items-center">
+          <input id="externe" type="radio" formControlName="reunionType" value="externe" class="mr-2" />
+          Externe
+        </label>
       </div>
-      <button type="button" (click)="addOrdreDuJourDescription()" class="mt-2 p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Ajouter Ordre du Jour</button>
     </div>
-    <div formArrayName="responsablesMatricules" class="flex flex-col space-y-2">
-      <label class="mb-2 font-semibold text-gray-700">Responsables Matricules:</label>
-      <div *ngFor="let control of responsablesMatricules.controls; let i = index" class="flex items-center space-x-2">
-        <input [formControlName]="i" class="flex-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+
+    <!-- Date et Lieu de Réunion -->
+    <div class="grid grid-cols-2 gap-x-6">
+      <div class="flex flex-col">
+        <label for="dateReunion" class="mb-2 font-semibold text-gray-700">Date de Réunion:</label>
+        <input id="dateReunion" type="datetime-local" formControlName="dateReunion" class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
       </div>
-      <button type="button" (click)="addResponsableMatricule()" class="mt-2 p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Ajouter Responsable</button>
-    </div>
-    <div formArrayName="participantsMatricules" class="flex flex-col space-y-2">
-      <label class="mb-2 font-semibold text-gray-700">Participants Matricules:</label>
-      <div *ngFor="let control of participantsMatricules.controls; let i = index" class="flex items-center space-x-2">
-        <input [formControlName]="i" class="flex-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      <div class="flex flex-col">
+        <label for="lieu" class="mb-2 font-semibold text-gray-700">Lieu:</label>
+        <input id="lieu" formControlName="lieu" class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
       </div>
-      <button type="button" (click)="addParticipantMatricule()" class="mt-2 p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Ajouter Participant</button>
     </div>
+
+    <!-- Accordéon pour Responsable, Participants, Logistique, et Observation -->
+    <div id="accordion-flush" data-accordion="collapse" data-active-classes="bg-blue-50 text-blue-500">
+      
+      <!-- Responsable -->
+      <h6 id="accordion-flush-heading-1">
+        <button type="button" class="accordion-button p-2  text-lg font-bold flex justify-between border border-blue-300 border-dashed rounded-lg w-full" (click)="toggleAccordion(0)" data-accordion-target="#accordion-flush-body-1" aria-expanded="true" aria-controls="accordion-flush-body-1">
+          Responsable
+          <svg [ngClass]="{'rotate-180': accordionOpenStates[0]}" class="w-5 h-5 transition-transform transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+          </svg>
+        </button>
+      </h6>
+      <div id="accordion-flush-body-1" class="hidden" aria-labelledby="accordion-flush-heading-1">
+        <div class="p-5 border border-t-0">
+          <!-- Formulaire pour Responsable -->
+          <div formArrayName="responsablesMail" class="space-y-2">
+            <div *ngIf="reunionForm.get('reunionType')?.value === 'interne'; else manualResponsables">
+              <div *ngFor="let control of responsablesMail.controls; let i = index">
+                <select [formControlName]="i" class="w-full p-2 border border-gray-300 rounded-md">
+                  <option *ngFor="let chef of chefs" [value]="chef.email">{{ chef.nom }} {{ chef.prenoms }}</option>
+                </select>
+              </div>
+            </div>
+            <ng-template #manualResponsables>
+              <div *ngFor="let control of responsablesMail.controls; let i = index">
+                <input [formControlName]="i" class="w-full p-2 border border-gray-300 rounded-md" />
+              </div>
+            </ng-template>
+            <button type="button" (click)="addResponsableMail()" class="mt-2 p-2 bg-blue-500 text-white rounded-md">Ajouter Responsable</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Participants -->
+      <h6 id="accordion-flush-heading-2">
+        <button type="button" class="accordion-button p-2  text-lg font-bold flex justify-between border border-blue-300 border-dashed rounded-lg w-full" (click)="toggleAccordion(1)" data-accordion-target="#accordion-flush-body-2" aria-expanded="false" aria-controls="accordion-flush-body-2">
+          Participants
+          <svg [ngClass]="{'rotate-180': accordionOpenStates[1]}" class="w-5 h-5 transition-transform transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </button>
+      </h6>
+      <div id="accordion-flush-body-2" class="hidden" aria-labelledby="accordion-flush-heading-2">
+        <div class="p-5 border border-t-0">
+          <!-- Formulaire pour Participants -->
+          <div formArrayName="participantsMail" class="space-y-2">
+            <div *ngIf="reunionForm.get('reunionType')?.value === 'interne'; else manualParticipants">
+              <div *ngFor="let control of participantsMail.controls; let i = index">
+                <select [formControlName]="i" class="w-full p-2 border border-gray-300 rounded-md">
+                  <option *ngFor="let chef of chefs" [value]="chef.email">{{ chef.nom }} {{ chef.prenoms }}</option>
+                </select>
+              </div>
+            </div>
+            <ng-template #manualParticipants>
+              <div *ngFor="let control of participantsMail.controls; let i = index">
+                <input [formControlName]="i" class="w-full p-2 border border-gray-300 rounded-md" />
+              </div>
+            </ng-template>
+            <button type="button" (click)="addParticipantMail()" class="mt-2 p-2 bg-blue-500 text-white rounded-md">Ajouter Participant</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Logistique -->
+      <h6 id="accordion-flush-heading-3">
+        <button type="button" class="accordion-button p-2  text-lg font-bold flex justify-between border border-blue-300 border-dashed rounded-lg w-full" (click)="toggleAccordion(2)" data-accordion-target="#accordion-flush-body-3" aria-expanded="false" aria-controls="accordion-flush-body-3">
+          Logistique
+          <svg [ngClass]="{'rotate-180': accordionOpenStates[2]}" class="w-5 h-5 transition-transform transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </button>
+      </h6>
+      <div id="accordion-flush-body-3" class="hidden" aria-labelledby="accordion-flush-heading-3">
+        <div class="p-5 border border-t-0">
+          <!-- Formulaire pour Logistique -->
+          <div formArrayName="logistique" class="space-y-2">
+            <div *ngFor="let control of logistique.controls; let i = index">
+              <input [formControlName]="i" class="w-full p-2 border border-gray-300 rounded-md" />
+            </div>
+            <button type="button" (click)="addLogistique()" class="mt-2 p-2 bg-blue-500 text-white rounded-md">Ajouter Logistique</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Observation -->
+      <h6 id="accordion-flush-heading-4">
+        <button type="button" class="accordion-button p-2  text-lg font-bold flex justify-between border border-blue-300  rounded-lg w-full" (click)="toggleAccordion(3)" data-accordion-target="#accordion-flush-body-4" aria-expanded="false" aria-controls="accordion-flush-body-4">
+          Observation
+          <svg [ngClass]="{'rotate-180': accordionOpenStates[3]}" class="w-5 h-5 transition-transform transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </button>
+      </h6>
+      <div id="accordion-flush-body-4" class="hidden" aria-labelledby="accordion-flush-heading-4">
+        <div class="p-5 border border-t-0">
+          <textarea formControlName="observation" class="w-full p-2 border border-gray-300 rounded-md"></textarea>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Submit Button -->
     <button type="submit" class="w-full p-2 bg-green-500 text-white rounded-md hover:bg-green-600">Planifier Réunion</button>
   </form>
+</div>

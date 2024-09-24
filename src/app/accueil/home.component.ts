@@ -44,22 +44,6 @@ export class HomeComponent implements OnInit {
       this.flowbiteService.loadFlowbite(flowbite => {
         console.log('Flowbite loaded:', flowbite);
       });
-      this.userService.getUserInfo().subscribe(
-        data => {
-          this.user = data;
-          console.log('User info:', this.user.username);
-          this.userService.getUserByNumero(this.user.username).subscribe(user => {
-            this.finaluser = user;
-            console.log('User info:', this.finaluser.numero);
-          });
-        },
-        err => {
-          console.error('Error fetching user info', err);
-          if (err.status === 403) {
-            this.router.navigate(['/login']);
-          }
-        }
-      );
     }
 
     onMouseOver(event: Event) {

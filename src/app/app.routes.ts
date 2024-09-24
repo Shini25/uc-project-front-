@@ -27,7 +27,7 @@ import { AuthGuard } from './services/auth.guard';
 
 export const routes: Routes = [
     {
-      path: '',
+      path: 'home',
       component: HomeComponent
     },
     {
@@ -40,7 +40,7 @@ export const routes: Routes = [
         { path: 'organigramme-direction', component: OrganigrammeDirectionComponent },
         { path: 'organigramme-service', component: OrganigrammeServiceComponent },
         { path: 'archivage-courrier', component: ArchivageCourrierComponent },
-        { path: 'planifier-reunion', component: PlanifierReunionComponent },
+        { path: 'planification-reunion', component: PlanifierReunionComponent },
         { path: 'liste-reunion', component: ListeReunionComponent },
         { path: 'details-reunion/:id', component: DetailsReunionComponent },
         { path: 'liste-livret', component: ListeLivretComponent },

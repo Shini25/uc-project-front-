@@ -5,12 +5,12 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class ObservationService {
-  private apiUrl = 'http://localhost:8080/api/observation';
+export class LogistiqueService {
+  private apiUrl = 'http://localhost:8080/api/logistique';
 
   constructor(private http: HttpClient) {}
 
-  getOrdreDuJourByReunion(reunionId: number): Observable<string[]> {
-    return this.http.get<string[]>(`${this.apiUrl}/${reunionId}/ordredujour`);
+  getLogistiqueByReunion(reunionId: number): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrl}/${reunionId}/logistique`);
   }
 }

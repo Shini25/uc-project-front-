@@ -13,10 +13,10 @@ import { Router } from '@angular/router';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { User_account } from './models/user.model';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { FlowbiteService } from './services/flowbite.service';
 
 
 @Component({
@@ -44,14 +44,17 @@ import { MatExpansionModule } from '@angular/material/expansion';
 export class AppComponent implements OnInit {
   title = 'FrontBankLoan';
   pendingLoansCount: number = 0;
-  user: User_account | null = null;
+  user: any;
   numero: string | null = null;
   isLivretOpen = false;
+  finaluser: any;
 
-
-  constructor(private authService: AuthService, private userService: UserService, private router: Router) {}
+  constructor(private authService: AuthService, private userService: UserService, private router: Router, private flowbiteService: FlowbiteService) {}
 
   ngOnInit() {
+    this.flowbiteService.loadFlowbite(flowbite => {
+      console.log('Flowbite loaded:', flowbite);
+    });
     this.numero = this.userService.getNumero();
     console.log('Numero in AppComponent:', this.numero); // Log the numero in AppComponent
     if (this.numero) {
@@ -60,6 +63,22 @@ export class AppComponent implements OnInit {
         console.log('User retrieved:', this.user); // Log the retrieved user
       });
     }
+    this.userService.getUserInfo().subscribe(
+      data => {
+        this.user = data;
+        console.log('User info:', this.user.username);
+        this.userService.getUserByNumero(this.user.username).subscribe(user => {
+          this.finaluser = user;
+          console.log('User info:', this.finaluser.numero);
+        });
+      },
+      err => {
+        console.error('Error fetching user info', err);
+        if (err.status === 403) {
+          this.router.navigate(['/login']);
+        }
+      }
+    );
   }
 
   logout() {

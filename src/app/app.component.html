@@ -12,8 +12,34 @@
       <span class="text-5xl mt-0">uc</span>
     </div>
     <div class="flex"> 
-      <button type="button" class="w-12 h-12 rounded-full bg-blue-800"> 
+      <button id="userDropdownButton" data-dropdown-toggle="userDropdown"  data-dropdown-placement="bottom-start" class="w-12 h-12 rounded-full bg-blue-800 ">
+        <!-- affichef grandement dans cette boutton le premiere lettre de {{ finaluser?.email }} -->
+        <span class="text-white text-2xl">{{ finaluser?.email[0] }}</span>
       </button>
+      <div id="userDropdown" class="z-10 backdrop-blur-sm hidden bg-white divide-y divide-gray-100 rounded-lg shadow-md dark:bg-gray-700  ">
+          <ul class="w-[250px] p-3">
+            <li>
+              <p class="text-sm text-blue-800">{{ finaluser?.accountType }}</p>
+              <hr>
+            </li>
+
+
+            <li class="mt-2">
+              <p class="text-sm">{{ finaluser?.numero }}</p>
+            </li>
+            <li>
+              
+              <p class="text-xs">{{ finaluser?.email }}</p>
+            </li>
+          </ul>
+          <!-- Logout Button -->
+          <div class="p-3">
+            <button class="" (click)="logout()">
+                <span class="font-bold text-red-600">Déconnexion</span>
+            </button>
+        </div>
+          
+      </div>
     </div>
   </div>
 </div>
@@ -49,7 +75,7 @@
     </div>
 
     <!-- home -->
-    <div  class="relative w-full h-12 bg-blue-800 dark:bg-white  rounded-lg shadow-md flex items-center  cursor-pointer" routerLink="/">
+    <div  class="relative w-full h-12 bg-blue-800 dark:bg-white  rounded-lg shadow-md flex items-center  cursor-pointer" routerLink="/home">
       <div class="inline-flex ml-3 text-base">
         <div class="mr-3 flex justify-center items-center">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4 text-white ">
@@ -79,7 +105,7 @@
         <span class="font-semibold">Menus</span>
       </div>
       <div class="flex-1">
-          <a class="relative w-full h-12 dark:bg-white  rounded-lg flex items-center  cursor-pointer group " routerLink="liste-chef">
+          <a class="relative w-full h-12 dark:bg-white  rounded-lg flex items-center  cursor-pointer group " routerLink="auth/liste-chef">
             <div class="inline-flex ml-3 text-base">
               <div class="mr-3 flex justify-center items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4 text-gray-400 group-hover:text-blue-800 ">
@@ -95,7 +121,7 @@
           </a>
 
           <div class="relative">
-            <button  type="button" class="relative w-full h-12  dark:bg-white rounded-lg flex items-center  cursor-pointer group" routerLink="liste-livret" >
+            <button  type="button" class="relative w-full h-12  dark:bg-white rounded-lg flex items-center  cursor-pointer group" routerLink="auth/liste-livret" >
               <div class="inline-flex ml-3 text-base">
                 <div class="mr-3 flex justify-center items-center">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4 text-gray-400  group-hover:text-blue-800">
@@ -132,10 +158,10 @@
             <div id="chef-menu-dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-auto dark:bg-gray-700 backdrop-blur-lg">
               <ul class="p-0 text-sm text-gray-700 dark:text-gray-200">
                 <li class="w-full px-4  hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                  <a class="block py-2 text-black" routerLink="liste-chef">Liste chef</a>
+                  <a class="block py-2 text-black" routerLink="auth/liste-chef">Liste chef</a>
                 </li>
                 <li class="w-full px-4  hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" >
-                  <a class="block py-2 text-black" routerLink="organigramme-direction">Organigramme</a>
+                  <a class="block py-2 text-black" routerLink="/auth/organigramme-direction">Organigramme</a>
                 </li>
               </ul>
             </div>
@@ -160,7 +186,7 @@
         </a>
 
         <a class="relative w-full h-12  dark:bg-white  rounded-lg flex items-center  cursor-pointer group" >
-          <div class="inline-flex ml-3 text-base" routerLink="liste-autre-document">
+          <div class="inline-flex ml-3 text-base" routerLink="auth/liste-autre-document">
             <div class="mr-3 flex justify-center items-center">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4 text-gray-400 group-hover:text-blue-800">
                 <path fill-rule="evenodd" d="M7.502 6h7.128A3.375 3.375 0 0 1 18 9.375v9.375a3 3 0 0 0 3-3V6.108c0-1.505-1.125-2.811-2.664-2.94a48.972 48.972 0 0 0-.673-.05A3 3 0 0 0 15 1.5h-1.5a3 3 0 0 0-2.663 1.618c-.225.015-.45.032-.673.05C8.662 3.295 7.554 4.542 7.502 6ZM13.5 3A1.5 1.5 0 0 0 12 4.5h4.5A1.5 1.5 0 0 0 15 3h-1.5Z" clip-rule="evenodd" />
@@ -194,10 +220,10 @@
           <div id="reunion-dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-auto dark:bg-gray-700 backdrop-blur-lg">
             <ul class="p-0 text-sm text-gray-700 dark:text-gray-200">
               <li class="w-full px-4  hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                <a class="block py-2 text-black" routerLink="planifier-reunion"> Préparation</a>
+                <a class="block py-2 text-black" routerLink="auth/planification-reunion"> Préparation</a>
               </li>
               <li class="w-full px-4  hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" >
-                <a class="block py-2 text-black" routerLink="liste-reunion">Liste de la réunion</a>
+                <a class="block py-2 text-black" routerLink="auth/laiste-reunion">Liste de la réunion</a>
               </li>
             </ul>
           </div>
@@ -205,7 +231,7 @@
 
         </div>
 
-        <a class="relative w-full h-12  dark:bg-white  rounded-lg flex items-center  cursor-pointer group" routerLink="acces-reserve">
+        <a class="relative w-full h-12  dark:bg-white  rounded-lg flex items-center  cursor-pointer group" routerLink="auth/acces-reserve">
           <div class="inline-flex ml-3 text-base">
             <div class="mr-3 flex justify-center items-center">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4 text-gray-400  group-hover:text-blue-800">

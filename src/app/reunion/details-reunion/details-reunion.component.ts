@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ReunionService } from '../../services/reunion/ReunionService';
-import { OrdreDuJourService } from '../../services/reunion/OrdreDuJourService';
 import { ResponsableReunionService } from '../../services/reunion/ResponsableReunionService';
 import { ParticipantService } from '../../services/reunion/ParticipantService';
 import { InfoReunionBase } from '../../models/infoReunionBase.model';
 import { MatIcon } from '@angular/material/icon';
+import { LogistiqueService } from '../../services/reunion/logistiqueService';
+import { ObservationService } from '../../services/reunion/ObservationService';
 
 @Component({
   selector: 'app-details-reunion',
@@ -17,14 +18,16 @@ import { MatIcon } from '@angular/material/icon';
 })
 export class DetailsReunionComponent implements OnInit {
   reunion: InfoReunionBase | null = null;
-  ordreDuJour: string[] = [];
+  logistique: string[] = [];
+  observation: string[] = [];
   responsables: string[] = [];
   participants: string[] = [];
 
   constructor(
     private route: ActivatedRoute,
     private reunionService: ReunionService,
-    private ordreDuJourService: OrdreDuJourService,
+    private logistiqueService: LogistiqueService,
+    private observationService: ObservationService,
     private responsableReunionService: ResponsableReunionService,
     private participantService: ParticipantService
   ) {}
@@ -33,7 +36,8 @@ export class DetailsReunionComponent implements OnInit {
     const reunionId = this.route.snapshot.paramMap.get('id');
     if (reunionId) {
       this.fetchReunionDetails(parseInt(reunionId, 10));
-      this.fetchOrdreDuJour(parseInt(reunionId, 10));
+      this.fetchLogistique(parseInt(reunionId, 10));
+      this.fetchObservation(parseInt(reunionId, 10));
       this.fetchResponsables(parseInt(reunionId, 10));
       this.fetchParticipants(parseInt(reunionId, 10));
     }
@@ -45,9 +49,15 @@ export class DetailsReunionComponent implements OnInit {
     });
   }
 
-  fetchOrdreDuJour(reunionId: number): void {
-    this.ordreDuJourService.getOrdreDuJourByReunion(reunionId).subscribe((data: string[]) => {
-      this.ordreDuJour = data;
+  fetchLogistique(reunionId: number): void {
+    this.logistiqueService.getLogistiqueByReunion(reunionId).subscribe((data: string[]) => {
+      this.logistique = data;
+    });
+  }
+
+  fetchObservation(reunionId: number): void {
+    this.observationService.getObservationByReunion(reunionId).subscribe((data: string[]) => {
+      this.observation = data;
     });
   }
 

@@ -6,7 +6,7 @@ export interface InfoReunionBase {
     objet: string;
     dateCreation?: string;
     logistique: string[];
-    responsablesMatricules: string[];
-    participantsMatricules: string[];
-    observations: string[];
+    responsablesMail: string[];
+    participantsMail: string[];
+    observation: string[];
   }

@@ -1,66 +1,103 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormArray } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { ReunionService } from '../../services/reunion/ReunionService'; // Use the correct import path and name
+import { ReunionService } from '../../services/reunion/ReunionService';
+import { InfoBaseChefService } from '../../services/chefs/infoBaseChef.service'; // Import the service
+import { Chefs } from '../../models/chefs.model';
 
 @Component({
   selector: 'app-planifier-reunion',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, HttpClientModule],
   templateUrl: './planifier-reunion.component.html',
-  styleUrls: ['./planifier-reunion.component.css']
+  styleUrls: ['./planifier-reunion.component.css'] 
 })
-export class PlanifierReunionComponent {
+export class PlanifierReunionComponent implements OnInit {
   reunionForm: FormGroup;
+  chefs: Chefs[] = []; 
+  accordionOpenStates = [false, false, false, false];
 
-  constructor(private fb: FormBuilder, private reunionService: ReunionService) {
+
+  constructor(
+    private fb: FormBuilder,
+    private reunionService: ReunionService,
+    private chefService: InfoBaseChefService // Inject the service
+  ) {
     this.reunionForm = this.fb.group({
-      titre: ['', Validators.required],
       dateReunion: ['', Validators.required],
       lieu: ['', Validators.required],
       objet: ['', Validators.required],
-      ordreDuJourDescriptions: this.fb.array([]),
-      responsablesMatricules: this.fb.array([]),
-      participantsMatricules: this.fb.array([])
+      reunionType: ['', Validators.required],
+      logistique: this.fb.array([]),
+      observations: this.fb.array([]),
+      responsablesMail: this.fb.array([]),
+      participantsMail: this.fb.array([])
     });
   }
 
-  get ordreDuJourDescriptions(): FormArray {
-    return this.reunionForm.get('ordreDuJourDescriptions') as FormArray;
+  ngOnInit(): void {
+    this.reunionForm.get('reunionType')?.valueChanges.subscribe(value => {
+      if (value === 'interne') {
+        this.fetchChefs();
+      }
+    });
   }
 
-  get responsablesMatricules(): FormArray {
-    return this.reunionForm.get('responsablesMatricules') as FormArray;
+  fetchChefs(): void {
+    this.chefService.getAllChefs().subscribe((data: Chefs[]) => {
+      this.chefs = data;
+    });
   }
 
-  get participantsMatricules(): FormArray {
-    return this.reunionForm.get('participantsMatricules') as FormArray;
+  get logistique(): FormArray {
+    return this.reunionForm.get('logistique') as FormArray;
   }
 
-  addOrdreDuJourDescription(): void {
-    this.ordreDuJourDescriptions.push(this.fb.control('', Validators.required));
+  get responsablesMail(): FormArray {
+    return this.reunionForm.get('responsablesMail') as FormArray;
   }
 
-  addResponsableMatricule(): void {
-    this.responsablesMatricules.push(this.fb.control('', Validators.required));
+  get participantsMail(): FormArray {
+    return this.reunionForm.get('participantsMail') as FormArray;
   }
 
-  addParticipantMatricule(): void {
-    this.participantsMatricules.push(this.fb.control('', Validators.required));
+  get observations(): FormArray {
+    return this.reunionForm.get('observations') as FormArray;
+  }
+
+  addLogistique(): void {
+    this.logistique.push(this.fb.control('', Validators.required));
+  }
+
+  addObservation(): void {
+    this.observations.push(this.fb.control('', Validators.required));
+  }
+
+  addResponsableMail(): void {
+    this.responsablesMail.push(this.fb.control('', Validators.required));
+  }
+
+  addParticipantMail(): void {
+    this.participantsMail.push(this.fb.control('', Validators.required));
+  }
+
+  toggleAccordion(index: number): void {
+    this.accordionOpenStates[index] = !this.accordionOpenStates[index];
   }
 
   onSubmit() {
     if (this.reunionForm.valid) {
       const reunionData = this.reunionForm.value;
       this.reunionService.planifierReunion(
-        reunionData.titre,
         new Date(reunionData.dateReunion),
         reunionData.lieu,
         reunionData.objet,
-        reunionData.ordreDuJourDescriptions,
-        reunionData.responsablesMatricules,
-        reunionData.participantsMatricules
+        reunionData.reunionType,
+        reunionData.logistique,
+        reunionData.observations,
+        reunionData.responsablesMail,
+        reunionData.participantsMail
       ).subscribe(response => {
         console.log('Réunion planifiée avec succès', response);
       });
