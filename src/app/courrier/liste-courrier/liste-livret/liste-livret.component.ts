@@ -1,19 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Livret } from '../../../models/courriers/livret.model';
+import { LivretAudit } from '../../../models/courriers/livretAudit.model';
 import { LivretService } from '../../../services/courrier/livret.service';
 import { MimeService } from '../../../services/mime.service';
 import { CommonModule } from '@angular/common';
 import { DatePipe } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FlowbiteService } from '../../../services/flowbite.service';
+import { UserService } from '../../../services/user.service';
+import { LivretAuditService } from '../../../services/courrier/livretAudit.service'; 
 
 @Component({
   selector: 'app-liste-livret',
   standalone: true,
-  imports: [CommonModule, DatePipe],
+  imports: [CommonModule, DatePipe, FormsModule, ReactiveFormsModule],
   templateUrl: './liste-livret.component.html',
   styleUrls: ['./liste-livret.component.css']
 })
-export class ListeLivretComponent implements OnInit {
+export class ListeLivretComponent implements OnInit, AfterViewInit {
   livrets: Livret[] = [];
+  livretsAudit: LivretAudit[] = [];
   filteredLivrets: Livret[] = [];
   paginatedLivrets: Livret[] = [];
   selectedType: string = '';
@@ -21,15 +28,57 @@ export class ListeLivretComponent implements OnInit {
   searchQuery: string = '';
   searchDate: string = '';
   searchType: string = 'title';
-
   currentPage: number = 1;
   rowsPerPage: number = 10;
   totalPages: number = 1;
+  updateForm: FormGroup;
+  isUpdateFormVisible: boolean = false;
+  selectedFile!: File;
+  selectedFileName!: string;
+  fileType!: string;
+  userNumero!: string; 
+  user: any;
+  finaluser: any;
+  expandedRowIndex: number | null = null;
 
-  constructor(private livretService: LivretService, private mimeService: MimeService) {}
+  constructor(
+    private livretService: LivretService, 
+    private mimeService: MimeService, 
+    private flowbiteService: FlowbiteService,
+    private fb: FormBuilder,
+    private userService: UserService, 
+    private livretAuditService: LivretAuditService 
+  ) {
+    this.updateForm = this.fb.group({
+      idCourrier: ['', Validators.required],
+      titre: new FormControl({value: '', disabled: true}),
+      type: new FormControl({value: '', disabled: true}),
+    });
+  }
 
   ngOnInit(): void {
     this.getAllLivrets();
+    this.getUserNumero(); 
+  }
+
+  ngAfterViewInit(): void {
+    this.flowbiteService.loadFlowbite(flowbite => {
+      console.log('Flowbite loaded:', flowbite);
+    });
+  }
+
+  getUserNumero(): void {
+    this.userService.getUserInfo().subscribe(
+      data => {
+        this.user = data;
+        console.log(this.user.username);
+        this.userService.getUserByNumero(this.user.username).subscribe(user => {
+          this.finaluser = user;
+          console.log(this.finaluser.numero);
+          this.userNumero = this.finaluser.numero;
+        });
+      }
+    );
   }
 
   getAllLivrets(): void {
@@ -41,9 +90,7 @@ export class ListeLivretComponent implements OnInit {
 
   filterLivrets(): void {
     this.filteredLivrets = this.livrets.filter(livret => {
-      // Check livret type first
       const typeMatches = this.selectedType === '' || livret.type.toString() === this.selectedType;
-  
       let searchMatches = true;
       if (this.searchType === 'title') {
         searchMatches = livret.titre.toLowerCase().includes(this.searchQuery.toLowerCase());
@@ -51,13 +98,10 @@ export class ListeLivretComponent implements OnInit {
         const livretDate = new Date(livret.dateInsertion).toISOString().split('T')[0];
         searchMatches = livretDate === this.searchDate;
       }
-  
       return typeMatches && searchMatches;
     });
-  
     this.updatePagination();
   }
-  
 
   onSearch(event: Event): void {
     this.searchQuery = (event.target as HTMLInputElement).value;
@@ -131,5 +175,90 @@ export class ListeLivretComponent implements OnInit {
     link.href = window.URL.createObjectURL(blob);
     link.download = fileName;
     link.click();
+  }
+
+  downloadLivretAudit(livretAudit: LivretAudit): void {
+    const fileType = livretAudit.typeContenue;
+    const extension = this.mimeService.getFileExtension(fileType);
+    const fileName = `${livretAudit.titre}.${extension.toLowerCase()}`;
+
+    const byteCharacters = atob(livretAudit.contenue);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    const blob = new Blob([byteArray], { type: fileType });
+
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = fileName;
+    link.click();
+  }
+
+  previewLivret(livret: Livret): void {
+    const fileType = livret.typeContenue;
+    const byteCharacters = atob(livret.contenue);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    const blob = new Blob([byteArray], { type: fileType });
+    const fileURL = URL.createObjectURL(blob);
+    window.open(fileURL);
+  }
+
+  openUpdateForm(livret: Livret): void {
+    this.updateForm.patchValue({
+      idCourrier: livret.idCourrier,
+      titre: livret.titre,
+      type: livret.type,
+    });
+    this.isUpdateFormVisible = true;
+  }
+
+  closeUpdateForm(): void {
+    this.isUpdateFormVisible = false;
+  }
+
+  onFileChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length) {
+      this.selectedFile = input.files[0];
+      this.selectedFileName = this.selectedFile.name;
+      this.fileType = this.selectedFile.type;
+    }
+  }
+
+  updateLivret(): void { 
+    if (this.updateForm.valid && this.selectedFile) {
+      const { idCourrier } = this.updateForm.value;
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64File = reader.result as string;
+
+        console.log(idCourrier);
+        console.log(base64File);
+        this.livretService.updateLivret(idCourrier, base64File, this.userNumero).subscribe( // Pass userNumero as modifyby
+          () => {
+            this.getAllLivrets();
+            this.closeUpdateForm();
+          }
+        );
+      };
+      reader.readAsDataURL(this.selectedFile);
+    }
+  }
+
+  toggleRow(index: number, livret: Livret) {
+    if (this.expandedRowIndex === index) {
+      this.expandedRowIndex = null;
+    } else {
+      this.expandedRowIndex = index;
+    }
+    this.livretAuditService.getAllLivretsAuditByCourrierId(livret.idCourrier).subscribe((data: LivretAudit[]) => {
+      this.livretsAudit = data;
+    });
   }
 }

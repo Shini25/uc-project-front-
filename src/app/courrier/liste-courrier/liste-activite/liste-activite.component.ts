@@ -1,35 +1,80 @@
-import { Component, OnInit } from '@angular/core';
-import { ActiviteService } from '../../../services/courrier/activite.service';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Activite } from '../../../models/courriers/activite.model';
+import { ActiviteService } from '../../../services/courrier/activite.service';
 import { MimeService } from '../../../services/mime.service';
 import { CommonModule } from '@angular/common';
 import { DatePipe } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FlowbiteService } from '../../../services/flowbite.service';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-liste-activite',
   standalone: true,
-  imports: [CommonModule, DatePipe],
+  imports: [CommonModule, DatePipe, FormsModule, ReactiveFormsModule],
   templateUrl: './liste-activite.component.html',
-  styleUrl: './liste-activite.component.css'
+  styleUrls: ['./liste-activite.component.css']
 })
-export class ListeActiviteComponent implements OnInit {
+export class ListeActiviteComponent implements OnInit, AfterViewInit {
   activites: Activite[] = [];
   filteredActivites: Activite[] = [];
   paginatedActivites: Activite[] = [];
   selectedType: string = '';
-  activiteTypes: string[] = ['GUIDE_AU_USAGERS', 'CIRCUIT_DE_TRAITEMENT', 'MANUELS_DE_PROCEDURES', 'CODES_DE_LA_SOLDE', 'SGAP'];
+  activiteTypes: string[] = ['TEXTES_LEGISLATIF'];
   searchQuery: string = '';
   searchDate: string = '';
   searchType: string = 'title';
-
   currentPage: number = 1;
   rowsPerPage: number = 10;
   totalPages: number = 1;
+  updateForm: FormGroup;
+  isUpdateFormVisible: boolean = false;
+  selectedFile!: File;
+  selectedFileName!: string;
+  fileType!: string;
+  userNumero!: string; 
+  user: any;
+  finaluser: any;
+  expandedRowIndex: number | null = null;
 
-  constructor(private activiteService: ActiviteService, private mimeService: MimeService) {}
+  constructor(
+    private activiteService: ActiviteService, 
+    private mimeService: MimeService, 
+    private flowbiteService: FlowbiteService,
+    private fb: FormBuilder,
+    private userService: UserService, 
+  ) {
+    this.updateForm = this.fb.group({
+      idCourrier: ['', Validators.required],
+      titre: new FormControl({value: '', disabled: true}),
+      type: new FormControl({value: '', disabled: true}),
+    });
+  }
 
   ngOnInit(): void {
     this.getAllActivites();
+    this.getUserNumero(); 
+  }
+
+  ngAfterViewInit(): void {
+    this.flowbiteService.loadFlowbite(flowbite => {
+      console.log('Flowbite loaded:', flowbite);
+    });
+  }
+
+  getUserNumero(): void {
+    this.userService.getUserInfo().subscribe(
+      data => {
+        this.user = data;
+        console.log(this.user.username);
+        this.userService.getUserByNumero(this.user.username).subscribe(user => {
+          this.finaluser = user;
+          console.log(this.finaluser.numero);
+          this.userNumero = this.finaluser.numero;
+        });
+      }
+    );
   }
 
   getAllActivites(): void {
@@ -41,9 +86,7 @@ export class ListeActiviteComponent implements OnInit {
 
   filterActivites(): void {
     this.filteredActivites = this.activites.filter(activite => {
-      // Check activite type first
       const typeMatches = this.selectedType === '' || activite.type.toString() === this.selectedType;
-  
       let searchMatches = true;
       if (this.searchType === 'title') {
         searchMatches = activite.titre.toLowerCase().includes(this.searchQuery.toLowerCase());
@@ -51,13 +94,10 @@ export class ListeActiviteComponent implements OnInit {
         const activiteDate = new Date(activite.dateInsertion).toISOString().split('T')[0];
         searchMatches = activiteDate === this.searchDate;
       }
-  
       return typeMatches && searchMatches;
     });
-  
     this.updatePagination();
   }
-  
 
   onSearch(event: Event): void {
     this.searchQuery = (event.target as HTMLInputElement).value;
@@ -131,5 +171,41 @@ export class ListeActiviteComponent implements OnInit {
     link.href = window.URL.createObjectURL(blob);
     link.download = fileName;
     link.click();
+  }
+
+
+  previewActivite(activite: Activite): void {
+    const fileType = activite.typeContenue;
+    const byteCharacters = atob(activite.contenue);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    const blob = new Blob([byteArray], { type: fileType });
+    const fileURL = URL.createObjectURL(blob);
+    window.open(fileURL);
+  }
+
+  openUpdateForm(activite: Activite): void {
+    this.updateForm.patchValue({
+      idCourrier: activite.idCourrier,
+      titre: activite.titre,
+      type: activite.type,
+    });
+    this.isUpdateFormVisible = true;
+  }
+
+  closeUpdateForm(): void {
+    this.isUpdateFormVisible = false;
+  }
+
+  onFileChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length) {
+      this.selectedFile = input.files[0];
+      this.selectedFileName = this.selectedFile.name;
+      this.fileType = this.selectedFile.type;
+    }
   }
 }

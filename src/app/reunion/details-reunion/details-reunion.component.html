@@ -1,67 +1,63 @@
-<div *ngIf="reunion" class="reunion-details ">
-    <h4 class="title ">Détails de Réunion</h4>
-    <div class="objet">
-        <label>Objet:</label>
-        <div class="">
-          <span class="objet-contenu">{{ reunion.objet }}</span>
+<div *ngIf="reunion" class="reunion-details p-4 bg-white shadow-md rounded-lg">
+    <h5 class="title text-xl font-bold mb-4">Détails de Réunion</h5>
+    <div class="objet mb-4">
+        <label class="font-semibold">Objet:</label>
+        <div class="mt-1">
+          <span class="objet-contenu text-gray-700">{{ reunion.objet }}</span>
         </div>
-      </div>
-    <div class="reunion-content">
-      <div class="left-section">
-        <div class="en-ligne">
-            <label>Titre:</label>
-            <div class="date meme-ligne">
-              <span class="date-contenu">{{ reunion.titre }}</span>
-            </div>
-          </div>
+    </div>
+    <div class="reunion-content flex flex-wrap">
+      <div class="left-section w-full md:w-1/2 pr-4">
 
-        <div class="en-ligne">
-          <label>Date:</label>
-          <div class="date meme-ligne">
-            <span class="date-contenu">{{ reunion.dateReunion | date: 'short' }}</span>
+        <div class="en-ligne mb-4">
+          <label class="font-semibold">Date:</label>
+          <div class="date meme-ligne mt-1">
+            <span class="date-contenu text-gray-700">{{ reunion.dateReunion | date: 'short' }}</span>
           </div>
         </div>
 
-        <div class="en-ligne">
-          <label>Lieu:</label>
-          <div class="lieu meme-ligne">
-            <span class="lieu-contenu">{{ reunion.lieu }}</span>
+        <div class="en-ligne mb-4">
+          <label class="font-semibold">Lieu:</label>
+          <div class="lieu meme-ligne mt-1">
+            <span class="lieu-contenu text-gray-700">{{ reunion.lieu }}</span>
           </div>
         </div>
-        <div>
-          <label>Logistique:</label>
-          <div class="logistique">
-            <ul>
-              <li *ngFor="let item of logistique">
+        <div class="mb-4">
+          <label class="font-semibold">Logistique:</label>
+          <div class="logistique mt-1">
+            <ul class="list-disc list-inside">
+              <li *ngFor="let item of logistique" class="text-gray-700">
                 {{ item }}
               </li>
             </ul>
           </div>
         </div>
       </div>
-      <div class="right-section">
-        <div>
-          <label>Responsables:</label>
-          <div class="responsables">
-            <ul>
-              <li *ngFor="let responsable of responsables">
+      <div class="right-section w-full md:w-1/2 pl-4">
+        <div class="mb-4">
+          <label class="font-semibold">Responsables:</label>
+          <div class="responsables mt-1">
+            <ul class="list-disc list-inside">
+              <li *ngFor="let responsable of responsables" class="text-gray-700">
                 {{ responsable }}
               </li>
             </ul>
           </div>
         </div>
-        <div>
-          <label>Participants invités:</label>
-          <div class="participants">
-            <ul>
-              <li *ngFor="let participant of participants">
-              {{ participant }}
-              <input type="checkbox" />
-            </li>
-          </ul>
+        <div class="mb-4">
+          <label class="font-semibold">Participants invités:</label>
+          <div class="participants mt-1">
+            <ul class="list-disc list-inside">
+              <li *ngFor="let participant of participants" class="flex items-center text-gray-700">
+                {{ participant }}
+                <input type="checkbox" class="ml-2" />
+              </li>
+            </ul>
           </div>
         </div>
       </div>
     </div>
-    <button class="presence-button">Fiche de présence <mat-icon>arrow_forward</mat-icon></button>
-  </div>
+    <button class="presence-button mt-4 px-4 py-2 bg-blue-700 text-white rounded-lg flex items-center">
+      Fiche de présence <mat-icon class="ml-2">arrow_forward</mat-icon>
+    </button>
+</div>

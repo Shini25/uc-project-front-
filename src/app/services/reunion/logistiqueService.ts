@@ -14,3 +14,4 @@ export class LogistiqueService {
     return this.http.get<string[]>(`${this.apiUrl}/${reunionId}/logistique`);
   }
 }
+

@@ -1,121 +1,222 @@
 <div class="mx-auto px-4 py-6">
 
-    <!-- header -->
-     <div class="flex flex-col  w-full ">
-        <div class="w-full  "><h6 class="text-gray-800 text-2xl font-bold m-0">Liste des Livrets</h6></div>
-        <div class="flex flex-row flex-1  justify-between">
-            <div class="w-1/2 h-12 ">
-                <div class="flex">
-                    <div class="w-1/6">
-                        <select id="searchTypeSelect" (change)="onSearchTypeChange($event)" 
-                                class="block w-full pl-3 pr-10 py-2 text-base text-gray-800 bg-gray-50 border-gray-600 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-s-md cursor-pointer">
-                          <option value="title">titre</option>
-                          <option value="date">date</option>
-                        </select>
-                    </div>
-                    <div class="relative w-full " *ngIf="searchType === 'title'">
-                        <input 
-                        type="text" 
-                        id="searchInput" 
-                        placeholder="Rechercher par titre" 
-                        (input)="onSearch($event)" 
-                        class="block w-full pl-3 pr-3 py-2 text-base text-black bg-white border-gray-600 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" />
-        
-                    </div>
-                    <div class="relative w-full " *ngIf="searchType === 'date'">
-                            <input 
-                              type="date" 
-                              id="searchDate" 
-                              (change)="onDateChange($event)" 
-                              class="block w-full pl-3 pr-3 py-2 text-base text-gray-300 bg-gray-100 border-gray-600 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md" />
-                    </div>
-                    <div class="flex justify-center items-center cursor-pointer bg-blue-800 p-1 rounded-e-md" (click)="resetFilters() ">
+  <!-- header -->
+   <div class="flex flex-col  w-full ">
+      <div class="w-full  "><h6 class="text-gray-800 text-2xl m-0"><span class="font-bold">Liste des Livrets</span> </h6></div>
+      <div class="flex flex-row flex-1  justify-between">
+          <div class="w-1/2 h-12 ">
+              <div class="flex">
+                  <div class="w-1/6">
+                      <select id="searchTypeSelect" (change)="onSearchTypeChange($event)" 
+                              class="block w-full pl-3 pr-10 py-2 text-base text-gray-800 bg-gray-50 border-gray-600 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-s-md cursor-pointer">
+                        <option value="title">titre</option>
+                        <option value="date">date</option>
+                      </select>
+                  </div>
+                  <div class="relative w-full " *ngIf="searchType === 'title'">
+                      <input 
+                      type="text" 
+                      id="searchInput" 
+                      placeholder="Rechercher par titre" 
+                      (input)="onSearch($event)" 
+                      class="block w-full pl-3 pr-3 py-2 text-base text-black bg-white border-gray-600 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" />
+      
+                  </div>
+                  <div class="relative w-full " *ngIf="searchType === 'date'">
+                          <input 
+                            type="date" 
+                            id="searchDate" 
+                            (change)="onDateChange($event)" 
+                            class="block w-full pl-3 pr-3 py-2 text-base text-gray-300 bg-gray-100 border-gray-600 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md" />
+                  </div>
+                  <div class="flex justify-center items-center cursor-pointer bg-blue-700 p-1 rounded-e-md" (click)="resetFilters() ">
                       
-                        <!-- <button 
-                          class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded" 
-                          >
-                          Réinitialiser
-                        </button> -->
-                        
-                          <svg  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-white dark:text-gray-800">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
-                          </svg>
-                      
-                    </div>
-                </div>
-            </div>
-            <div class="w-1/2 h-12 ">
-                <div class="w-full  flex justify-end">
-                    <select id="livretTypeSelect" (change)="onTypeChange($event)" 
-                            class="block w-1/2 pl-3 pr-10 text-base text-gray-800 bg-gray-50 border-gray-600 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
-                    <option *ngFor="let type of livretTypes" [value]="type">{{ type }}</option>
-                    </select>
-                </div>    
-            </div>
-        </div>
-     </div>
-  
-    <!-- Livret Table -->
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg overflow-auto max-h-[520px] ">
-      <table class="w-full text-sm text-left text-gray-400 dark:text-gray-400">
-        <thead class="text-xs text-gray-800 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <svg  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-white dark:text-gray-800">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                        </svg>
+                    
+                  </div>
+              </div>
+          </div>
+          <div class="w-1/2 h-12 ">
+              <div class="w-full  flex justify-end">
+                  <select id="livretTypeSelect" (change)="onTypeChange($event)" 
+                          class="block w-1/2 pl-3 pr-10 text-base text-gray-800 bg-gray-50 border-gray-600 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                  <option *ngFor="let type of livretTypes" [value]="type">{{ type }}</option>
+                  </select>
+              </div>    
+          </div>
+      </div>
+   </div>
+
+  <!-- Livret Table -->
+  <div class="relative overflow-x-auto shadow-md sm:rounded-lg overflow-auto max-h-[520px]">
+
+    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+      <thead class="text-xs sticky top-0 text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
           <tr>
-            <th scope="col" class="px-6 py-3">Titre</th>
-            <th scope="col" class="px-6 py-3">Date d'insertion</th>
-            <th scope="col" class="px-6 py-3">Type</th>
-            <th scope="col" class="px-6 py-3">Données insérées par</th>
-            <th scope="col" class="px-6 py-3">Action</th>
+              <th scope="col" class="px-4 py-3">Titre</th>
+              <th scope="col" class="px-4 py-3">Date d'insertion</th>
+              <th scope="col" class="px-4 py-3">Type</th>
+              <th scope="col" class="px-4 py-3">insérées par</th>
+              <th scope="col" class="px-4 py-3">Consulter</th>
+              <th scope="col" class="px-4 py-3">
+                  <span class="sr-only">Actions</span>
+              </th>
+              <th scope="col" class="px-4 py-3"></th>
           </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let livret of paginatedLivrets" class="bg-white text-gray-800 border-b border-gray-700">
-            <td class="px-6 py-4">{{ livret.titre }}</td>
-            <td class="px-6 py-4">{{ livret.dateInsertion | date:'medium' }}</td>
-            <td class="px-6 py-4">{{ livret.type }}</td>
-            <td class="px-6 py-4">{{ livret.user_account.numero }}</td>
-            <td class="px-6 py-4">
-              <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" (click)="downloadLivret(livret)">
-                Consulter
-              </button>
+      </thead>
+      <tbody  class="bg-white">
+        <ng-container *ngFor="let livret of paginatedLivrets; let i = index">
+        <tr class="border-b dark:border-gray-700" >
+          <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ livret.titre }}</th>
+          <!-- if datemodification = null show livret.date.insertion else date.modification -->
+              <td class="px-4 py-3">{{ livret.dateModification ? (livret.dateModification | date:'medium') : (livret.dateInsertion | date:'medium') }}</td>
+              <td class="px-4 py-3">{{ livret.type }}</td>
+              <td class="px-4 py-3">{{ livret.user_account.numero }}</td>
+
+              <td class="px-4 py-3">
+                <div class="flex flex-row gap-2">
+                  <button class=" text-white px-2 py-1 rounded" (click)="downloadLivret(livret)">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 text-blue-700">
+                    <path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375Z" />
+                    <path fill-rule="evenodd" d="m3.087 9 .54 9.176A3 3 0 0 0 6.62 21h10.757a3 3 0 0 0 2.995-2.824L20.913 9H3.087ZM12 10.5a.75.75 0 0 1 .75.75v4.94l1.72-1.72a.75.75 0 1 1 1.06 1.06l-3 3a.75.75 0 0 1-1.06 0l-3-3a.75.75 0 1 1 1.06-1.06l1.72 1.72v-4.94a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
+                  </svg>                  
+                </button>
+                <button class=" text-white px-2 py-1 rounded" (click)="previewLivret(livret)">
+                  <span class="bg-amber-400 size-6 px-2 py-1 rounded-md">Voir</span>
+                </button>
+                </div>
+              </td>
+              <td class="px-4 py-3">
+                <div class="flex flex-row gap-2">
+                  <button (click)="openUpdateForm(livret)" class="text-blue-600 hover:underline">Modifier</button>
+                </div>
+              </td>
+              <td>
+                <button (click)="toggleRow(i, livret)" [ngClass]="{'hidden': livret.dateModification == null}"  class="flex items-center justify-between w-full p-2 font-medium text-gray-500 ">
+                    <svg class="w-4 h-4" [ngClass]="expandedRowIndex === i ? 'rotate-180' : ''" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
             </td>
           </tr>
-        </tbody>
-      </table>
-  
-      <!-- No Results Message -->
-      <div *ngIf="filteredLivrets.length === 0" class="text-center text-red-500 font-semibold ">
-        Aucun résultat trouvé.
-      </div>
-    </div>
-  
-    <!-- Pagination Controls -->
-    <div class="flex justify-between items-center mt-4 text-gray-400">
-      <!-- Rows per page -->
-      <div>
-        <label for="rowsPerPage" class="mr-2">Lignes par page:</label>
-        <select id="rowsPerPage" (change)="onRowsPerPageChange($event)" 
-                class="bg-gray-50 border-gray-600 text-gray-800 rounded-md">
-          <option [value]="5">5</option>
-          <option [value]="10" selected>10</option>
-          <option [value]="20">20</option>
-          <option [value]="50">50</option>
-        </select>
-      </div>
-  
-      <!-- Pagination Buttons -->
-      <div>
-        <button class="px-4 py-2  text-gray-400 rounded-md" [disabled]="currentPage === 1" (click)="previousPage()">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
-              </svg>              
-        </button>
-        <button class="px-4 py-2  text-gray-400 rounded-md" [disabled]="currentPage >= totalPages" (click)="nextPage()">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-              </svg>
-              
-        </button>
-      </div>
+        <!-- Ligne extensible -->
+        <tr *ngIf="expandedRowIndex === i">
+          <td colspan="8" class="px-4 py-3 bg-gray-50">
+              <div *ngFor="let livretAudit of livretsAudit" class="bg-blue-700/10 rounded-md p-2 mb-3 flex flex-row justify-between"> 
+                  <div>
+                    <p class="font-bold">contenue</p>
+                    <button (click)="downloadLivretAudit(livretAudit)" class="text-white px-2 py-1 rounded">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 text-blue-700">
+                        <path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375Z" />
+                        <path fill-rule="evenodd" d="m3.087 9 .54 9.176A3 3 0 0 0 6.62 21h10.757a3 3 0 0 0 2.995-2.824L20.913 9H3.087ZM12 10.5a.75.75 0 0 1 .75.75v4.94l1.72-1.72a.75.75 0 1 1 1.06 1.06l-3 3a.75.75 0 0 1-1.06 0l-3-3a.75.75 0 1 1 1.06-1.06l1.72 1.72v-4.94a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
+                      </svg>
+                    </button>
+                  </div>
+                  <div>
+                    <p class="font-bold">date d'insertion</p>
+                    <p>{{ livretAudit.dateInsertion | date:'medium' }}</p>
+                    <p class="font-bold"> date de modification : </p>
+                    <p>{{ livretAudit.auditTimestamp | date:'medium' }}</p>
+                  </div>
+                  <div>
+                    <p class="font-bold">insérée par</p>
+                    <p>{{ livretAudit.userId }}</p>
+
+                    <p class="font-bold">modifiée par</p>
+                    <p>{{ livretAudit.modifiedBy }}</p>
+
+                  </div>
+                  <div>
+                    <p> {{livretAudit.idAuditLivret}}</p>
+
+                  </div>
+                <hr>
+              </div>
+          </td>
+      </tr>
+      </ng-container>
+
+      </tbody>
+  </table>
+
+    <!-- No Results Message -->
+    <div *ngIf="filteredLivrets.length === 0" class="text-center text-red-500 font-semibold ">
+      Aucun résultat trouvé.
     </div>
   </div>
-  
+
+  <!-- Pagination Controls -->
+  <div class="flex justify-between items-center mt-4 text-gray-400">
+    <!-- Rows per page -->
+    <div>
+      <label for="rowsPerPage" class="mr-2">Lignes par page:</label>
+      <select id="rowsPerPage" (change)="onRowsPerPageChange($event)" 
+              class="bg-gray-50 border-gray-600 text-gray-800 rounded-md">
+        <option [value]="5">5</option>
+        <option [value]="10" selected>10</option>
+        <option [value]="20">20</option>
+        <option [value]="50">50</option>
+      </select>
+    </div>
+
+    <!-- Pagination Buttons -->
+    <div>
+      <button class="px-4 py-2  text-gray-400 rounded-md" [disabled]="currentPage === 1" (click)="previousPage()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+            </svg>              
+      </button>
+      <button class="px-4 py-2  text-gray-400 rounded-md" [disabled]="currentPage >= totalPages" (click)="nextPage()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+            </svg>
+            
+      </button>
+    </div>
+  </div>
+
+
+      <!-- Update Form -->
+      <div *ngIf="isUpdateFormVisible" class="fixed inset-0 flex items-center justify-center bg-blue-700/30 overflow-hidden">
+        <div class="bg-white p-6 rounded-lg shadow-xl  w-1/2">
+          <h3 class="text-xl font-medium text-gray-900 mb-4">Rectification</h3>
+          <form [formGroup]="updateForm">
+            <div  >
+              <input type="text" id="idCourrier" formControlName="idCourrier"  class="hidden bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5">
+            </div>
+            <div>
+              <label for="titre" class="block mb-2 text-sm font-medium text-gray-900">Titre</label>
+              <input type="text" id="titre" formControlName="titre" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+            </div>
+            <div>
+              <label for="type" class="block mb-2 text-sm font-medium text-gray-900">Type</label>
+              <input type="text" id="type" formControlName="type" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+            </div>
+
+            <!-- contenue -->
+            <div class="w-full mt-4 h- ">
+              <label for="file-upload" class="flex items-center cursor-pointer mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                  <path fill-rule="evenodd" d="M18.97 3.659a2.25 2.25 0 0 0-3.182 0l-10.94 10.94a3.75 3.75 0 1 0 5.304 5.303l7.693-7.693a.75.75 0 0 1 1.06 1.06l-7.693 7.693a5.25 5.25 0 1 1-7.424-7.424l10.939-10.94a3.75 3.75 0 1 1 5.303 5.304L9.097 18.835l-.008.008-.007.007-.002.002-.003.002A2.25 2.25 0 0 1 5.91 15.66l7.81-7.81a.75.75 0 0 1 1.061 1.06l-7.81 7.81a.75.75 0 0 0 1.054 1.068L18.97 6.84a2.25 2.25 0 0 0 0-3.182Z" clip-rule="evenodd" />
+                </svg>
+                
+                <span class="mlcon-2">Choisir un fichier</span>
+              </label>
+              <input id="file-upload" type="file" (change)="onFileChange($event)" hidden>
+              <span *ngIf="selectedFileName" class="block mb-4">{{ selectedFileName }}</span>
+            </div>
+
+
+          </form>
+          <div class="flex justify-end mt-4">
+            <button (click)="updateLivret()" class="text-white bg-blue-600 hover:bg-blue-700 rounded-lg text-sm px-5 py-2.5">Update</button>
+            <button (click)="closeUpdateForm()" class="text-gray-600 bg-gray-200 hover:bg-gray-300 rounded-lg text-sm px-5 py-2.5 ml-2">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+</div>
+
+

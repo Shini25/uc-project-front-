@@ -1,35 +1,80 @@
-import { Component, OnInit } from '@angular/core';
-import { AutreDocumentService } from '../../../services/courrier/autreDocument.service';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { AutreDocument } from '../../../models/courriers/autreDocument.model';
+import { AutreDocumentService } from '../../../services/courrier/autreDocument.service';
+import { MimeService } from '../../../services/mime.service';
 import { CommonModule } from '@angular/common';
 import { DatePipe } from '@angular/common';
-import { MimeService } from '../../../services/mime.service';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FlowbiteService } from '../../../services/flowbite.service';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-liste-autre-document',
   standalone: true,
-  imports: [CommonModule, DatePipe],
+  imports: [CommonModule, DatePipe, FormsModule, ReactiveFormsModule],
   templateUrl: './liste-autre-document.component.html',
-  styleUrl: './liste-autre-document.component.css'
+  styleUrls: ['./liste-autre-document.component.css']
 })
-export class ListeAutreDocumentComponent implements OnInit {
+export class ListeAutreDocumentComponent implements OnInit, AfterViewInit {
   autreDocuments: AutreDocument[] = [];
   filteredAutreDocuments: AutreDocument[] = [];
   paginatedAutreDocuments: AutreDocument[] = [];
   selectedType: string = '';
-  autreDocumentTypes: string[] = ['GUIDE_AU_USAGERS', 'CIRCUIT_DE_TRAITEMENT', 'MANUELS_DE_PROCEDURES', 'CODES_DE_LA_SOLDE', 'SGAP'];
+  autreDocumentTypes: string[] = ['CALENDRIER_SOLDE_PENSION', 'REMARQUES_OBSERVATION', 'LETTRES_NOTE'];
   searchQuery: string = '';
-  searchDate: string = ''; // For date filter
+  searchDate: string = '';
   searchType: string = 'title';
-
   currentPage: number = 1;
   rowsPerPage: number = 10;
   totalPages: number = 1;
+  updateForm: FormGroup;
+  isUpdateFormVisible: boolean = false;
+  selectedFile!: File;
+  selectedFileName!: string;
+  fileType!: string;
+  userNumero!: string; 
+  user: any;
+  finaluser: any;
+  expandedRowIndex: number | null = null;
 
-  constructor(private autreDocumentService: AutreDocumentService, private mimeService: MimeService) {}
+  constructor(
+    private autreDocumentService: AutreDocumentService, 
+    private mimeService: MimeService, 
+    private flowbiteService: FlowbiteService,
+    private fb: FormBuilder,
+    private userService: UserService, 
+  ) {
+    this.updateForm = this.fb.group({
+      idCourrier: ['', Validators.required],
+      titre: new FormControl({value: '', disabled: true}),
+      type: new FormControl({value: '', disabled: true}),
+    });
+  }
 
   ngOnInit(): void {
     this.getAllAutreDocuments();
+    this.getUserNumero(); 
+  }
+
+  ngAfterViewInit(): void {
+    this.flowbiteService.loadFlowbite(flowbite => {
+      console.log('Flowbite loaded:', flowbite);
+    });
+  }
+
+  getUserNumero(): void {
+    this.userService.getUserInfo().subscribe(
+      data => {
+        this.user = data;
+        console.log(this.user.username);
+        this.userService.getUserByNumero(this.user.username).subscribe(user => {
+          this.finaluser = user;
+          console.log(this.finaluser.numero);
+          this.userNumero = this.finaluser.numero;
+        });
+      }
+    );
   }
 
   getAllAutreDocuments(): void {
@@ -41,9 +86,7 @@ export class ListeAutreDocumentComponent implements OnInit {
 
   filterAutreDocuments(): void {
     this.filteredAutreDocuments = this.autreDocuments.filter(autreDocument => {
-      // Check autreDocument type first
       const typeMatches = this.selectedType === '' || autreDocument.type.toString() === this.selectedType;
-  
       let searchMatches = true;
       if (this.searchType === 'title') {
         searchMatches = autreDocument.titre.toLowerCase().includes(this.searchQuery.toLowerCase());
@@ -51,13 +94,10 @@ export class ListeAutreDocumentComponent implements OnInit {
         const autreDocumentDate = new Date(autreDocument.dateInsertion).toISOString().split('T')[0];
         searchMatches = autreDocumentDate === this.searchDate;
       }
-  
       return typeMatches && searchMatches;
     });
-  
     this.updatePagination();
   }
-  
 
   onSearch(event: Event): void {
     this.searchQuery = (event.target as HTMLInputElement).value;
@@ -131,5 +171,41 @@ export class ListeAutreDocumentComponent implements OnInit {
     link.href = window.URL.createObjectURL(blob);
     link.download = fileName;
     link.click();
+  }
+
+
+  previewAutreDocument(autreDocument: AutreDocument): void {
+    const fileType = autreDocument.typeContenue;
+    const byteCharacters = atob(autreDocument.contenue);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    const blob = new Blob([byteArray], { type: fileType });
+    const fileURL = URL.createObjectURL(blob);
+    window.open(fileURL);
+  }
+
+  openUpdateForm(autreDocument: AutreDocument): void {
+    this.updateForm.patchValue({
+      idCourrier: autreDocument.idCourrier,
+      titre: autreDocument.titre,
+      type: autreDocument.type,
+    });
+    this.isUpdateFormVisible = true;
+  }
+
+  closeUpdateForm(): void {
+    this.isUpdateFormVisible = false;
+  }
+
+  onFileChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length) {
+      this.selectedFile = input.files[0];
+      this.selectedFileName = this.selectedFile.name;
+      this.fileType = this.selectedFile.type;
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormArray } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
@@ -14,6 +14,7 @@ import { Chefs } from '../../models/chefs.model';
   styleUrls: ['./planifier-reunion.component.css'] 
 })
 export class PlanifierReunionComponent implements OnInit {
+  @Input() isActive: boolean = false;
   reunionForm: FormGroup;
   chefs: Chefs[] = []; 
   accordionOpenStates = [false, false, false, false];
@@ -42,6 +43,11 @@ export class PlanifierReunionComponent implements OnInit {
         this.fetchChefs();
       }
     });
+  }
+
+
+  closeModal(): void {
+    this.isActive = false;
   }
 
   fetchChefs(): void {
@@ -82,12 +88,14 @@ export class PlanifierReunionComponent implements OnInit {
     this.participantsMail.push(this.fb.control('', Validators.required));
   }
 
-  toggleAccordion(index: number): void {
-    this.accordionOpenStates[index] = !this.accordionOpenStates[index];
+  toggleAccordion(index: number) {
+    this.accordionOpenStates = this.accordionOpenStates.map((state, i) => i === index ? !state : false);
   }
 
   onSubmit() {
     if (this.reunionForm.valid) {
+      console.log(this.reunionForm.value);
+
       const reunionData = this.reunionForm.value;
       this.reunionService.planifierReunion(
         new Date(reunionData.dateReunion),

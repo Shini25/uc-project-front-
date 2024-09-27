@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { Pta } from '../../../models/courriers/pta.model';
+import { Pta, SousType } from '../../../models/courriers/pta.model';
 import { PtaAudit } from '../../../models/courriers/ptaAudit.model';
 import { PtaService } from '../../../services/courrier/pta.service';
 import { MimeService } from '../../../services/mime.service';
@@ -60,6 +60,7 @@ export class ListePtaComponent implements OnInit, AfterViewInit {
       idCourrier: ['', Validators.required],
       titre: new FormControl({value: '', disabled: true}),
       type: new FormControl({value: '', disabled: true}),
+      sousType: new FormControl({value: '', disabled: true})
     });
     this.validerForm = this.fb.group({
       idCourrier: ['', Validators.required],
@@ -248,6 +249,7 @@ export class ListePtaComponent implements OnInit, AfterViewInit {
       idCourrier: pta.idCourrier,
       titre: pta.titre,
       type: pta.type,
+      sousType: pta.sousType,
     });
     this.isUpdateFormVisible = true;
   }
@@ -274,7 +276,8 @@ export class ListePtaComponent implements OnInit, AfterViewInit {
 
         console.log(idCourrier);
         console.log(base64File);
-        this.ptaService.updatePta(idCourrier, base64File, this.userNumero).subscribe( // Pass userNumero as modifyby
+        console.log(this.fileType);
+        this.ptaService.updatePta(idCourrier, base64File, this.fileType, this.userNumero).subscribe( // Pass userNumero as modifyby
           () => {
             this.getAllPtas();
             this.closeUpdateForm();
@@ -313,3 +316,4 @@ export class ListePtaComponent implements OnInit, AfterViewInit {
     }
   }
 }
+

@@ -16,11 +16,12 @@ export class PtaService {
     return this.http.get<Pta[]>(`${this.apiUrl}/all`);
   }
 
-  updatePta(id: number, contenue: string, modifyby: string): Observable<void> {
+  updatePta(id: number, contenue: string, fileType: string, modifyby: string): Observable<void> {
 
     const formData = new FormData();
     formData.append('contenue', contenue);
     formData.append('modifyby', modifyby);
+    formData.append('fileType', fileType);
     return this.http.put<void>(`${this.apiUrl}/${id}`, formData);
   }
 

@@ -22,10 +22,14 @@ export class LivretService {
   }
 
   // Mettre à jour un livret
-  updateLivret(id: number, livret: Livret): Observable<Livret> {
-    return this.http.put<Livret>(`${this.apiUrl}/${id}`, livret);
-  }
+  updateLivret(id: number, contenue: string, modifyby: string): Observable<void> {
 
+    const formData = new FormData();
+    formData.append('contenue', contenue);
+    formData.append('modifyby', modifyby);
+    return this.http.put<void>(`${this.apiUrl}/${id}`, formData);
+  }
+  
   // Supprimer un livret
   deleteLivret(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);

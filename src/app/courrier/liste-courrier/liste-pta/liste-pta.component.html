@@ -1,8 +1,8 @@
 <div class="mx-auto px-4 py-6 z-10 h-full overflow-hidden">
   <!-- header -->
    <div class="flex flex-col  w-full mb-4">
-      <div class="w-full  "><h6 class="text-gray-800 text-2xl font-bold m-0">Liste des Ptas</h6></div>
-      <div class="flex flex-row flex-1  justify-between">
+      <div class="w-full  "><h6 class="text-gray-800 text-2xl font-bold m-0"><span class="font-bold">Liste des Ptas</span></h6></div>
+      <div class="flex flex-row flex-1  juastify-between">
           <div class="w-1/2 h-12 ">
               <div class="flex">
                   <div class="w-1/6">
@@ -26,7 +26,7 @@
                             type="date" 
                             id="searchDate" 
                             (change)="onDateChange($event)" 
-                            class="block w-full pl-3 pr-3 py-2 text-base text-gray-300 bg-gray-100 border-gray-600 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md" />
+                            class="block w-full pl-3 pr-3 py-2 text-base text-black bg-white border-gray-200 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md" />
                   </div>
                   <div class="flex justify-center items-center cursor-pointer bg-blue-800 p-1 rounded-e-md" (click)="resetFilters() ">
                         <svg  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-white dark:text-gray-800">
@@ -59,11 +59,10 @@
    </div>
 
   <!-- Pta Table -->
-  <div class="relative overflow-x-auto shadow-md sm:rounded-lg overflow-auto max-h-[520px]">
-
+  <div class="relative overflow-x-auto shadow-md sm:rounded-lg overflow-auto max-h-[480px]">
     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-          <tr>
+      <thead class="text-xs text-gray-700 uppercase sticky top-0 backdrop-blur-lg shadow-lg z-10 bg-gray-200/30 dark:bg-gray-700 dark:text-gray-400">
+          <tr class="">
               <th scope="col" class="px-4 py-3">Titre</th>
               <th scope="col" class="px-4 py-3">Date d'insertion</th>
               <th scope="col" class="px-4 py-3">Type</th>
@@ -71,7 +70,7 @@
               <th scope="col" class="px-4 py-3">insérées par</th>
               <th scope="col" class="px-4 py-3">Consulter</th>
               <th scope="col" class="px-4 py-3">
-                  <span class="sr-only">Actions</span>
+                  <span class="sr-only ">Actions</span>
               </th>
               <th scope="col" class="px-4 py-3"></th>
           </tr>
@@ -79,11 +78,11 @@
       <tbody  class="bg-white">
         <ng-container *ngFor="let pta of paginatedPtas; let i = index">
         <tr class="border-b dark:border-gray-700" [ngClass]="{'bg-red-100': !pta.valide, 'hover:bg-gray-100': pta.valide}">
-          <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ pta.titre }}</th>
+          <th scope="row" class="px-4 py-3 font-bold text-gray-900 whitespace-nowrap dark:text-white">{{ pta.titre }}</th>
           <!-- if datemodification = null show pta.date.insertion else date.modification -->
               <td class="px-4 py-3">{{ pta.dateModification ? (pta.dateModification | date:'medium') : (pta.dateInsertion | date:'medium') }}</td>
               <td class="px-4 py-3">{{ pta.type }}</td>
-              <td class="px-4 py-3">{{ pta.sousType }}</td>
+              <td class="px-4 py-3 font-bold">{{ pta.sousType }}</td>
               <td class="px-4 py-3">{{ pta.user_account.numero }}</td>
 
               <td class="px-4 py-3">
@@ -194,56 +193,56 @@
   </div>
 
 
-      <!-- Update Form -->
-      <div *ngIf="isUpdateFormVisible" class="fixed inset-0 flex items-center justify-center bg-blue-800/30 overflow-hidden">
-        <div class="bg-white p-6 rounded-lg shadow-xl  w-1/2">
-          <h3 class="text-xl font-medium text-gray-900 mb-4">Rectification</h3>
-          <form [formGroup]="updateForm">
-            <div  >
-              <input type="text" id="idCourrier" formControlName="idCourrier"  class="hidden bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5">
-            </div>
-            <div>
-              <label for="titre" class="block mb-2 text-sm font-medium text-gray-900">Titre</label>
-              <input type="text" id="titre" formControlName="titre" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-            </div>
-            <div>
-              <label for="type" class="block mb-2 text-sm font-medium text-gray-900">Type</label>
-              <input type="text" id="type" formControlName="type" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-            </div>
-
-            <!-- contenue -->
-            <div class="w-full mt-4 h- ">
-              <label for="file-upload" class="flex items-center cursor-pointer mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-                  <path fill-rule="evenodd" d="M18.97 3.659a2.25 2.25 0 0 0-3.182 0l-10.94 10.94a3.75 3.75 0 1 0 5.304 5.303l7.693-7.693a.75.75 0 0 1 1.06 1.06l-7.693 7.693a5.25 5.25 0 1 1-7.424-7.424l10.939-10.94a3.75 3.75 0 1 1 5.303 5.304L9.097 18.835l-.008.008-.007.007-.002.002-.003.002A2.25 2.25 0 0 1 5.91 15.66l7.81-7.81a.75.75 0 0 1 1.061 1.06l-7.81 7.81a.75.75 0 0 0 1.054 1.068L18.97 6.84a2.25 2.25 0 0 0 0-3.182Z" clip-rule="evenodd" />
-                </svg>
-                
-                <span class="mlcon-2">Choisir un fichier</span>
-              </label>
-              <input id="file-upload" type="file" (change)="onFileChange($event)" hidden>
-              <span *ngIf="selectedFileName" class="block mb-4">{{ selectedFileName }}</span>
-            </div>
-
-
-          </form>
-          <div class="flex justify-end mt-4">
-            <button (click)="updatePta()" class="text-white bg-blue-600 hover:bg-blue-700 rounded-lg text-sm px-5 py-2.5">Update</button>
-            <button (click)="closeUpdateForm()" class="text-gray-600 bg-gray-200 hover:bg-gray-300 rounded-lg text-sm px-5 py-2.5 ml-2">Cancel</button>
-          </div>
+  <!-- Update Form -->
+  <div *ngIf="isUpdateFormVisible" class="fixed inset-0 flex items-center justify-center bg-blue-800/30 overflow-hidden z-20">
+    <div class="bg-white p-6 rounded-lg shadow-xl  w-1/2">
+      <h3 class="text-xl font-medium text-gray-900 mb-4">Rectification</h3>
+      <form [formGroup]="updateForm">
+        <div  >
+          <input type="text" id="idCourrier" formControlName="idCourrier"  class="hidden bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5">
         </div>
-      </div>
-
-      <!-- Confirmation Modal -->
-      <div *ngIf="isConfirmModalVisible" class="fixed inset-0 flex items-center justify-center bg-gray-300 bg-opacity-50 overflow-hidden">
-        <div class="bg-white p-6 rounded-lg shadow-xl w-1/3">
-          <h3 class="text-xl font-medium text-gray-900 mb-4">Confirmation</h3>
-          <p>Êtes-vous sûr de vouloir valider ce PTA?</p>
-          <div class="flex justify-end mt-4">
-            <button (click)="confirmValiderPta()" class="text-white bg-green-600 hover:bg-green-700 rounded-lg text-sm px-5 py-2.5">Oui</button>
-            <button (click)="closeConfirmModal()" class="text-gray-600 bg-gray-200 hover:bg-gray-300 rounded-lg text-sm px-5 py-2.5 ml-2">Non</button>
-          </div>
+        <div>
+          <label for="titre" class="block mb-2 text-sm font-medium text-gray-900">Titre</label>
+          <input type="text" id="titre" formControlName="titre" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
         </div>
+        <div>
+          <label for="type" class="block mb-2 text-sm font-medium text-gray-900">Type</label>
+          <input type="text" id="soustype" formControlName="sousType" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+        </div>
+
+        <!-- contenue -->
+        <div class="w-full mt-4 h- ">
+          <label for="file-upload" class="flex items-center cursor-pointer mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+              <path fill-rule="evenodd" d="M18.97 3.659a2.25 2.25 0 0 0-3.182 0l-10.94 10.94a3.75 3.75 0 1 0 5.304 5.303l7.693-7.693a.75.75 0 0 1 1.06 1.06l-7.693 7.693a5.25 5.25 0 1 1-7.424-7.424l10.939-10.94a3.75 3.75 0 1 1 5.303 5.304L9.097 18.835l-.008.008-.007.007-.002.002-.003.002A2.25 2.25 0 0 1 5.91 15.66l7.81-7.81a.75.75 0 0 1 1.061 1.06l-7.81 7.81a.75.75 0 0 0 1.054 1.068L18.97 6.84a2.25 2.25 0 0 0 0-3.182Z" clip-rule="evenodd" />
+            </svg>
+            
+            <span class="mlcon-2">Choisir un fichier</span>
+          </label>
+          <input id="file-upload" type="file" (change)="onFileChange($event)" hidden>
+          <span *ngIf="selectedFileName" class="block mb-4">{{ selectedFileName }}</span>
+        </div>
+
+
+      </form>
+      <div class="flex justify-end mt-4">
+        <button (click)="updatePta()" class="text-white bg-blue-600 hover:bg-blue-700 rounded-lg text-sm px-5 py-2.5">modifier</button>
+        <button (click)="closeUpdateForm()" class="text-gray-600 bg-gray-200 hover:bg-gray-300 rounded-lg text-sm px-5 py-2.5 ml-2">annuler</button>
       </div>
+    </div>
+  </div>
+
+  <!-- Confirmation Modal -->
+  <div *ngIf="isConfirmModalVisible" class="fixed inset-0 flex items-center justify-center bg-gray-300 bg-opacity-50 overflow-hidden">
+    <div class="bg-white p-6 rounded-lg shadow-xl w-1/3">
+      <h3 class="text-xl font-medium text-gray-900 mb-4">Confirmation</h3>
+      <p>Êtes-vous sûr de vouloir valider ce PTA?</p>
+      <div class="flex justify-end mt-4">
+        <button (click)="confirmValiderPta()" class="text-white bg-green-600 hover:bg-green-700 rounded-lg text-sm px-5 py-2.5">Oui</button>
+        <button (click)="closeConfirmModal()" class="text-gray-600 bg-gray-200 hover:bg-gray-300 rounded-lg text-sm px-5 py-2.5 ml-2">Non</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 
