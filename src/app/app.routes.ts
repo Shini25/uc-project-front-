@@ -13,9 +13,9 @@ import { ArchivageCourrierComponent } from './courrier/archivage-courrier/archiv
 import { LoginComponent } from './login/login.component';
 import { ListChefComponent } from './list-chef/list-chef.component';
 import { ChefFormComponent } from './chef-form/chef-form.component';
-import { PlanifierReunionComponent } from './reunion/planifier-reunion/planifier-reunion.component';
-import { ListeReunionComponent } from './reunion/liste-reunion/liste-reunion.component';
-import { DetailsReunionComponent } from './reunion/details-reunion/details-reunion.component';
+import { PlanifierReunionComponent } from './meeting/planifier-reunion/planifier-reunion.component';
+import { ListeReunionComponent } from './meeting/liste-reunion/liste-reunion.component';
+import { DetailsMeetingComponent } from './meeting/meeting-details/meeting-detail.component';
 import { ListeLivretComponent } from './courrier/liste-courrier/liste-livret/liste-livret.component';
 import { ListeTexteComponent } from './courrier/liste-courrier/liste-texte/liste-texte.component';
 import { ListePtaComponent } from './courrier/liste-courrier/liste-pta/liste-pta.component';
@@ -42,7 +42,7 @@ export const routes: Routes = [
         { path: 'archivage-courrier', component: ArchivageCourrierComponent },
         { path: 'planification-reunion', component: PlanifierReunionComponent },
         { path: 'liste-reunion', component: ListeReunionComponent },
-        { path: 'details-reunion/:id', component: DetailsReunionComponent },
+        { path: 'details-reunion/:id', component: DetailsMeetingComponent },
         { path: 'liste-livret', component: ListeLivretComponent },
         { path: 'liste-texte', component: ListeTexteComponent },
         { path: 'liste-pta', component: ListePtaComponent },

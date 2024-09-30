@@ -10,7 +10,6 @@ import { MatCardModule } from '@angular/material/card';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
-import { SuccessDialogComponent } from './success-dialog/success-dialog.component';
 import { MatSelectModule } from '@angular/material/select';
 import { FlowbiteService } from '../services/flowbite.service';
 
@@ -28,7 +27,6 @@ import { FlowbiteService } from '../services/flowbite.service';
     MatCardModule,
     MatStepperModule,
     MatIconModule,
-    SuccessDialogComponent,
     MatSelectModule
   ]
 })
@@ -40,6 +38,8 @@ export class ChefFormComponent implements AfterViewInit {
   selectedPhoto: File | null = null;
   isLinear = true;
   currentStep = 1;
+  isLoading: boolean = false;
+  successMessage: string = '';
 
   constructor(private fb: FormBuilder, private chefcService: InfoBaseChefService, public dialog: MatDialog, private flowbiteService: FlowbiteService) {
     this.chefsForm = this.fb.group({
@@ -126,8 +126,12 @@ export class ChefFormComponent implements AfterViewInit {
     }
   }
 
+
+  errorMessage: string = '';
+
   onSubmit(): void {
     if (this.firstFormGroup.valid && this.secondFormGroup.valid && this.thirdFormGroup.valid) {
+      this.isLoading = true;  // Show spinner
       const Chef: Chefs = { ...this.firstFormGroup.value, ...this.secondFormGroup.value, ...this.thirdFormGroup.value };
       const attributions = this.attributions.value.map((attr: any) => attr.attribution);
       const motsDuChef = this.motDuChefs.value.map((mot: any) => mot.paragraphe);
@@ -143,14 +147,23 @@ export class ChefFormComponent implements AfterViewInit {
 
           this.chefcService.createChefs(Chef, base64Photo, attributions, motsDuChef).subscribe(response => {
             console.log('Chef created', response);
-            this.dialog.open(SuccessDialogComponent);
+            setTimeout(() => {
+              this.isLoading = false;  // Hide spinner
+              this.successMessage = 'Chef créé avec succès!';  // Show success message
+              setTimeout(() => {
+                this.successMessage = '';  // Hide success message after 3s
+              }, 3000);
+            }, 2000);  // Delay to simulate loading
           }, error => {
             console.error('Error creating Chef:', error);
+            this.isLoading = false;  // Hide spinner
+            this.errorMessage = 'Erreur lors de la création du Chef. Veuillez réessayer.';  // Afficher le message d'erreur
+            setTimeout(() => {
+              this.errorMessage = '';  // Hide error message after 3s
+            }, 3000);
           });
         };
         reader.readAsDataURL(this.selectedPhoto);
-      } else {
-        console.error('Photo is required');
       }
     }
   }

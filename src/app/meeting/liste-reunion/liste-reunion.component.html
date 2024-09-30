@@ -1,0 +1,244 @@
+<div class="meeting-list p-6 rounded-lg shadow-lg">
+  <h4 class="text-3xl flex items-center mb-6">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v2a2 2 0 002 2h2a2 2 0 002-2v-2m0-6l-2-2-2 2m-2 6l-2-2-2 2m16-16H5a2 2 0 00-2 2v2m0 12v2a2 2 0 002 2h14a2 2 0 002-2v-2M3 7h18M9 13h6"/>
+    </svg>
+    <span class="font-bold">Liste de Réunion</span>
+  </h4>
+
+  <!-- Search Controls -->
+  <div class="flex flex-row mb-4">
+    <div class="w-1/2 h-12">
+      <div class="flex">
+        <div class="w-1/5 outline-none">
+          <select id="searchTypeSelect" (change)="onSearchTypeChange($event)" 
+                  class="block w-full pl-3 pr-10 py-2 text-base text-gray-800 bg-gray-50 border-gray-600 outline-none focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-s-md cursor-pointer">
+            <option value="objet">Objet</option>
+            <option value="date">Date</option>
+          </select>
+        </div>
+        <div class="relative w-full" *ngIf="searchType === 'objet'">
+          <input 
+            type="text" 
+            id="searchInput" 
+            placeholder="Rechercher par objet" 
+            (input)="onSearch($event)" 
+            class="block w-full pl-3 pr-3 py-2 text-base text-black bg-white border-gray-600 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" />
+        </div>
+        <div class="relative w-full" *ngIf="searchType === 'date'">
+          <input 
+            type="date" 
+            id="searchDate" 
+            (change)="onDateChange($event)" 
+            class="block w-full pl-3 pr-3 py-2 text-base text-black bg-white border-gray-200 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md" />
+        </div>
+        <div class="flex justify-center items-center mr-3 cursor-pointer bg-blue-700 p-1 rounded-e-md" (click)="resetFilters()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-white dark:text-gray-800">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+          </svg>
+        </div>
+
+        <div routerLink="/auth/planification-reunion" class="flex justify-center items-center cursor-pointer bg-blue-700 hover:bg-blue-800 text-white border shadow-xl p-1 rounded-lg">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+          </svg> 
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="relative overflow-x-auto shadow-md sm:rounded-lg overflow-auto max-h-[480px]">
+    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+      <thead class="text-xs sticky top-0 border-t shadow-xl backdrop-blur-md text-black uppercase bg-gray-200/50 dark:bg-gray-700 dark:text-gray-400">
+        <tr class="font-extrabold">
+          <th scope="col" class="px-4 py-3">OBJET</th>
+          <th scope="col" class="px-4 py-3">DATE</th>
+          <th scope="col" class="px-4 py-3">REUNION</th>
+          <th scope="col" class="px-4 py-3">INSÉRÉES PAR</th>
+          <th scope="col" class="px-4 py-3 flex flex-col gap-2">
+            <span class="text-xs">FICHE DE PRÉSENCE</span>
+            <span class="text-xs text-gray-500">(insérée par)</span>
+          </th>
+          <th scope="col" class="px-4 py-3"></th>
+        </tr>
+      </thead>
+      <tbody class="bg-white">
+        <ng-container *ngFor="let meeting of paginatedMeetings; let i = index">
+          <tr [ngClass]="{'bg-amber-400/10 , hover:!bg-amber-400/20': isPastDate(meeting.meetingDate)}" class="hover:bg-gray-50 transition-all duration-150 border-b dark:border-gray-700  text-gray-500">
+            <td class="px-4 py-6 font-semibold  whitespace-nowrap dark:text-white  flex flex-row items-center gap-2">
+              <div class="">
+                <span class="relative flex h-3 w-3 " *ngIf="isToday(meeting.meetingDate)">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-600 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-3 w-3 bg-blue-700"></span>
+                </span>
+              </div>
+              <div class="">
+                  {{ meeting.objet }}
+              </div>
+
+            </td>
+            <td class="px-4 py-3">{{ meeting.meetingDate | date: 'short' }}</td>
+            <td class="px-4 py-3">
+              <span class="p-1 text-white rounded-md" [ngClass]="{
+                'bg-green-500': meeting.meetingType === 'interne',
+                'bg-amber-500  ': meeting.meetingType === 'externe'
+              }">
+                {{ meeting.meetingType }}
+              </span>
+            </td>
+            <td class="px-4 py-3">{{ meeting.addby }}</td>
+            <td class="text-center px-4 py-3">
+              <button *ngIf="!meeting.modifyby" (click)="openModal(meeting.id)" class="text-blue-700 border border-blue-700/30 shadow-xl rounded-full p-2 group">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 group-hover:w-5 group-hover:h-5 transition-all duration-150">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                </svg>
+              </button>
+              <div *ngIf="meeting.modifyby">
+                {{ meeting.modifyby }}
+              </div>
+            </td>
+
+            <td>
+              <button  (click)="toggleRow(i, meeting)" class="flex items-center justify-between w-full p-2 font-medium text-gray-500">
+                <svg class="w-4 h-4" [ngClass]="expandedRowIndex === i ? 'rotate-180' : ''" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </button>
+            </td>
+          </tr>
+          <!-- Expandable row -->
+          <tr *ngIf="expandedRowIndex === i">
+            <td colspan="6" class="px-4 py-3 bg-gray-50">
+              <div class="border border-gray-300 rounded-md p-4 mb-3 flex flex-row justify-between">
+                <!-- basic info -->
+                <div class="flex flex-col gap-4">
+                  <div class="flex flex-row gap-2 items-center">
+                    <div>
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                      </svg>
+                    </div>
+                    <div class="self-center">
+                      <span class="text-sm text-black">{{ meeting.location }}</span>
+                    </div>
+                  </div>
+                  <!-- logistics -->
+                  <div>
+                    <p class="font-bold text-sm text-black">Logistique</p>
+                    <ul class="list-disc list-inside">
+                      <li *ngFor="let item of logistique" class="text-gray-700">
+                        {{ item }}
+                      </li>
+                    </ul>
+                  </div>
+                  <!-- observation -->
+                  <div>
+                    <p class="font-bold text-sm text-black">Observation</p>
+                    <ul class="list-disc list-inside">
+                      <li *ngFor="let observation of observation" class="text-gray-700">
+                        {{ observation }}
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+
+
+  <div class="text-center z-50 fixed inset-0 flex items-center justify-center" *ngIf="isLoading">
+    <div role="status">
+      <svg aria-hidden="true" class="inline w-12 h-12 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+        <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+      </svg>
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+  
+  <div *ngIf="successMessage" id="toast-success" 
+    [ngClass]="{'opacity-100': successMessage, 'opacity-0': !successMessage}" 
+    class="toast-message flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-opacity duration-500 ease-in-out" 
+    role="alert">
+    
+    <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200">
+      <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+      </svg>
+      <span class="sr-only">Check icon</span>
+    </div>
+    
+    <div class="ms-3 text-sm font-normal">{{ successMessage }}</div>
+    
+    <button type="button" class="ms-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700" data-dismiss-target="#toast-success" aria-label="Close">
+      <span class="sr-only">Close</span>
+      <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+      </svg>
+    </button>
+  </div>
+  
+  <!-- Fiche de présence -->
+  <div *ngIf="isModalVisible" class="fixed inset-0 flex items-center justify-center bg-gray-300 bg-opacity-50 overflow-hidden z-20">
+    <div class="bg-white p-6 rounded-lg shadow-xl w-1/2">
+      <h3 class="text-xl font-medium text-gray-900 mb-4">Fiche de Présence</h3>
+      <form [formGroup]="updateForm">
+        <div>
+          <input type="hidden" formControlName="meetingId">
+        </div>
+        <div class="w-full mt-4">
+          <label for="file-upload" class="flex items-center cursor-pointer mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+              <path fill-rule="evenodd" d="M18.97 3.659a2.25 2.25 0 0 0-3.182 0l-10.94 10.94a3.75 3.75 0 1 0 5.304 5.303l7.693-7.693a.75.75 0 0 1 1.06 1.06l-7.693 7.693a5.25 5.25 0 1 1-7.424-7.424l10.939-10.94a3.75 3.75 0 1 1 5.303 5.304L9.097 18.835l-.008.008-.007.007-.002.002-.003.002A2.25 2.25 0 0 1 5.91 15.66l7.81-7.81a.75.75 0 0 1 1.061 1.06l-7.81 7.81a.75.75 0 0 0 1.054 1.068L18.97 6.84a2.25 2.25 0 0 0 0-3.182Z" clip-rule="evenodd" />
+            </svg>
+            <span class="ml-2">Choisir un fichier</span>
+          </label>
+          <input id="file-upload" type="file" (change)="onFileChange($event)" hidden>
+          <span *ngIf="selectedFileName" class="block mb-4">{{ selectedFileName }}</span>
+        </div>
+      </form>
+      <div class="flex justify-end mt-4">
+        <button (click)="addAttendanceSheet()" class="text-white bg-blue-600 hover:bg-blue-700 rounded-lg text-sm px-5 py-2.5">Inserer</button>
+        <button (click)="closeModal()" class="text-gray-600 bg-gray-200 hover:bg-gray-300 rounded-lg text-sm px-5 py-2.5 ml-2">Annuler</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add this block for rows per page selection and pagination controls -->
+  <div class="flex justify-between items-center mt-4 text-gray-400">
+    <!-- Rows per page -->
+    <div>
+      <label for="rowsPerPage" class="mr-2">Lignes par page:</label>
+      <select id="rowsPerPage" (change)="onRowsPerPageChange($event)" 
+              class="bg-gray-50 border-gray-600 text-gray-800 rounded-md">
+        <option [value]="5">5</option>
+        <option [value]="10" selected>10</option>
+        <option [value]="20">20</option>
+        <option [value]="50">50</option>
+      </select>
+    </div>
+
+    <!-- Pagination Buttons -->
+    <div>
+      <button class="px-4 py-2 text-gray-400 rounded-md" [disabled]="currentPage === 1" (click)="previousPage()">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+        </svg>              
+      </button>
+      
+      <button class="px-4 py-2 text-gray-400 rounded-md" [disabled]="currentPage >= totalPages" (click)="nextPage()">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+</div>

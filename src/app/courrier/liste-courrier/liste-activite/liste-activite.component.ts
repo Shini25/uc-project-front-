@@ -21,7 +21,7 @@ export class ListeActiviteComponent implements OnInit, AfterViewInit {
   filteredActivites: Activite[] = [];
   paginatedActivites: Activite[] = [];
   selectedType: string = '';
-  activiteTypes: string[] = ['TEXTES_LEGISLATIF'];
+  activiteTypes: string[] = ['REFORMES', 'HEBDOMADAIRE', 'MENSUELLE', 'TRIMESTRIELLE', 'SEMESTRIELLE'];
   searchQuery: string = '';
   searchDate: string = '';
   searchType: string = 'title';

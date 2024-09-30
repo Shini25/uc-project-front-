@@ -54,6 +54,8 @@ export class ListChefComponent implements OnInit {
   selectedType: string = 'UC';
   chefTypes: string[] = ['DAF', 'UC', 'SERVICE_CENTRAUX', 'SERVICE_REGIONAUX', 'DIVISION', 'BUREAUX', 'ANTENNES_CIRFIN'];
   title: string = 'Chef UC';
+  isAttributionModalVisible = false;
+  selectedChef: Chefs | null = null;
 
   constructor(
     private chefService: InfoBaseChefService,
@@ -156,10 +158,22 @@ export class ListChefComponent implements OnInit {
     return this.searchActive ? [] : this.visibleChefs;
   }
 
-  onTypeChange(type: string): void {
+  onTypeChange(event: Event): void {
+    const selectElement = event.target as HTMLSelectElement;
+    const type = selectElement.value;
     this.currentIndex = 0;
     this.selectedType = type;
     this.title = `Chef - ${type.replace('_', ' ').toLowerCase()}`;
     this.fetchChefsByType(type);
+  }
+
+  openAttributionModal(chef: Chefs): void {
+    this.selectedChef = chef;
+    this.isAttributionModalVisible = true;
+  }
+
+  closeAttributionModal(): void {
+    this.isAttributionModalVisible = false;
+    this.selectedChef = null;
   }
 }

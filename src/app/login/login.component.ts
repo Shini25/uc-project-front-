@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
   accountStatuses = ['ONLINE', 'OFFLINE'];
   accountTypes = ['ADMIN', 'SIMPLE', 'OTHER'];
   accountStates = ['ACTIVE', 'INACTIVE'];
-
+  finaluser: any;
   showLoginForm = true;
 
   constructor(
@@ -76,9 +76,9 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.invalid) {
       return;
     }
-  
+
     const { numero, password } = this.loginForm.value;
-  
+
     this.loading = true;
     this.authService.login({ numero, password }).subscribe(
       data => {
@@ -86,9 +86,27 @@ export class LoginComponent implements OnInit {
         this.userSessionService.setNumero(numero);
         console.log('Numero set in login:', numero); 
         console.log('JWT Token:', data.jwt); // Log the token
+
+        // Fetch user info after successful login
+        this.userService.getUserInfo().subscribe(
+          userInfo => {
+            this.user = userInfo;
+            console.log('User info:', this.user.numero);
+            this.userService.getUserByNumero(this.user.numero).subscribe(user => {
+              this.finaluser = user;
+              console.log('User info:', this.finaluser.numero);
+            });
+          },
+          err => {
+            console.error('Error fetching user info', err);
+          }
+        );
+
         setTimeout(() => {
           this.loading = false;
-          this.router.navigate(['/home']);
+          this.router.navigateByUrl('/home', { skipLocationChange: true }).then(() => {
+            this.router.navigate(['/home']);
+          });
         }, 2000);
       },
       err => {
@@ -106,8 +124,8 @@ export class LoginComponent implements OnInit {
         }
       }
     );
-}
-  
+  }
+
   logout() {
     this.authService.logout();
     this.userSessionService.clearNumero();
