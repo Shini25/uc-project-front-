@@ -21,7 +21,7 @@ export class ListeTexteComponent implements OnInit, AfterViewInit {
   filteredTextes: Texte[] = [];
   paginatedTextes: Texte[] = [];
   selectedType: string = '';
-  texteTypes: string[] = ['TEXTES_LEGISLATIF'];
+  texteTypes: string[] = ['TEXTES_REGLEMENTAIRES', 'REMARQUES_OBSERVATIONS', 'LETTRES_NOTES', 'SGAP', 'PROJET_DE_TEXTE'];
   searchQuery: string = '';
   searchDate: string = '';
   searchType: string = 'title';

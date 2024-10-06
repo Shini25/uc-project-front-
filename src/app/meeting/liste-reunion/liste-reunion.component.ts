@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, LOCALE_ID } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
@@ -14,12 +14,20 @@ import { MeetingOrganizersService } from '../../services/meeting/meetingOrganize
 import { MeetingObservationsService } from '../../services/meeting/meetingObservations.service';
 import { MeetingParticipantsService } from '../../services/meeting/meetingParticipants.service';
 import { LogisticsService } from '../../services/meeting/logistics.service';
+import { SendMailService } from '../../services/sendMail.service';
+import { registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
+import { Observable, throwError } from 'rxjs';
+
+registerLocaleData(localeFr);
+
 @Component({
   selector: 'app-liste-reunion',
   standalone: true,
   imports: [CommonModule, MatButtonModule, RouterLink, RouterModule, ReactiveFormsModule],
   templateUrl: './liste-reunion.component.html',
-  styleUrls: ['./liste-reunion.component.css']
+  styleUrls: ['./liste-reunion.component.css'],
+  providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }]
 })
 export class ListeReunionComponent implements OnInit {
   meetings: InfoMeetingBase[] = [];
@@ -45,7 +53,8 @@ export class ListeReunionComponent implements OnInit {
   currentPage: number = 1;
   rowsPerPage: number = 10;
   totalPages: number = 1;
-  
+  isSendMailVisible: boolean = true; 
+  isLoadingSpinner: boolean = false; 
 
   constructor(
     private meetingService: MeetingService, 
@@ -56,7 +65,8 @@ export class ListeReunionComponent implements OnInit {
     private meetingOrganizersService: MeetingOrganizersService,
     private meetingParticipantsService: MeetingParticipantsService,
     private meetingObservationsService: MeetingObservationsService,
-    private logistiqueService: LogisticsService
+    private logistiqueService: LogisticsService,
+    private sendMailService: SendMailService
   ) {
     const userId = this.userSessionService.getNumero();
     this.updateForm = this.fb.group({
@@ -180,12 +190,55 @@ export class ListeReunionComponent implements OnInit {
       this.responsables = data;
     });
   }
-
+  
   fetchParticipants(meetingId: number): void {
     this.meetingParticipantsService.getParticipantsByMeeting(meetingId).subscribe((data: string[]) => {
       this.participants = data;
     });
   }
+
+  getResponsables(meetingId: number): Observable<string[]> {
+    return this.meetingOrganizersService.getOrganizersByMeeting(meetingId);
+  }
+
+  getParticipants(meetingId: number): Observable<string[]> {
+    return this.meetingParticipantsService.getParticipantsByMeeting(meetingId);
+  }
+
+  
+  sendReminderEmail(meeting: any): Observable<void> {
+    const objet = meeting.objet;
+    const date = meeting.meetingDate;
+    const lieu = meeting.location;
+
+    // Send email to participants
+    this.getParticipants(meeting.id).subscribe((participants: string[]) => {
+      participants.forEach((participant: string) => {
+        this.sendMailService.sendReminderEmail(participant, objet, date, lieu).subscribe({
+          next: () => console.log(`Email sent to participant: ${participant}`),
+          error: (err) => console.error(`Error sending email to participant: ${participant}`, err)
+        });
+      });
+    });
+
+    // Send email to responsible persons
+    this.getResponsables(meeting.id).subscribe((responsables: string[]) => {
+      responsables.forEach((responsable: string) => {
+        this.sendMailService.sendReminderEmail(responsable, objet, date, lieu).subscribe({
+          next: () => console.log(`Email sent to responsable: ${responsable}`),
+          error: (err) => console.error(`Error sending email to responsable: ${responsable}`, err)
+        });
+      });
+    });
+
+    console.log('Reminder emails sent for meeting:', meeting.objet);
+    return new Observable<void>(subscriber => {
+      subscriber.next();
+      subscriber.complete();
+    });
+  }
+  
+
 
 
   toggleRow(index: number, meeting: InfoMeetingBase): void { // Add this method
@@ -255,6 +308,7 @@ export class ListeReunionComponent implements OnInit {
   }
 
   previousPage(): void {
+    
     if (this.currentPage > 1) {
       this.currentPage--;
       this.updatePagination();
@@ -273,5 +327,54 @@ export class ListeReunionComponent implements OnInit {
     const start = (this.currentPage - 1) * this.rowsPerPage;
     const end = start + this.rowsPerPage;
     this.paginatedMeetings = this.filteredMeetings.slice(start, end);
+  }
+
+  isThisWeek(dateCreation: string): boolean {
+    const date = new Date(dateCreation);
+    const today = new Date();
+    const startOfWeek = new Date(today.setDate(today.getDate() - today.getDay()));
+    const endOfWeek = new Date(today.setDate(today.getDate() - today.getDay() + 6));
+    return date >= startOfWeek && date <= endOfWeek;
+  }
+
+  sendGlobalReminderEmails(): void {
+    this.isLoadingSpinner = true;
+    let completedRequests = 0;
+    const totalRequests = this.paginatedMeetings.length;
+    let hasError = false;
+  
+    this.paginatedMeetings.forEach(meeting => {
+      this.sendReminderEmail(meeting).subscribe({
+        next: () => {
+          completedRequests++;
+          if (completedRequests === totalRequests) {
+            setTimeout(() => {
+              this.isLoadingSpinner = false; // Hide spinner after a delay
+              this.successMessage = 'Mails envoyés avec succès!';
+              setTimeout(() => {
+                this.successMessage = '';  // Clear the message after 3 seconds
+              }, 3000);
+            }, 2000); // Delay of 2 seconds
+          }
+        },
+        error: () => {
+          hasError = true;
+          completedRequests++;
+          if (completedRequests === totalRequests) {
+            setTimeout(() => {
+              this.isLoadingSpinner = false; // Hide spinner after a delay
+              this.successMessage = 'Certains e-mails n\'ont pas pu être envoyés.';
+              setTimeout(() => {
+                this.successMessage = '';  // Clear the message after 3 seconds
+              }, 3000);
+            }, 2000); // Delay of 2 seconds
+          }
+        }
+      });
+    });
+  }
+  
+  toggleSendMailVisibility(): void {
+    this.isSendMailVisible = !this.isSendMailVisible;
   }
 }

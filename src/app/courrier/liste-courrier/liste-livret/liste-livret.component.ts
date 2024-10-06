@@ -24,7 +24,7 @@ export class ListeLivretComponent implements OnInit, AfterViewInit {
   filteredLivrets: Livret[] = [];
   paginatedLivrets: Livret[] = [];
   selectedType: string = '';
-  livretTypes: string[] = ['GUIDE_AU_USAGERS', 'CIRCUIT_DE_TRAITEMENT', 'MANUELS_DE_PROCEDURES', 'CODES_DE_LA_SOLDE', 'SGAP'];
+  livretTypes: string[] = ['GUIDE_AUX_USAGERS', 'CIRCUIT_DE_TRAITEMENT', 'MANUELS_DE_PROCEDURES', 'CODES_DE_LA_SOLDE', 'CODES_DES_PENSIONS'];
   searchQuery: string = '';
   searchDate: string = '';
   searchType: string = 'title';

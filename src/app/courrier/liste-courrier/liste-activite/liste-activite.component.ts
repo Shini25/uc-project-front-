@@ -21,7 +21,7 @@ export class ListeActiviteComponent implements OnInit, AfterViewInit {
   filteredActivites: Activite[] = [];
   paginatedActivites: Activite[] = [];
   selectedType: string = '';
-  activiteTypes: string[] = ['REFORMES', 'HEBDOMADAIRE', 'MENSUELLE', 'TRIMESTRIELLE', 'SEMESTRIELLE'];
+  activiteTypes: string[] = ['REFORMES', 'HEBDOMADAIRE', 'MENSUEL', 'TRIMESTRIEL', 'SEMESTRIEL', 'ANNUEL', 'GRANDES_REALISATIONS'];
   searchQuery: string = '';
   searchDate: string = '';
   searchType: string = 'title';
@@ -37,6 +37,8 @@ export class ListeActiviteComponent implements OnInit, AfterViewInit {
   user: any;
   finaluser: any;
   expandedRowIndex: number | null = null;
+
+  selectedDateFilter: string = '';
 
   constructor(
     private activiteService: ActiviteService, 
@@ -173,7 +175,6 @@ export class ListeActiviteComponent implements OnInit, AfterViewInit {
     link.click();
   }
 
-
   previewActivite(activite: Activite): void {
     const fileType = activite.typeContenue;
     const byteCharacters = atob(activite.contenue);
@@ -207,5 +208,43 @@ export class ListeActiviteComponent implements OnInit, AfterViewInit {
       this.selectedFileName = this.selectedFile.name;
       this.fileType = this.selectedFile.type;
     }
+  }
+
+  onDateFilterChange(event: Event): void {
+    const selectElement = event.target as HTMLSelectElement;
+    this.selectedDateFilter = selectElement.value;
+    this.filterActivitesByDate();
+  }
+
+  filterActivitesByDate(): void {
+    const now = new Date();
+    let startDate: Date;
+
+    switch (this.selectedDateFilter) {
+      case 'today':
+        startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        break;
+      case 'week':
+        startDate = new Date(now.setDate(now.getDate() - now.getDay()));
+        break;
+      case 'month':
+        startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+        break;
+      case '3months':
+        startDate = new Date(now.getFullYear(), now.getMonth() - 3, 1);
+        break;
+      case '6months':
+        startDate = new Date(now.getFullYear(), now.getMonth() - 6, 1);
+        break;
+      default:
+        startDate = new Date(0); // Default to a very old date if no filter is selected
+    }
+
+    this.filteredActivites = this.activites.filter(activite => {
+      const activiteDate = new Date(activite.dateModification || activite.dateInsertion);
+      return activiteDate >= startDate;
+    });
+
+    this.updatePagination();
   }
 }

@@ -78,17 +78,27 @@
       
                 <div class="form-group">
                   <label class="block text-sm font-bold text-gray-900">Type de Chef</label>
-                  <select formControlName="typeDeChef" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                  <select formControlName="typeChef" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" (change)="onTypeChefChange($event)">
                     <option value="UC">UC</option>
-                    <option value="DAF">DAF</option>
-                    <option value="SERVICE_CENTRAUX">SERVICE_CENTRAUX</option>
-                    <option value="SERVICE_REGIONAUX">SERVICE_REGIONAUX</option>
-                    <option value="DIVISION">DIVISION</option>
-                    <option value="BUREAUX">BUREAUX</option>
-                    <option value="ANTENNES_CIRFIN">ANTENNES_CIRFIN</option>
+                    <option value="DG">DG</option>
+                    <option value="CELLULES">Cellule</option>
+                    <option value="CIRCONSCRIPTION_FINANCIERES">Circonscription financiere</option>
+                    <option value="SERVICES_REGIONAUX_BUDGET">Service regionaux de budget</option>
+                    <option value="SERVICES_REGIONAUX_SOLDE_PENSIONS">Service regionaux de la solde et de pension</option>
+                    <option value="SERVICES_RATTACHES">Service Rattache</option>
+                    <option value="SERVICES_CENTRAUX_DIRECTION">Service centraux de la direction</option>
+                    <option value="DIRECTEURS_PRMP">Directeur & PRMP</option>
                   </select>
                 </div>
-      
+
+                <!-- Sous Type Options -->
+                <div class="form-group" *ngIf="sousTypeOptions.length > 0">
+                  <label class="block text-sm font-bold text-gray-900">Sous Type</label>
+                  <select formControlName="sousType" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                    <option *ngFor="let option of sousTypeOptions" [value]="option">{{ option }}</option>
+                  </select>
+                </div>
+
                 <div class="form-group">
                   <label class="block text-sm font-bold text-gray-900">Photos</label>
                   <input type="file" (change)="onFileChange($event)" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">

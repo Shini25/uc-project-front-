@@ -7,12 +7,9 @@ import { InfoBaseChefService } from '../services/chefs/infoBaseChef.service';
 import { photoService } from '../services/chefs/photo.service';
 import { attributionService } from '../services/chefs/attribution.service';
 import { Chefs } from '../models/chefs.model';
-import { RouterModule } from '@angular/router';
-import { Router } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { RouterLink } from '@angular/router';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatDrawerContainer } from '@angular/material/sidenav';
-import { MatDrawer } from '@angular/material/sidenav';
+import { MatSidenavModule, MatDrawerContainer, MatDrawer } from '@angular/material/sidenav';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { motDuChefService } from '../services/chefs/motDuChef.service';
 import { MatRippleModule } from '@angular/material/core';
@@ -47,15 +44,13 @@ export class ListChefComponent implements OnInit {
   chefs: Chefs[] = [];
   visibleChefs: Chefs[] = [];
   filteredChefs: Chefs[] = [];
-  currentIndex: number = 0;
-  itemsPerPage: number = 1;
   searchActive: boolean = false;
   firstParagraphs: { [key: string]: string } = {};
-  selectedType: string = 'UC';
-  chefTypes: string[] = ['DAF', 'UC', 'SERVICE_CENTRAUX', 'SERVICE_REGIONAUX', 'DIVISION', 'BUREAUX', 'ANTENNES_CIRFIN'];
-  title: string = 'Chef UC';
+  selectedType: string = 'DIRECTEURS_PRMP';
+  chefTypes: string[] = ['DG', 'CELLULES', 'CIRCONSCRIPTION_FINANCIERES', 'DIRECTEURS_PRMP', 'SERVICES_CENTRAUX_DIRECTION', 'SERVICES_REGIONAUX_BUDGET', 'SERVICES_REGIONAUX_SOLDE_PENSIONS', 'SERVICES_RATTACHES'];
   isAttributionModalVisible = false;
   selectedChef: Chefs | null = null;
+  selectedChefId: Chefs | null = null;
 
   constructor(
     private chefService: InfoBaseChefService,
@@ -67,10 +62,9 @@ export class ListChefComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-      this.flowbiteService.loadFlowbite(flowbite => {
-        console.log('Flowbite loaded:', flowbite);
-      });
-    
+    this.flowbiteService.loadFlowbite(flowbite => {
+      console.log('Flowbite loaded:', flowbite);
+    });
     this.fetchChefsByType(this.selectedType);
   }
 
@@ -93,7 +87,7 @@ export class ListChefComponent implements OnInit {
   }
 
   updateVisibleChefs(): void {
-    this.visibleChefs = this.chefs.slice(this.currentIndex, this.currentIndex + this.itemsPerPage);
+    this.visibleChefs = this.searchActive ? this.filteredChefs : this.chefs;
     this.visibleChefs.forEach(chef => {
       this.chefPhotoService.getPhotosByChef(chef.numero).subscribe(photos => {
         chef.photos = photos;
@@ -102,28 +96,6 @@ export class ListChefComponent implements OnInit {
         chef.attributions = attributions.map(attr => ({ attribution: attr }));
       });
     });
-  }
-
-  nextChef(): void {
-    if (this.currentIndex + this.itemsPerPage < this.chefs.length) {
-      this.currentIndex += this.itemsPerPage;
-      this.updateVisibleChefs();
-    }
-  }
-
-  prevChef(): void {
-    if (this.currentIndex - this.itemsPerPage >= 0) {
-      this.currentIndex -= this.itemsPerPage;
-      this.updateVisibleChefs();
-    }
-  }
-
-  showAttributions(chefId: string): void {
-    this.router.navigate(['/attributions', chefId]);
-  }
-
-  showMotDuChefs(chefId: string): void {
-    this.router.navigate(['/motduchefs', chefId]);
   }
 
   onSearch(event: Event): void {
@@ -140,6 +112,7 @@ export class ListChefComponent implements OnInit {
       this.filteredChefs = [];
       this.searchActive = false;
     }
+    this.updateVisibleChefs();
   }
 
   selectChef(chef: Chefs): void {
@@ -155,15 +128,13 @@ export class ListChefComponent implements OnInit {
   }
 
   getDisplayChefs(): Chefs[] {
-    return this.searchActive ? [] : this.visibleChefs;
+    return this.searchActive ? this.filteredChefs : this.visibleChefs;
   }
 
   onTypeChange(event: Event): void {
     const selectElement = event.target as HTMLSelectElement;
     const type = selectElement.value;
-    this.currentIndex = 0;
     this.selectedType = type;
-    this.title = `Chef - ${type.replace('_', ' ').toLowerCase()}`;
     this.fetchChefsByType(type);
   }
 

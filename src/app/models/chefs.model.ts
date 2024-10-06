@@ -16,7 +16,8 @@ export interface Chefs {
   prenoms: string;
   email: string;
   contact: string;
-  typeDeChef: string;
+  typeChef: string;
+  sousType: string;
   photos: string[];
   attributions: UcAttribution[];
   motDuChefs: UcMotDuChef[];

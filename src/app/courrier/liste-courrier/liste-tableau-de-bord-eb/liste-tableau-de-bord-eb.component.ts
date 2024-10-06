@@ -17,11 +17,10 @@ export class ListeTableauDeBordEBComponent {
   filteredTableauDeBords: TableauDeBord[] = [];
   paginatedTableauDeBords: TableauDeBord[] = [];
   selectedType: string = '';
-  tableauDeBordTypes: string[] = ['GUIDE_AU_USAGERS', 'CIRCUIT_DE_TRAITEMENT', 'MANUELS_DE_PROCEDURES', 'CODES_DE_LA_SOLDE', 'SGAP'];
+  tableauDeBordTypes: string[] = ['TABLEAU_DE_BORD', 'EXECUTION_DAF', 'EXECUTION_SSB', 'EXECUTION_DE_DEPENSES'];
   searchQuery: string = '';
   searchDate: string = '';
   searchType: string = 'title';
-
   currentPage: number = 1;
   rowsPerPage: number = 10;
   totalPages: number = 1;

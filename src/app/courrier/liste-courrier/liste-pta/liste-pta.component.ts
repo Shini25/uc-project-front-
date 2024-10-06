@@ -26,9 +26,9 @@ export class ListePtaComponent implements OnInit, AfterViewInit {
   paginatedPtas: Pta[] = [];
   selectedType: string = '';
   selectedSousType: string = '';
-  ptaTypes: string[] = ['SERVICE', 'GLOBAL'];
-  sousTypesGlobal: string[] = ['DSP', 'DGBF', 'MEF', 'PROG_130', 'EXECUTION_DAAF', 'EXECUTION_SSB', 'FEUILLE_DE_ROUTE', 'PIP', 'PSMFP', 'EXECUTION_BUDGETAIRE_DSP_DGEAE', 'GRANDES_REALISATIONS', 'CEB', 'AUTRES'];
-  sousTypesService: string[] = ['SODP', 'SSDO', 'SVSP', 'SNSA', 'SCS', 'SCPDE'];
+  ptaTypes: string[] = ['SERVICE', 'DGBF'];
+  sousTypesGlobal: string[] = ['DSP', 'DGBF', 'MEF', 'PROG_130'];
+  sousTypesService: string[] = ['SLP', 'SODP', 'SSDO', 'SVSP', 'SMSA', 'SCS', 'SCPAE', 'SISP', 'DIGIT'];
   currentSousTypes: string[] = [];
   searchQuery: string = '';
   searchDate: string = ''; 
@@ -146,7 +146,7 @@ export class ListePtaComponent implements OnInit, AfterViewInit {
 
   onTypeChange(event: Event): void {
     this.selectedType = (event.target as HTMLSelectElement).value;
-    this.currentSousTypes = this.selectedType === 'GLOBAL' ? this.sousTypesGlobal : this.sousTypesService;
+    this.currentSousTypes = this.selectedType === 'DGBF' ? this.sousTypesGlobal : this.sousTypesService;
     this.selectedSousType = ''; // Reset the selected subtype
     this.filterPtas();
   }

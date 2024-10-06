@@ -16,4 +16,29 @@ export class ActiviteService {
   getAllActivites(): Observable<Activite[]> {
     return this.http.get<Activite[]>(`${this.apiUrl}/all`);
   }
+
+  // Récupérer les activités par jour
+  getActivitesByDay(date: string): Observable<Activite[]> {
+    return this.http.get<Activite[]>(`${this.apiUrl}/day/${date}`);
+  }
+
+  // Récupérer les activités par mois
+  getActivitesByMonth(year: number, month: number): Observable<Activite[]> {
+    return this.http.get<Activite[]>(`${this.apiUrl}/month/${year}/${month}`);
+  }
+
+  // Récupérer les activités par trimestre
+  getActivitesByQuarter(year: number, quarter: number): Observable<Activite[]> {
+    return this.http.get<Activite[]>(`${this.apiUrl}/quarter/${year}/${quarter}`);
+  }
+
+  // Récupérer les activités par semestre
+  getActivitesBySemester(year: number, semester: number): Observable<Activite[]> {
+    return this.http.get<Activite[]>(`${this.apiUrl}/semester/${year}/${semester}`);
+  }
+
+  // Récupérer les activités par semaine
+  getActivitesByWeek(date: string): Observable<Activite[]> {
+    return this.http.get<Activite[]>(`${this.apiUrl}/week/${date}`);
+  }
 }

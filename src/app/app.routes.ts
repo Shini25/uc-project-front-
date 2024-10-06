@@ -23,8 +23,13 @@ import { ListeAutreDocumentComponent } from './courrier/liste-courrier/liste-aut
 import { ListeActiviteComponent } from './courrier/liste-courrier/liste-activite/liste-activite.component';
 import { ListeTableauDeBordEBComponent } from './courrier/liste-courrier/liste-tableau-de-bord-eb/liste-tableau-de-bord-eb.component';
 import { AuthGuard } from './services/auth.guard';
+import { UcPresentaionComponent } from './uc-presentaion/uc-presentaion.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { PtasListComponent } from './dashboard/ptas-list/ptas-list.component';
+import { TableauDeBordListComponent } from './dashboard/tableau-de-bord-list/tableau-de-bord-list.component';
+import { ActiviteListComponent
 
-
+ } from './dashboard/activite-list/activite-list.component';
 export const routes: Routes = [
     {
       path: 'home',
@@ -40,7 +45,7 @@ export const routes: Routes = [
         { path: 'organigramme-direction', component: OrganigrammeDirectionComponent },
         { path: 'organigramme-service', component: OrganigrammeServiceComponent },
         { path: 'archivage-courrier', component: ArchivageCourrierComponent },
-        { path: 'planification-reunion', component: PlanifierReunionComponent },
+        { path: 'liste-reunion/planification', component: PlanifierReunionComponent },
         { path: 'liste-reunion', component: ListeReunionComponent },
         { path: 'details-reunion/:id', component: DetailsMeetingComponent },
         { path: 'liste-livret', component: ListeLivretComponent },
@@ -49,6 +54,11 @@ export const routes: Routes = [
         { path: 'liste-autre-document', component: ListeAutreDocumentComponent },
         { path: 'liste-activite', component: ListeActiviteComponent },
         { path: 'liste-tableau-de-bord', component: ListeTableauDeBordEBComponent },
+        { path: 'uc-presentation', component: UcPresentaionComponent },
+        { path: 'dashboard', component: DashboardComponent },
+        { path: 'ptas-list', component: PtasListComponent },
+        { path: 'tableau-de-bord-list', component: TableauDeBordListComponent },
+        { path: 'liste=activite-chef', component: ActiviteListComponent},
       ]
     },
     {

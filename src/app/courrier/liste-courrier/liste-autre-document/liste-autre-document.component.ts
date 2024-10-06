@@ -21,7 +21,7 @@ export class ListeAutreDocumentComponent implements OnInit, AfterViewInit {
   filteredAutreDocuments: AutreDocument[] = [];
   paginatedAutreDocuments: AutreDocument[] = [];
   selectedType: string = '';
-  autreDocumentTypes: string[] = ['CALENDRIER_SOLDE_PENSION', 'REMARQUES_OBSERVATION', 'LETTRES_NOTE'];
+  autreDocumentTypes: string[] = ['CALENDRIER_SOLDE_PENSION', 'FEUILLE_DE_ROUTE', 'PIP', 'PSMFP', 'EXECUTION_BUDGETAIRE_DSP_DGEAE', 'CEB', 'AUTRES'];
   searchQuery: string = '';
   searchDate: string = '';
   searchType: string = 'title';

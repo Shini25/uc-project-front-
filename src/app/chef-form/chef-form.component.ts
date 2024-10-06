@@ -30,6 +30,7 @@ import { FlowbiteService } from '../services/flowbite.service';
     MatSelectModule
   ]
 })
+
 export class ChefFormComponent implements AfterViewInit {
   chefsForm: FormGroup;
   firstFormGroup: FormGroup;
@@ -40,6 +41,9 @@ export class ChefFormComponent implements AfterViewInit {
   currentStep = 1;
   isLoading: boolean = false;
   successMessage: string = '';
+  sousTypeOptions: string[] = [];
+  errorMessage: string = '';
+
 
   constructor(private fb: FormBuilder, private chefcService: InfoBaseChefService, public dialog: MatDialog, private flowbiteService: FlowbiteService) {
     this.chefsForm = this.fb.group({
@@ -51,7 +55,8 @@ export class ChefFormComponent implements AfterViewInit {
       photos: this.fb.array([]),
       attributions: this.fb.array([]),
       motDuChefs: this.fb.array([]),
-      typeDeChef: ['', Validators.required]  // Added field with default value
+      typeChef: ['', Validators.required],
+      sousType:['']
     });
 
     this.firstFormGroup = this.fb.group({
@@ -61,7 +66,8 @@ export class ChefFormComponent implements AfterViewInit {
       email: ['', [Validators.required, Validators.email]],
       contact: ['', Validators.required],
       photos: this.fb.array([]),
-      typeDeChef: ['', Validators.required]  // Added field with default value
+      typeChef: ['', Validators.required],
+      sousType: ['']  
     });
 
     this.secondFormGroup = this.fb.group({
@@ -127,15 +133,21 @@ export class ChefFormComponent implements AfterViewInit {
   }
 
 
-  errorMessage: string = '';
-
   onSubmit(): void {
     if (this.firstFormGroup.valid && this.secondFormGroup.valid && this.thirdFormGroup.valid) {
+      // Automatically set sousType based on typeChef
+      const typeChef = this.firstFormGroup.get('typeChef')?.value;
+      if (typeChef === 'UC') {
+        this.firstFormGroup.get('sousType')?.setValue('UC');
+      } else if (typeChef === 'DG') {
+        this.firstFormGroup.get('sousType')?.setValue('DGFAG');
+      }
+  
       this.isLoading = true;  // Show spinner
       const Chef: Chefs = { ...this.firstFormGroup.value, ...this.secondFormGroup.value, ...this.thirdFormGroup.value };
       const attributions = this.attributions.value.map((attr: any) => attr.attribution);
       const motsDuChef = this.motDuChefs.value.map((mot: any) => mot.paragraphe);
-
+  
       if (this.selectedPhoto) {
         const reader = new FileReader();
         reader.onload = () => {
@@ -144,7 +156,7 @@ export class ChefFormComponent implements AfterViewInit {
           console.log('Base64 Photo:', base64Photo);
           console.log('Attributions:', attributions);
           console.log('Mots du Chef:', motsDuChef);
-
+  
           this.chefcService.createChefs(Chef, base64Photo, attributions, motsDuChef).subscribe(response => {
             console.log('Chef created', response);
             setTimeout(() => {
@@ -165,6 +177,65 @@ export class ChefFormComponent implements AfterViewInit {
         };
         reader.readAsDataURL(this.selectedPhoto);
       }
+    }
+  }
+
+  onTypeChefChange(event: any): void {
+    const selectedTypeChef = event.target.value;
+    this.updateSousTypeOptions(selectedTypeChef);
+  }
+
+  updateSousTypeOptions(typeChef: string): void {
+    switch (typeChef) {
+      case 'DG':
+        this.sousTypeOptions = ['DGFAG'];
+        break;
+      case 'CELLULES':
+        this.sousTypeOptions = [
+          'DGEAE_C_AUGURE', 'DGEAE_C_INFORMATIQUE', 'DSP_C_DIGITALISATION', 
+          'DSP_C_INFORMATIQUE', 'IPFP', 'DPE_C_SIGPE', 'DB_EPN', 
+          'DB_C_INFORMATIQUE_SIIGFP'
+        ];
+        break;
+      case 'CIRCONSCRIPTION_FINANCIERES':
+        this.sousTypeOptions = ['NOSYBE', 'SAINTE_MARIE', 'MAROLAMBO', 'MORAMANGA'];
+        break;
+      case 'SERVICES_REGIONAUX_BUDGET':
+        this.sousTypeOptions = [
+          'ALAOTRA_MANGORO', 'AMORONI_MANIA', 'ANALAMANGA', 'ANALANJIROFO', 
+          'ANDROY', 'ANOSY', 'ATSIMO_ANDREFANA', 'ATSIMO_ATSINANANA', 
+          'ATSINANANA', 'BETSIBOKA', 'BOENY', 'BONGOLAVA', 'DIANA', 
+          'FITOVINANY', 'HAUTE_MAHATSIATRA', 'ITASY', 'MELAKY', 'IHOROMBE', 
+          'MENABE', 'SAVA', 'SOFIA', 'VAKINAKARATRA', 'VATOVAVY'
+        ];
+        break;
+      case 'SERVICES_REGIONAUX_SOLDE_PENSIONS':
+        this.sousTypeOptions = [
+          'ALAOTRA_MANGORO', 'AMORONI_MANIA', 'ANALAMANGA', 'ANALANJIROFO', 
+          'ANDROY', 'ANOSY', 'ATSIMO_ANDREFANA', 'ATSIMO_ATSINANANA', 
+          'ATSINANANA', 'BETSIBOKA', 'BOENY', 'BONGOLAVA', 'DIANA', 
+          'FITOVINANY', 'HAUTE_MAHATSIATRA', 'ITASY', 'MELAKY', 'IHOROMBE', 
+          'MENABE', 'SAVA', 'SOFIA', 'VAKINAKARATRA', 'VATOVAVY'
+        ];
+        break;
+      case 'SERVICES_RATTACHES':
+        this.sousTypeOptions = [
+          'SAI', 'SAF', 'SCOM', 'SPERS', 'SPE', 'SSEB', 'SCGA', 'CAS', 'SCI'
+        ];
+        break;
+      case 'SERVICES_CENTRAUX_DIRECTION':
+        this.sousTypeOptions = [
+          'DbSSB', 'DbSRF', 'DbSSSA', 'DbSSPI', 'DgeaeSGEAE', 'DgeaeSCSD', 
+          'DgeaeSLE', 'DgeaeSPPAE', 'DpeSSCVA', 'DpeSMATTA', 'DpeSLBA', 
+          'DspSMSA', 'DspSCS', 'DspSVSP', 'DspSCPAE', 'DspSODP', 'DspSLP', 
+          'DspSSDO'
+        ];
+        break;
+      case 'DIRECTEURS_PRMP':
+        this.sousTypeOptions = ['DB', 'DSP', 'PRMP', 'DGEAE', 'DPE'];
+        break;
+      default:
+        this.sousTypeOptions = [];
     }
   }
 }

@@ -5,28 +5,21 @@ export enum PtaType {
     SERVICE,
     GLOBAL
 }
-
 export enum SousType {
-    SLP,
-    SODP,
-    SSDO,
-    SVSP,
-    SNSA,
-    SCS,
-    SCPDE,
-    DSP,
-    DGBF,
-    MEF,
-    PROG_130,
-    EXECUTION_DAAF,
-    EXECUTION_SSB,
-    FEUILLE_DE_ROUTE,
-    PIP,
-    PSMFP,
-    EXECUTION_BUDGETAIRE_DSP_DGEAE,
-    GRANDES_REALISATIONS,
-    CEB,
-    AUTRES
+    SLP = "SLP",
+    SODP = "SODP",
+    SSDO = "SSDO",
+    SVSP = "SVSP",
+    SMSA = "SMSA",
+    SCS = "SCS",
+    SCPAE = "SCPAE",
+    SISP = "SISP",
+    DIGIT = "DIGIT",
+    DGBF = "DGBF",
+    DSP = "DSP",
+    MEF = "MEF",
+    PROG_130 = "PROG_130"
+
 }
 
 export class Pta extends Courrier {
