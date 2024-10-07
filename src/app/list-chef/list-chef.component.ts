@@ -1,46 +1,31 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
 import { InfoBaseChefService } from '../services/chefs/infoBaseChef.service';
 import { photoService } from '../services/chefs/photo.service';
 import { attributionService } from '../services/chefs/attribution.service';
 import { Chefs } from '../models/chefs.model';
-import { RouterModule, Router } from '@angular/router';
 import { RouterLink } from '@angular/router';
-import { MatSidenavModule, MatDrawerContainer, MatDrawer } from '@angular/material/sidenav';
-import { MatExpansionModule } from '@angular/material/expansion';
 import { motDuChefService } from '../services/chefs/motDuChef.service';
-import { MatRippleModule } from '@angular/material/core';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
-import { MatMenuModule } from '@angular/material/menu';
 import { FlowbiteService } from '../services/flowbite.service';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { UserSessionService } from '../services/userSessionService';
+import { Router } from '@angular/router';
+import { OrganizationalChartService } from '../services/chefs/organizationalChart.service';
 
 @Component({
   selector: 'app-list-chef',
   standalone: true,
   imports: [
     CommonModule,
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule,
     RouterLink,
-    RouterModule,
-    MatSidenavModule,
-    MatDrawerContainer,
-    MatDrawer,
-    MatExpansionModule,
-    MatRippleModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatMenuModule
+    ReactiveFormsModule
+
   ],
   templateUrl: './list-chef.component.html',
   styleUrls: ['./list-chef.component.css']
 })
 export class ListChefComponent implements OnInit {
+  organizationalChartForm: FormGroup;
   chefs: Chefs[] = [];
   visibleChefs: Chefs[] = [];
   filteredChefs: Chefs[] = [];
@@ -49,31 +34,50 @@ export class ListChefComponent implements OnInit {
   selectedType: string = 'DIRECTEURS_PRMP';
   chefTypes: string[] = ['DG', 'CELLULES', 'CIRCONSCRIPTION_FINANCIERES', 'DIRECTEURS_PRMP', 'SERVICES_CENTRAUX_DIRECTION', 'SERVICES_REGIONAUX_BUDGET', 'SERVICES_REGIONAUX_SOLDE_PENSIONS', 'SERVICES_RATTACHES'];
   isAttributionModalVisible = false;
+  isOrganiationalchartModalVisible = false;
   selectedChef: Chefs | null = null;
   selectedChefId: Chefs | null = null;
+
+
+  selectedFile: File | null = null;
+  selectedFileName: string | null = null;
+  fileType: string | null = null;
 
   constructor(
     private chefService: InfoBaseChefService,
     private chefPhotoService: photoService,
     private chefAttributionService: attributionService,
+    private organizationalChartService: OrganizationalChartService,
     private router: Router,
+    private fb: FormBuilder,
     private chefMotDuChefService: motDuChefService,
-    private flowbiteService: FlowbiteService
-  ) {}
+    private flowbiteService: FlowbiteService,
+    private userSessionService: UserSessionService
+  ) {
+
+    const userId = this.userSessionService.getNumero();
+    this.organizationalChartForm = this.fb.group({
+      type: ['', Validators.required],
+      addBy: [userId]
+    });
+  }
 
   ngOnInit(): void {
     this.flowbiteService.loadFlowbite(flowbite => {
       console.log('Flowbite loaded:', flowbite);
     });
     this.fetchChefsByType(this.selectedType);
+
   }
 
   fetchChefsByType(type: string): void {
     this.chefService.getChefsByTypeDeChef(type).subscribe((data: Chefs[]) => {
       this.chefs = data;
+
+      console.log(  'anandramana chefs' ,this.chefs);
       this.updateVisibleChefs();
       this.chefs.forEach(chef => {
-        this.fetchFirstParagraph(chef.numero);
+        this.fetchFirstParagraph(chef.id);
       });
     });
   }
@@ -89,10 +93,10 @@ export class ListChefComponent implements OnInit {
   updateVisibleChefs(): void {
     this.visibleChefs = this.searchActive ? this.filteredChefs : this.chefs;
     this.visibleChefs.forEach(chef => {
-      this.chefPhotoService.getPhotosByChef(chef.numero).subscribe(photos => {
+      this.chefPhotoService.getPhotosByChef(chef.id).subscribe(photos => {
         chef.photos = photos;
       });
-      this.chefAttributionService.getAttributionsByChef(chef.numero).subscribe(attributions => {
+      this.chefAttributionService.getAttributionsByChef(chef.id).subscribe(attributions => {
         chef.attributions = attributions.map(attr => ({ attribution: attr }));
       });
     });
@@ -104,7 +108,7 @@ export class ListChefComponent implements OnInit {
       this.filteredChefs = this.chefs.filter(chef =>
         chef.nom.toLowerCase().includes(searchTerm) ||
         chef.prenoms.toLowerCase().includes(searchTerm) ||
-        chef.numero.toLowerCase().includes(searchTerm) ||
+        chef.id.toLowerCase().includes(searchTerm) ||
         `${chef.nom.toLowerCase()} ${chef.prenoms.toLowerCase()}`.includes(searchTerm)
       );
       this.searchActive = true;
@@ -116,10 +120,10 @@ export class ListChefComponent implements OnInit {
   }
 
   selectChef(chef: Chefs): void {
-    this.chefPhotoService.getPhotosByChef(chef.numero).subscribe(photos => {
+    this.chefPhotoService.getPhotosByChef(chef.id).subscribe(photos => {
       chef.photos = photos;
     });
-    this.chefAttributionService.getAttributionsByChef(chef.numero).subscribe(attributions => {
+    this.chefAttributionService.getAttributionsByChef(chef.id).subscribe(attributions => {
       chef.attributions = attributions.map(attr => ({ attribution: attr }));
     });
     this.visibleChefs = [chef];
@@ -143,8 +147,48 @@ export class ListChefComponent implements OnInit {
     this.isAttributionModalVisible = true;
   }
 
-  closeAttributionModal(): void {
+  openOrganiationalchartModal(): void {
+    this.isOrganiationalchartModalVisible = true;
+  }
+
+  closeModal(): void {
     this.isAttributionModalVisible = false;
+    this.isOrganiationalchartModalVisible = false;
     this.selectedChef = null;
+  }
+
+
+  // Organigramme
+  onFileChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length) {
+      this.selectedFile = input.files[0];
+      this.selectedFileName = this.selectedFile.name;
+      this.fileType = this.selectedFile.type;
+    }
+  }
+
+  onSubmitOrganizationalChart(): void {
+    if (this.organizationalChartForm.valid && this.selectedFile) {
+      const { type, addBy } = this.organizationalChartForm.value;
+      
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64File = reader.result as string;
+
+        
+        console.log(base64File);
+        console.log(type);
+        console.log(addBy);
+        console.log(this.fileType);
+
+        this.organizationalChartService.createOrganizationalChart(type, base64File, addBy, this.fileType!).subscribe(response => {
+        });
+      };
+
+      reader.readAsDataURL(this.selectedFile);
+    } else {
+      console.error('Formulaire invalide ou fichier manquant');
+    }
   }
 }

@@ -11,7 +11,7 @@ export interface UcMotDuChef {
 }
 
 export interface Chefs {
-  numero: string;
+  id?: any;
   nom: string;
   prenoms: string;
   email: string;

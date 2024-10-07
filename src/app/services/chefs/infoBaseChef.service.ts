@@ -29,25 +29,30 @@ export class InfoBaseChefService {
     return this.http.post<Chefs>(`${this.apiUrl}/create`, formData);
   }
 
+  updateChefs(ancienContact: string, chef: Chefs, base64Photo: string, attributions: string[], motsDuChef: string[]): Observable<Chefs> {
+    const formData = new FormData();
+
+    const chefBlob = new Blob([JSON.stringify(chef)], { type: 'application/json' });
+    formData.append('chef', chefBlob);
+
+    formData.append('photo', base64Photo);
+
+    const attributionsBlob = new Blob([JSON.stringify(attributions)], { type: 'application/json' });
+    formData.append('attributions', attributionsBlob);
+
+    const motsDuChefBlob = new Blob([JSON.stringify(motsDuChef)], { type: 'application/json' });
+    formData.append('motsDuChef', motsDuChefBlob);
+
+    return this.http.put<Chefs>(`${this.apiUrl}/update/${ancienContact}`, formData);
+
+  }
 
   getAllChefs(order: string = 'desc'): Observable<Chefs[]> {
     return this.http.get<Chefs[]>(`${this.apiUrl}/list?order=${order}`);
   }
 
-  getChefsById(numero: string): Observable<Chefs> {
-    return this.http.get<Chefs>(`${this.apiUrl}/${numero}`);
-  }
-
-  updateChefs(numero: string, chef: Chefs): Observable<Chefs> {
-    const chefBlob = new Blob([JSON.stringify(chef)], { type: 'application/json' });
-    const formData = new FormData();
-    formData.append('chef', chefBlob);
-
-    return this.http.put<Chefs>(`${this.apiUrl}/${numero}`, formData);
-  }
-
-  deleteChefs(numero: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${numero}`);
+  getChefsById(contact: string): Observable<Chefs> {
+      return this.http.get<Chefs>(`${this.apiUrl}/update/${contact}`);
   }
 
   getChefsByTypeDeChef(typeDeChef: string): Observable<Chefs[]> {

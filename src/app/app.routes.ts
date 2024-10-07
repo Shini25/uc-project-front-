@@ -5,10 +5,7 @@ import { HomeComponent } from './accueil/home.component';
 import { PageNotFoundComponentComponent } from './page-introuvable/page-not-found-component.component';
 import { AccountCreatedDialogComponent } from './create-account/account-created-dialog/account-created-dialog.component';
 import { CreateAccountComponent } from './create-account/create-account.component';
-import { SuccessDialogComponent } from './chef-form/success-dialog/success-dialog.component';
 import { MotDuChefComponent } from './list-chef/motduchef/motduchef.component';
-import { OrganigrammeDirectionComponent } from './organigramme-direction/organigramme-direction.component';
-import { OrganigrammeServiceComponent } from './organigramme-service/organigramme-service.component';
 import { ArchivageCourrierComponent } from './courrier/archivage-courrier/archivage-courrier.component';
 import { LoginComponent } from './login/login.component';
 import { ListChefComponent } from './list-chef/list-chef.component';
@@ -27,9 +24,10 @@ import { UcPresentaionComponent } from './uc-presentaion/uc-presentaion.componen
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { PtasListComponent } from './dashboard/ptas-list/ptas-list.component';
 import { TableauDeBordListComponent } from './dashboard/tableau-de-bord-list/tableau-de-bord-list.component';
-import { ActiviteListComponent
+import { ActiviteListComponent } from './dashboard/activite-list/activite-list.component';
+import { UpdateChefComponent } from './update-chef/update-chef.component';
+import { OrganizationalChartComponent } from './organizational-chart/organizational-chart.component';
 
- } from './dashboard/activite-list/activite-list.component';
 export const routes: Routes = [
     {
       path: 'home',
@@ -42,8 +40,6 @@ export const routes: Routes = [
         { path: 'chef-form', component: ChefFormComponent },
         { path: 'liste-chef', component: ListChefComponent },
         { path: 'chef-motduchef/:chefId', component: MotDuChefComponent },
-        { path: 'organigramme-direction', component: OrganigrammeDirectionComponent },
-        { path: 'organigramme-service', component: OrganigrammeServiceComponent },
         { path: 'archivage-courrier', component: ArchivageCourrierComponent },
         { path: 'liste-reunion/planification', component: PlanifierReunionComponent },
         { path: 'liste-reunion', component: ListeReunionComponent },
@@ -58,7 +54,9 @@ export const routes: Routes = [
         { path: 'dashboard', component: DashboardComponent },
         { path: 'ptas-list', component: PtasListComponent },
         { path: 'tableau-de-bord-list', component: TableauDeBordListComponent },
-        { path: 'liste=activite-chef', component: ActiviteListComponent},
+        { path: 'liste-activite-chef', component: ActiviteListComponent},
+        { path: 'modification', component: UpdateChefComponent},
+        { path: 'organigramme', component: OrganizationalChartComponent}
       ]
     },
     {

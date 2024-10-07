@@ -46,15 +46,18 @@ export class ListePtaComponent implements OnInit, AfterViewInit {
   userNumero!: string; 
   user: any;
   finaluser: any;
-  expandedRowIndex: number | null = null;  // Pour garder la trace de l'index de la ligne ouverte
+  expandedRowIndex: number | null = null;
 
+  isConfirmModalVisible: boolean = false;
+  ptaToValidate: Pta | null = null;
+  
   constructor(
     private ptaService: PtaService, 
     private mimeService: MimeService, 
     private flowbiteService: FlowbiteService,
     private fb: FormBuilder,
-    private userService: UserService, // Inject UserService
-    private ptaAuditService: PtaAuditService // Inject PtaAuditService
+    private userService: UserService, 
+    private ptaAuditService: PtaAuditService
   ) {
     this.updateForm = this.fb.group({
       idCourrier: ['', Validators.required],
@@ -75,11 +78,10 @@ export class ListePtaComponent implements OnInit, AfterViewInit {
   }
 
   toggleRow(index: number, pta: Pta) {
-    // Si la ligne est déjà ouverte, la refermer
     if (this.expandedRowIndex === index) {
       this.expandedRowIndex = null;
     } else {
-      this.expandedRowIndex = index;  // Ouvrir une nouvelle ligne
+      this.expandedRowIndex = index; 
     }
     this.ptaAuditService.getAllPtasAuditByCourrierId(pta.idCourrier).subscribe((data: PtaAudit[]) => {
       this.ptasAudit = data;
@@ -295,9 +297,6 @@ export class ListePtaComponent implements OnInit, AfterViewInit {
       }
     );
   }
-
-  isConfirmModalVisible: boolean = false;
-  ptaToValidate: Pta | null = null;
 
   openConfirmModal(pta: Pta): void {
     this.ptaToValidate = pta;

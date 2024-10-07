@@ -1,24 +1,23 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
 import { InfoBaseChefService } from '../services/chefs/infoBaseChef.service';
 import { Chefs } from '../models/chefs.model';
 import { MatDialog } from '@angular/material/dialog';
 import { FlowbiteService } from '../services/flowbite.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-chef-form',
-  templateUrl: './chef-form.component.html',
-  styleUrls: ['./chef-form.component.css'],
+  selector: 'app-update-chef',
   standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
 
-  ]
+  ],
+  templateUrl: './update-chef.component.html',
+  styleUrl: './update-chef.component.css'
 })
-
-export class ChefFormComponent implements AfterViewInit {
+export class UpdateChefComponent implements AfterViewInit  {
   chefsForm: FormGroup;
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
@@ -34,7 +33,7 @@ export class ChefFormComponent implements AfterViewInit {
 
   constructor(private fb: FormBuilder, private chefcService: InfoBaseChefService, public dialog: MatDialog, private flowbiteService: FlowbiteService) {
     this.chefsForm = this.fb.group({
-      numero: ['', Validators.required],
+      ancienContact: ['', Validators.required],
       nom: ['', Validators.required],
       prenoms: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -47,7 +46,7 @@ export class ChefFormComponent implements AfterViewInit {
     });
 
     this.firstFormGroup = this.fb.group({
-      numero: ['', Validators.required],
+      ancienContact: ['', Validators.required],
       nom: ['', Validators.required],
       prenoms: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -119,7 +118,6 @@ export class ChefFormComponent implements AfterViewInit {
     }
   }
 
-
   onSubmit(): void {
     if (this.firstFormGroup.valid && this.secondFormGroup.valid && this.thirdFormGroup.valid) {
       // Automatically set sousType based on typeChef
@@ -130,7 +128,7 @@ export class ChefFormComponent implements AfterViewInit {
         this.firstFormGroup.get('sousType')?.setValue('DGFAG');
       }
   
-      this.isLoading = true;  // Show spinner
+      this.isLoading = true;  
       const Chef: Chefs = { ...this.firstFormGroup.value, ...this.secondFormGroup.value, ...this.thirdFormGroup.value };
       const attributions = this.attributions.value.map((attr: any) => attr.attribution);
       const motsDuChef = this.motDuChefs.value.map((mot: any) => mot.paragraphe);
@@ -143,22 +141,22 @@ export class ChefFormComponent implements AfterViewInit {
           console.log('Base64 Photo:', base64Photo);
           console.log('Attributions:', attributions);
           console.log('Mots du Chef:', motsDuChef);
-  
-          this.chefcService.createChefs(Chef, base64Photo, attributions, motsDuChef).subscribe(response => {
+          console.log('Ancien Contact:', this.firstFormGroup.get('ancienContact')?.value);
+          this.chefcService.updateChefs(this.firstFormGroup.get('ancienContact')?.value, Chef, base64Photo, attributions, motsDuChef).subscribe(response => {
             console.log('Chef created', response);
             setTimeout(() => {
-              this.isLoading = false;  // Hide spinner
-              this.successMessage = 'Chef créé avec succès!';  // Show success message
+              this.isLoading = false;  
+              this.successMessage = 'Chef modifié avec succès!';  
               setTimeout(() => {
-                this.successMessage = '';  // Hide success message after 3s
+                this.successMessage = '';  
               }, 3000);
-            }, 2000);  // Delay to simulate loading
+            }, 2000);  
           }, error => {
             console.error('Error creating Chef:', error);
-            this.isLoading = false;  // Hide spinner
-            this.errorMessage = 'Erreur lors de la création du Chef. Veuillez réessayer.';  // Afficher le message d'erreur
+            this.isLoading = false;  
+            this.errorMessage = 'Erreur lors de la modification du Chef. Veuillez réessayer.'; 
             setTimeout(() => {
-              this.errorMessage = '';  // Hide error message after 3s
+              this.errorMessage = '';  
             }, 3000);
           });
         };
