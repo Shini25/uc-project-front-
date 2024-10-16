@@ -10,11 +10,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlowbiteService } from './../../services/flowbite.service';
 import { UserService } from './../../services/user.service'; // Import UserService
 import { PtaAuditService } from './../../services/courrier/ptaAudit.service'; // Import PtaAuditService
+import { ReplaceUnderscorePipe } from '../../shared/pipe/replace-underscore.pipe';
 
 @Component({
   selector: 'app-ptas-list',
   standalone: true,
-  imports: [CommonModule, DatePipe, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, DatePipe, FormsModule, ReactiveFormsModule, ReplaceUnderscorePipe],
   templateUrl: './ptas-list.component.html',
   styleUrl: './ptas-list.component.css'
 })
@@ -40,21 +41,27 @@ export class PtasListComponent implements OnInit, AfterViewInit {
   validerForm: FormGroup;
   isUpdateFormVisible: boolean = false;
 
-  selectedFile!: File;
-  selectedFileName!: string;
-  fileType!: string;
+  selectedFile!: File | null;
+  selectedFileName!: string | null;
+  fileType!: string | null;
   userNumero!: string; 
   user: any;
   finaluser: any;
-  expandedRowIndex: number | null = null;  // Pour garder la trace de l'index de la ligne ouverte
+  expandedRowIndex: number | null = null;
 
+  isConfirmModalVisible: boolean = false;
+  ptaToValidate: Pta | null = null;
+
+  errorMessage: string | null = null;
+  maxFileSize: number = 100 * 1024 * 1024; // 10 MB
+  
   constructor(
     private ptaService: PtaService, 
     private mimeService: MimeService, 
     private flowbiteService: FlowbiteService,
     private fb: FormBuilder,
-    private userService: UserService, // Inject UserService
-    private ptaAuditService: PtaAuditService // Inject PtaAuditService
+    private userService: UserService, 
+    private ptaAuditService: PtaAuditService
   ) {
     this.updateForm = this.fb.group({
       idCourrier: ['', Validators.required],
@@ -75,11 +82,10 @@ export class PtasListComponent implements OnInit, AfterViewInit {
   }
 
   toggleRow(index: number, pta: Pta) {
-    // Si la ligne est déjà ouverte, la refermer
     if (this.expandedRowIndex === index) {
       this.expandedRowIndex = null;
     } else {
-      this.expandedRowIndex = index;  // Ouvrir une nouvelle ligne
+      this.expandedRowIndex = index; 
     }
     this.ptaAuditService.getAllPtasAuditByCourrierId(pta.idCourrier).subscribe((data: PtaAudit[]) => {
       this.ptasAudit = data;
@@ -146,7 +152,7 @@ export class PtasListComponent implements OnInit, AfterViewInit {
 
   onTypeChange(event: Event): void {
     this.selectedType = (event.target as HTMLSelectElement).value;
-    this.currentSousTypes = this.selectedType === 'GLOBAL' ? this.sousTypesGlobal : this.sousTypesService;
+    this.currentSousTypes = this.selectedType === 'DGBF' ? this.sousTypesGlobal : this.sousTypesService;
     this.selectedSousType = ''; // Reset the selected subtype
     this.filterPtas();
   }
@@ -256,35 +262,42 @@ export class PtasListComponent implements OnInit, AfterViewInit {
 
   closeUpdateForm(): void {
     this.isUpdateFormVisible = false;
-  } 
+  }
 
   onFileChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length) {
-      this.selectedFile = input.files[0];
-      this.selectedFileName = this.selectedFile.name;
-      this.fileType = this.selectedFile.type;
+      const file = input.files[0];
+
+      // Validate file size
+      if (file.size > this.maxFileSize) {
+        console.error('File size exceeds limit');
+        this.errorMessage = 'File size exceeds the 10 MB limit.';
+        this.selectedFile = null;
+        this.selectedFileName = null;
+        this.fileType = null;
+        return;
+      }
+
+      this.selectedFile = file;
+      this.selectedFileName = file.name;
+      this.fileType = file.type;
+      this.errorMessage = null; 
     }
-  }
+  } 
 
   updatePta(): void { 
     if (this.updateForm.valid && this.selectedFile) {
       const { idCourrier } = this.updateForm.value;
-      const reader = new FileReader();
-      reader.onload = () => {
-        const base64File = reader.result as string;
+      const formData = new FormData();
+      formData.append('contenue', this.selectedFile);
+      formData.append('fileType', this.fileType!);
+      formData.append('modifyby', this.userNumero);
 
-        console.log(idCourrier);
-        console.log(base64File);
-        console.log(this.fileType);
-        this.ptaService.updatePta(idCourrier, base64File, this.fileType, this.userNumero).subscribe( // Pass userNumero as modifyby
-          () => {
-            this.getAllPtas();
-            this.closeUpdateForm();
-          }
-        );
-      };
-      reader.readAsDataURL(this.selectedFile);
+      this.ptaService.updatePta(idCourrier, this.selectedFile, this.fileType!, this.userNumero).subscribe(() => {
+        this.getAllPtas();
+        this.closeUpdateForm();
+      });
     }
   }
 
@@ -295,9 +308,6 @@ export class PtasListComponent implements OnInit, AfterViewInit {
       }
     );
   }
-
-  isConfirmModalVisible: boolean = false;
-  ptaToValidate: Pta | null = null;
 
   openConfirmModal(pta: Pta): void {
     this.ptaToValidate = pta;

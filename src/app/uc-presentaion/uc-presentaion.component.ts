@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener, Renderer2 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InfoBaseChefService } from '../services/chefs/infoBaseChef.service';
 import { photoService } from '../services/chefs/photo.service';
@@ -34,8 +34,8 @@ export class UcPresentaionComponent implements OnInit {
   isOrganiationalchartModalVisible = false;
   selectedChef: Chefs | null = null;
   selectedChefId: Chefs | null = null;
-
-
+  isZoomedOrganizational = false;  
+  isZoomedAttributions = false;
   selectedFile: File | null = null;
   selectedFileName: string | null = null;
   fileType: string | null = null;
@@ -47,6 +47,7 @@ export class UcPresentaionComponent implements OnInit {
     private router: Router,
     private chefMotDuChefService: motDuChefService,
     private flowbiteService: FlowbiteService,
+    private renderer: Renderer2
   ) {
   }
 
@@ -57,6 +58,38 @@ export class UcPresentaionComponent implements OnInit {
     this.fetchChefsByType(this.selectedType);
 
   }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const modalElementOrganizational = document.querySelector('.form-content') as HTMLElement;
+    if (this.isOrganiationalchartModalVisible && modalElementOrganizational && !modalElementOrganizational.contains(event.target as Node)) {
+      this.zoomModal(modalElementOrganizational, 'organizational');
+    }
+  
+    const modalElementAttributions = document.querySelector('.form-content-attributions') as HTMLElement;
+    if (this.isAttributionModalVisible && modalElementAttributions && !modalElementAttributions.contains(event.target as Node)) {
+      this.zoomModal(modalElementAttributions, 'attribution');
+    }
+  }
+  
+
+  zoomModal(element: HTMLElement, modalType: string): void {
+    if (modalType === 'organizational') {
+      this.isZoomedOrganizational = true;
+    } else if (modalType === 'attribution') {
+      this.isZoomedAttributions = true;
+    }
+  
+    setTimeout(() => {
+      if (modalType === 'organizational') {
+        this.isZoomedOrganizational = false;
+      } else if (modalType === 'attribution') {
+        this.isZoomedAttributions = false;
+      }
+    }, 100);
+  }
+  
+
 
   fetchChefsByType(type: string): void {
     this.chefService.getChefsByTypeDeChef(type).subscribe((data: Chefs[]) => {
@@ -90,14 +123,11 @@ export class UcPresentaionComponent implements OnInit {
     });
   }
 
-  onSearch(event: Event): void {
-    const searchTerm = (event.target as HTMLInputElement).value.toLowerCase();
-    if (searchTerm) {
-      this.filteredChefs = this.chefs.filter(chef =>
-        chef.nom.toLowerCase().includes(searchTerm) ||
-        chef.prenoms.toLowerCase().includes(searchTerm) ||
-        chef.id.toLowerCase().includes(searchTerm) ||
-        `${chef.nom.toLowerCase()} ${chef.prenoms.toLowerCase()}`.includes(searchTerm)
+  onSearch(event: Event) {
+    const input = (event.target as HTMLInputElement).value.toLowerCase();
+    if (input) {
+      this.filteredChefs = this.chefs.filter(chef => 
+        (chef.nom + ' ' + chef.prenoms).toLowerCase().includes(input)
       );
       this.searchActive = true;
     } else {
@@ -106,6 +136,7 @@ export class UcPresentaionComponent implements OnInit {
     }
     this.updateVisibleChefs();
   }
+
 
   selectChef(chef: Chefs): void {
     this.chefPhotoService.getPhotosByChef(chef.id).subscribe(photos => {

@@ -8,12 +8,12 @@ export class UserSessionService {
 
   setNumero(numero: string) {
     sessionStorage.setItem(this.userNumeroKey, numero);
-    console.log('Numero stored in sessionStorage:', numero); // Debug log
+    console.log('Numero stored in sessionStorage:', numero);
   }
 
   getNumero(): string | null {
     const numero = sessionStorage.getItem(this.userNumeroKey);
-    console.log('Numero retrieved from sessionStorage:', numero); // Debug log
+    console.log('Numero retrieved from sessionStorage:', numero);
     return numero;
   }
 

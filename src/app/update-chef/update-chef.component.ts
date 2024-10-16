@@ -1,27 +1,38 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { InfoBaseChefService } from '../services/chefs/infoBaseChef.service';
 import { Chefs } from '../models/chefs.model';
 import { MatDialog } from '@angular/material/dialog';
 import { FlowbiteService } from '../services/flowbite.service';
-import { CommonModule } from '@angular/common';
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+
+export const matchFieldsValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+  const numero = control.get('numero');
+  const contact = control.get('contact');
+
+  if (!numero || !contact) {
+    return null;
+  }
+
+  return numero.value === contact.value ? null : { fieldsDoNotMatch: true };
+};
 
 @Component({
   selector: 'app-update-chef',
+  templateUrl: './update-chef.component.html',
+  styleUrls: ['./update-chef.component.css'],
   standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
 
-  ],
-  templateUrl: './update-chef.component.html',
-  styleUrl: './update-chef.component.css'
+  ]
 })
-export class UpdateChefComponent implements AfterViewInit  {
+
+export class UpdateChefComponent implements AfterViewInit {
   chefsForm: FormGroup;
   firstFormGroup: FormGroup;
-  secondFormGroup: FormGroup;
-  thirdFormGroup: FormGroup;
   selectedPhoto: File | null = null;
   isLinear = true;
   currentStep = 1;
@@ -30,39 +41,37 @@ export class UpdateChefComponent implements AfterViewInit  {
   sousTypeOptions: string[] = [];
   errorMessage: string = '';
 
-
   constructor(private fb: FormBuilder, private chefcService: InfoBaseChefService, public dialog: MatDialog, private flowbiteService: FlowbiteService) {
     this.chefsForm = this.fb.group({
       ancienContact: ['', Validators.required],
+      numero: ['', [Validators.required, Validators.pattern('^[0-9]+$')]], 
       nom: ['', Validators.required],
       prenoms: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      contact: ['', Validators.required],
+      contact: ['', [Validators.required, Validators.pattern('^[0-9]+$')]], 
       photos: this.fb.array([]),
       attributions: this.fb.array([]),
       motDuChefs: this.fb.array([]),
       typeChef: ['', Validators.required],
-      sousType:['']
+      sousType:[''],
+
     });
 
     this.firstFormGroup = this.fb.group({
       ancienContact: ['', Validators.required],
+      numero:  ['', [Validators.required, Validators.pattern('^[0-9]+$')]], 
       nom: ['', Validators.required],
       prenoms: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      contact: ['', Validators.required],
+      contact:  ['', [Validators.required, Validators.pattern('^[0-9]+$')]], 
       photos: this.fb.array([]),
       typeChef: ['', Validators.required],
-      sousType: ['']  
-    });
-
-    this.secondFormGroup = this.fb.group({
+      sousType: [''] ,
       attributions: this.fb.array([]),
-    });
-
-    this.thirdFormGroup = this.fb.group({
       motDuChefs: this.fb.array([]),
-    });
+
+    }, { validators: matchFieldsValidator });
+
   }
 
   ngAfterViewInit(): void {
@@ -76,11 +85,11 @@ export class UpdateChefComponent implements AfterViewInit  {
   }
 
   get attributions(): FormArray {
-    return this.secondFormGroup.get('attributions') as FormArray;
+    return this.firstFormGroup.get('attributions') as FormArray;
   }
 
   get motDuChefs(): FormArray {
-    return this.thirdFormGroup.get('motDuChefs') as FormArray;
+    return this.firstFormGroup.get('motDuChefs') as FormArray;
   }
 
   addPhoto(): void {
@@ -119,7 +128,7 @@ export class UpdateChefComponent implements AfterViewInit  {
   }
 
   onSubmit(): void {
-    if (this.firstFormGroup.valid && this.secondFormGroup.valid && this.thirdFormGroup.valid) {
+    if (this.firstFormGroup.valid) {
       // Automatically set sousType based on typeChef
       const typeChef = this.firstFormGroup.get('typeChef')?.value;
       if (typeChef === 'UC') {
@@ -128,8 +137,9 @@ export class UpdateChefComponent implements AfterViewInit  {
         this.firstFormGroup.get('sousType')?.setValue('DGFAG');
       }
   
-      this.isLoading = true;  
-      const Chef: Chefs = { ...this.firstFormGroup.value, ...this.secondFormGroup.value, ...this.thirdFormGroup.value };
+      this.isLoading = true;  // Show spinner
+      const Chef: Chefs = { ...this.firstFormGroup.value };
+      const ancienContact = this.firstFormGroup.get('ancienContact')?.value;
       const attributions = this.attributions.value.map((attr: any) => attr.attribution);
       const motsDuChef = this.motDuChefs.value.map((mot: any) => mot.paragraphe);
   
@@ -138,23 +148,22 @@ export class UpdateChefComponent implements AfterViewInit  {
         reader.onload = () => {
           const base64Photo = reader.result as string;
           console.log('Chef:', Chef);
-          console.log('Base64 Photo:', base64Photo);
           console.log('Attributions:', attributions);
           console.log('Mots du Chef:', motsDuChef);
-          console.log('Ancien Contact:', this.firstFormGroup.get('ancienContact')?.value);
-          this.chefcService.updateChefs(this.firstFormGroup.get('ancienContact')?.value, Chef, base64Photo, attributions, motsDuChef).subscribe(response => {
+  
+          this.chefcService.updateChefs(ancienContact,Chef, this.selectedPhoto!, attributions, motsDuChef).subscribe(response => {
             console.log('Chef created', response);
             setTimeout(() => {
-              this.isLoading = false;  
-              this.successMessage = 'Chef modifié avec succès!';  
+              this.isLoading = false; 
+              this.successMessage = 'Chef mis à jour avec succès!'; 
               setTimeout(() => {
-                this.successMessage = '';  
+                this.successMessage = ''; 
               }, 3000);
-            }, 2000);  
+            }, 2000); 
           }, error => {
             console.error('Error creating Chef:', error);
             this.isLoading = false;  
-            this.errorMessage = 'Erreur lors de la modification du Chef. Veuillez réessayer.'; 
+            this.errorMessage = 'Erreur lors de la mise à jour du Chef. Veuillez réessayer.';  
             setTimeout(() => {
               this.errorMessage = '';  
             }, 3000);
@@ -221,6 +230,20 @@ export class UpdateChefComponent implements AfterViewInit  {
         break;
       default:
         this.sousTypeOptions = [];
+    }
+  }
+
+  removeAttribution() {
+    const attributions = this.firstFormGroup.get('attributions') as FormArray;
+    if (attributions.length > 0) {
+      attributions.removeAt(attributions.length - 1);
+    }
+  }
+
+  removeMotDuChef() {
+    const motDuChefs = this.firstFormGroup.get('motDuChefs') as FormArray;
+    if (motDuChefs.length > 0) {
+      motDuChefs.removeAt(motDuChefs.length - 1);
     }
   }
 }

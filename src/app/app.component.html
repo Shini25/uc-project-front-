@@ -1,4 +1,4 @@
-<div class="fixed top-0 z-20 w-full h-[8vh] md:pl-64   bg-white dark:bg-blue-950 border-b border-gray-200 shadow-md  dark:border-gray-700">
+<div class="fixed top-0 z-20 w-full h-[8vh] md:pl-64 bg-gray-50 dark:bg-sky-950 border-b border-gray-200 shadow-md  dark:border-gray-700">
   <div class="flex p-2  justify-between md:justify-end items-center  h-full">
     <div class="flex md:hidden">
       <button type="button" data-drawer-target="sidebar-toggle" data-drawer-toggle="sidebar-toggle" class="" aria-label="Sidebar">
@@ -10,16 +10,40 @@
     <div class="md:hidden ">
       <span class="text-5xl mt-0">uc</span>
     </div>
-    <div class="flex">
+    <div class="flex flex-row gap-2 items-center">
+      <div class="h-16 flex justplanification-reunionify-center items-center">
+        <div class="w-full flex justify-center items-center">
+          <label class="flex items-center cursor-pointer ms-4">
+            <input
+              type="checkbox"
+              class="sr-only peer"
+              (change)="toggleDarkMode()"
+              [checked]="isDarkMode"
+            />
+            <div
+              class="relative w-11 h-6 bg-gray-200 rounded-full peer
+                     dark:bg-gray-700 peer-focus:outline-none peer-focus:ring-4
+                     peer-focus:ring-blue-300 dark:peer-focus:ring-sky-950
+                     peer-checked:bg-blue-600 after:absolute after:top-[2px]
+                     after:start-[2px] after:bg-white after:border-gray-300
+                     after:rounded-full after:h-5 after:w-5 after:transition-all
+                     peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
+                     dark:border-gray-600"
+            ></div>
+
+          </label>
+        </div>
+      </div>
+
       <div *ngIf="isAuthenticated(); else loginButton">
-        <button  id="userDropdownButton" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-start" class="w-12 h-12 rounded-full bg-blue-900">
+        <button  id="userDropdownButton" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-start" class="w-12 h-12 rounded-full bg-sky-900">
           <!-- affichef grandement dans cette boutton le premiere lettre de {{ finaluser?.email }} -->
           <span class="text-neutral-50 text-2xl">{{ finaluser?.email[0] }}</span>
         </button>
         <div   id="userDropdown" class="z-10 backdrop-blur-sm hidden bg-white divide-y divide-neutral-50 rounded-lg shadow-md dark:bg-gray-700">
           <ul class="w-[250px] p-3">
             <li>
-              <p class="text-sm text-blue-950">{{ finaluser?.accountType }}</p>
+              <p class="text-sm text-sky-950">{{ finaluser?.accountType }}</p>
               <hr>
             </li>
             <li class="mt-2">
@@ -38,14 +62,14 @@
         </div>
       </div>
       <ng-template #loginButton>
-        <button type="button" class="text-blue-950 hover:text-neutral-500 border border-blue-950 hover:bg-blue-900  focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-neutral-500 dark:hover:bg-blue-500 dark:focus:ring-blue-950" routerLink="/login">Se connecter</button>
+        <button type="button" class="text-sky-950 hover:text-neutral-500 border border-sky-950 hover:bg-blue-900  focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-neutral-500 dark:hover:bg-blue-500 dark:focus:ring-sky-950" routerLink="/login">Se connecter</button>
       </ng-template>
     </div>
   </div>
 </div>
 
 <!-- sidebar -->
-<div id="sidebar-toggle" class="fixed left-0 z-[1000] w-64 h-full bg-white px-4  transition-transform -translate-x-full md:translate-x-0 dark:bg-gray-800 dark:border-gray-700 overflow-y-auto no-scrollbar flex flex-col border-r-2 " aria-label="Sidebar">
+<div id="sidebar-toggle" class="fixed left-0 z-[1000] sidebar w-64 h-full px-4  transition-transform -translate-x-full md:translate-x-0 dark:bg-gray-800 dark:border-gray-700 overflow-y-auto scrollbarr  flex flex-col border-r-2 border-gray-100 " aria-label="Sidebar">
   <div class="h-16 mb-4 ">
     <span class="text-5xl text-neutral-500 mt-0 hidden lg:inline">uc</span>
     <div class="flex  justify-center items-center  h-full ">
@@ -59,7 +83,7 @@
 
   <div class="h-auto flex justify-between flex-col">
     <!-- home -->
-    <div  class="relative w-full h-12 bg-blue-900 hover:bg-blue-950 dark:bg-white border border-neutral-50  rounded-lg shadow-md flex items-center  cursor-pointer " routerLink="/home">
+    <div  class="relative w-full h-12 bg-sky-900 hover:bg-sky-950 dark:bg-white border border-neutral-50  rounded-lg shadow-md flex items-center  cursor-pointer " routerLink="/home">
       <div class="inline-flex ml-3 text-base">
 
         <div class="mr-7 flex justify-center items-center">
@@ -79,7 +103,7 @@
   </div>
 
   <!-- hr -->
-  <div class="h-0.5 w-1/2 mx-auto my-8 bg-neutral-400" >
+  <div class="!h-0.5 w-1/2 mx-auto my-8 bg-neutral-200" >
   </div>
 
   <!-- menu -->
@@ -88,48 +112,31 @@
       <div class="justify-start flex  ">  
         <span class="font-semibold text-neutral-800">Menus</span>
       </div>
-      <div class="grid grid-cols-1 gap-1">
-          <a class="relative w-full h-12 dark:bg-white rounded-lg text-neutral-500 flex items-center cursor-pointer group hover:bg-gray-100" 
-             routerLink="auth/uc-presentation" 
-             routerLinkActive="bg-gray-100 text-neutral-700">
-            <div class="inline-flex ml-3 text-base">
-              <div class="mr-7 flex justify-center items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4  group-hover:text-neutral-800">
-                  <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
-                </svg>                       
-              </div>
-              <div class=" ">
-                <span class="mt-0 text-sm  group-hover:text-neutral-800">
-                  Presentation de l'uc
-                </span>
-              </div>
+      <div class="grid grid-cols-1 gap-2 overflow-y-auto">
+        <a class="relative w-full h-12 dark:bg-white rounded-lg text-gray-400 flex items-center cursor-pointer group hover:bg-gray-50" 
+            routerLink="auth/uc-presentation" 
+            routerLinkActive="bg-gray-50 text-gray-800">
+          <div class="inline-flex ml-3 text-base">
+            <div class="mr-7 flex justify-center items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4  group-hover:text-neutral-800">
+                <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
+              </svg>                       
             </div>
-          </a>
-
-          <div class="relative">
-            <button type="button" class="relative w-full h-12 text-neutral-500 dark:bg-white rounded-lg flex items-center cursor-pointer group hover:bg-gray-100"
-            routerLink="auth/liste-livret"
-            routerLinkActive="bg-gray-100 text-neutral-700">
-            <div class="inline-flex ml-3 text-base">
-              <div class="mr-7 flex justify-center items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4  group-hover:text-neutral-800">
-                  <path fill-rule="evenodd" d="M6.32 2.577a49.255 49.255 0 0 1 11.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 0 1-1.085.67L12 18.089l-7.165 3.583A.75.75 0 0 1 3.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93Z" clip-rule="evenodd" />
-                </svg>
-              </div>
-              <div>
-                <span class="text-sm mt-0  group-hover:text-neutral-800">
-                  Livrets
-                </span>
-              </div>
+            <div class=" ">
+              <span class="mt-0 text-sm  group-hover:text-neutral-800">
+                Présentation de l'UC
+              </span>
             </div>
-          </button>
-
           </div>
+        </a>
+
 
         <div class="relative">
-          <button type="button" class="relative w-full h-12  text-neutral-500 dark:bg-white  rounded-lg flex items-center  cursor-pointer group hover:bg-gray-100"
+          <button type="button" class="relative w-full h-12  text-gray-400 dark:bg-white  rounded-lg flex items-center  cursor-pointer group hover:bg-gray-50"
             routerLink="auth/liste-chef"
-            routerLinkActive="bg-gray-100 text-neutral-700" >
+            routerLinkActive="bg-gray-50 text-gray-800"
+            [routerLinkActiveOptions]="{ exact: false }">
+            
             <div class="inline-flex ml-3 text-base">
               <div class="mr-7 flex justify-center items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4 group-hover:text-neutral-800 ">
@@ -148,9 +155,9 @@
 
         <!-- organigramme -->
         <div class="relative">
-          <button type="button" class="relative w-full h-12  text-neutral-500 dark:bg-white  rounded-lg flex items-center  cursor-pointer group hover:bg-gray-100"
+          <button type="button" class="relative w-full h-12  text-gray-400 dark:bg-white  rounded-lg flex items-center  cursor-pointer group hover:bg-gray-50"
            routerLink="auth/organigramme"
-           routerLinkActive="bg-gray-100 text-neutral-700" >
+           routerLinkActive="bg-gray-50 text-gray-800" >
             <div class="inline-flex ml-3 text-base">
               <div class="mr-7 flex justify-center items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4 group-hover:text-neutral-800 ">
@@ -160,7 +167,7 @@
               </div>
               <div class=" ">
                 <span class="text-sm mt-0   group-hover:text-neutral-800">
-                  Organigramme
+                  Organigrammes
                 </span>
               </div>
             </div>
@@ -168,10 +175,28 @@
         </div>
 
 
+        <div class="relative">
+          <button type="button" class="relative w-full h-12 text-gray-400 dark:bg-white rounded-lg flex items-center cursor-pointer group hover:bg-gray-50"
+            routerLink="auth/liste-livret"
+            routerLinkActive="bg-gray-50 text-gray-800">
+            <div class="inline-flex ml-3 text-base">
+              <div class="mr-7 flex justify-center items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4  group-hover:text-neutral-800">
+                  <path fill-rule="evenodd" d="M6.32 2.577a49.255 49.255 0 0 1 11.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 0 1-1.085.67L12 18.089l-7.165 3.583A.75.75 0 0 1 3.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93Z" clip-rule="evenodd" />
+                </svg>
+              </div>
+              <div>
+                <span class="text-sm mt-0  group-hover:text-neutral-800">
+                  Livrets
+                </span>
+              </div>
+            </div>
+          </button>
+        </div>
 
-        <a class="relative w-full h-12  dark:bg-white text-neutral-500  rounded-lg flex items-center  cursor-pointer group hover:bg-gray-100"
+        <a class="relative w-full h-12  dark:bg-white text-gray-400  rounded-lg flex items-center  cursor-pointer group hover:bg-gray-50"
          routerLink="auth/liste-pta"
-         routerLinkActive="bg-gray-100 text-neutral-700" >
+         routerLinkActive="bg-gray-50 text-gray-800" >
           <div class="inline-flex ml-3 text-base">
             <div class="mr-7 flex justify-center items-center">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4  group-hover:text-neutral-800">
@@ -187,9 +212,9 @@
         </a>
 
         <!-- activité -->
-        <a class="relative w-full h-12  dark:bg-white text-neutral-500  rounded-lg flex items-center  cursor-pointer group hover:bg-gray-100"
+        <a class="relative w-full h-12  dark:bg-white text-gray-400  rounded-lg flex items-center  cursor-pointer group hover:bg-gray-50"
          routerLink="auth/liste-activite"
-         routerLinkActive="bg-gray-100 text-neutral-700" >
+         routerLinkActive="bg-gray-50 text-gray-800" >
           <div class="inline-flex ml-3 text-base">
             <div class="mr-7 flex justify-center items-center">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4  group-hover:text-neutral-800">
@@ -205,9 +230,9 @@
         </a>
 
         <!-- texte -->
-        <a class="relative w-full h-12  dark:bg-white text-neutral-500  rounded-lg flex items-center  cursor-pointer group hover:bg-gray-100"
+        <a class="relative w-full h-12  dark:bg-white text-gray-400  rounded-lg flex items-center  cursor-pointer group hover:bg-gray-50"
          routerLink="auth/liste-texte"
-         routerLinkActive="bg-gray-100 text-neutral-700" >
+         routerLinkActive="bg-gray-50 text-gray-800" >
           <div class="inline-flex ml-3 text-base">
             <div class="mr-7 flex justify-center items-center">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4  group-hover:text-neutral-800">
@@ -215,16 +240,33 @@
               </svg>                               
             </div>
             <div class=" ">
-              <span class="text-sm mt-0 text-neutral-500  group-hover:text-neutral-800">
+              <span class="text-sm mt-0  group-hover:text-neutral-800">
                 Etudes
               </span>
             </div>
           </div>
         </a>
 
-        <a class="relative w-full h-12  dark:bg-white text-neutral-500  rounded-lg flex items-center  cursor-pointer group hover:bg-gray-100"
+        <a class="relative w-full h-12  dark:bg-white text-gray-400  rounded-lg flex items-center  cursor-pointer group hover:bg-gray-50"
+        routerLink="auth/liste-suivi-execution"
+        routerLinkActive="bg-gray-50 text-gray-800" >
+         <div class="inline-flex ml-3 text-base">
+           <div class="mr-7 flex justify-center items-center">
+             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4  group-hover:text-neutral-800">
+               <path fill-rule="evenodd" d="M2.25 2.25a.75.75 0 0 0 0 1.5H3v10.5a3 3 0 0 0 3 3h1.21l-1.172 3.513a.75.75 0 0 0 1.424.474l.329-.987h8.418l.33.987a.75.75 0 0 0 1.422-.474l-1.17-3.513H18a3 3 0 0 0 3-3V3.75h.75a.75.75 0 0 0 0-1.5H2.25Zm6.04 16.5.5-1.5h6.42l.5 1.5H8.29Zm7.46-12a.75.75 0 0 0-1.5 0v6a.75.75 0 0 0 1.5 0v-6Zm-3 2.25a.75.75 0 0 0-1.5 0v3.75a.75.75 0 0 0 1.5 0V9Zm-3 2.25a.75.75 0 0 0-1.5 0v1.5a.75.75 0 0 0 1.5 0v-1.5Z" clip-rule="evenodd" />
+             </svg>                               
+           </div>
+           <div class=" ">
+             <span class="text-sm mt-0  group-hover:text-neutral-800">
+               Suivi d'exécution
+             </span>
+           </div>
+         </div>
+       </a>
+
+        <a class="relative w-full h-12  dark:bg-white text-gray-400  rounded-lg flex items-center  cursor-pointer group hover:bg-gray-50"
          routerLink="auth/liste-autre-document"
-         routerLinkActive="bg-gray-100 text-neutral-700" >
+         routerLinkActive="bg-gray-50 text-gray-800" >
           <div class="inline-flex ml-3 text-base">
             <div class="mr-7 flex justify-center items-center">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4 t group-hover:text-neutral-800">
@@ -241,9 +283,9 @@
         </a>
 
         <div class="relative">
-          <button class="relative w-full h-12 dark:bg-white text-neutral-500  rounded-lg flex items-center cursor-pointer group hover:bg-gray-100"
+          <button class="relative w-full h-12 dark:bg-white text-gray-400  rounded-lg flex items-center cursor-pointer group hover:bg-gray-50"
             routerLink="auth/liste-reunion"
-            routerLinkActive="bg-gray-100 text-neutral-700"
+            routerLinkActive="bg-gray-50 text-gray-800"
             [routerLinkActiveOptions]="{ exact: false }">
             <div class="inline-flex ml-3 text-base">
               <div class="mr-7 flex justify-center items-center">
@@ -260,9 +302,9 @@
           </button>
         </div>
 
-        <a class="relative w-full h-12  dark:bg-white text-neutral-500  rounded-lg flex items-center  cursor-pointer group hover:bg-gray-100"
+        <a class="relative w-full h-12  dark:bg-white text-gray-400  rounded-lg flex items-center  cursor-pointer group hover:bg-gray-50"
          routerLink="auth/dashboard"
-         routerLinkActive="bg-gray-100 text-neutral-700" >
+         routerLinkActive="bg-gray-50 text-gray-800" >
           <div class="inline-flex ml-3 text-base">
             <div class="mr-7 flex justify-center items-center">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4  group-hover:text-neutral-800">
@@ -279,40 +321,14 @@
       </div>
     </div>
   </div>
-  <div class="h-16 flex justplanification-reunionify-center items-center">
-    <div class="w-full flex justify-center items-center">
-      <label class="flex items-center cursor-pointer ms-4">
-        <input
-          type="checkbox"
-          class="sr-only peer"
-          (change)="toggleDarkMode()"
-          [checked]="isDarkMode"
-        />
-        <div
-          class="relative w-11 h-6 bg-gray-200 rounded-full peer
-                 dark:bg-gray-700 peer-focus:outline-none peer-focus:ring-4
-                 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-950
-                 peer-checked:bg-blue-600 after:absolute after:top-[2px]
-                 after:start-[2px] after:bg-white after:border-gray-300
-                 after:rounded-full after:h-5 after:w-5 after:transition-all
-                 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
-                 dark:border-gray-600"
-        ></div>
-        <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
-          {{ isDarkMode ? 'Sombre' : 'Clair' }}
-        </span>
-      </label>
-    </div>
-  </div>
 </div>
 
-<section class="md:ml-64 h-screen  pt-[8vh] ">
+<section class="md:ml-64 min-h-full bg-gray-50 !z-[-20] pt-[8vh] ">
   <div class="fixed h-full w-full  z-[-1000]">
-
   </div>
-  <div class="fixed z-[-1] h-64 w-64 bg-blue-900/60 rounded-br-full">
+  <div class="fixed !z-[0] h-64 w-64 blur-3xl bg-sky-900/30 rounded-br-full">
   </div>
-  <div class="fixed z-[-1] h-64 w-64 blur-sm md:bg-gold/80 right-0 bottom-0 bg-gold rounded-tl-full">
+  <div class="fixed z-[0] h-64 w-64 blur-3xl bg-yellow-500/40 rounded-tl-full bottom-0 right-0 ">
   </div>  
   <router-outlet></router-outlet>
 </section>

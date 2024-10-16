@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener, Renderer2 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InfoBaseChefService } from '../services/chefs/infoBaseChef.service';
 import { photoService } from '../services/chefs/photo.service';
@@ -35,13 +35,18 @@ export class ListChefComponent implements OnInit {
   chefTypes: string[] = ['DG', 'CELLULES', 'CIRCONSCRIPTION_FINANCIERES', 'DIRECTEURS_PRMP', 'SERVICES_CENTRAUX_DIRECTION', 'SERVICES_REGIONAUX_BUDGET', 'SERVICES_REGIONAUX_SOLDE_PENSIONS', 'SERVICES_RATTACHES'];
   isAttributionModalVisible = false;
   isOrganiationalchartModalVisible = false;
+  isZoomedOrganizational = false;  
+  isZoomedAttributions = false;
   selectedChef: Chefs | null = null;
   selectedChefId: Chefs | null = null;
-
 
   selectedFile: File | null = null;
   selectedFileName: string | null = null;
   fileType: string | null = null;
+
+  isLoading: boolean = false;
+  successMessage: string = '';
+  errorMessage: string = '';
 
   constructor(
     private chefService: InfoBaseChefService,
@@ -52,7 +57,8 @@ export class ListChefComponent implements OnInit {
     private fb: FormBuilder,
     private chefMotDuChefService: motDuChefService,
     private flowbiteService: FlowbiteService,
-    private userSessionService: UserSessionService
+    private userSessionService: UserSessionService,
+    private renderer: Renderer2
   ) {
 
     const userId = this.userSessionService.getNumero();
@@ -69,6 +75,38 @@ export class ListChefComponent implements OnInit {
     this.fetchChefsByType(this.selectedType);
 
   }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const modalElementOrganizational = document.querySelector('.form-content') as HTMLElement;
+    if (this.isOrganiationalchartModalVisible && modalElementOrganizational && !modalElementOrganizational.contains(event.target as Node)) {
+      this.zoomModal(modalElementOrganizational, 'organizational');
+    }
+  
+    const modalElementAttributions = document.querySelector('.form-content-attributions') as HTMLElement;
+    if (this.isAttributionModalVisible && modalElementAttributions && !modalElementAttributions.contains(event.target as Node)) {
+      this.zoomModal(modalElementAttributions, 'attribution');
+    }
+  }
+  
+
+  zoomModal(element: HTMLElement, modalType: string): void {
+    if (modalType === 'organizational') {
+      this.isZoomedOrganizational = true;
+    } else if (modalType === 'attribution') {
+      this.isZoomedAttributions = true;
+    }
+  
+    setTimeout(() => {
+      if (modalType === 'organizational') {
+        this.isZoomedOrganizational = false;
+      } else if (modalType === 'attribution') {
+        this.isZoomedAttributions = false;
+      }
+    }, 100);
+  }
+  
+
 
   fetchChefsByType(type: string): void {
     this.chefService.getChefsByTypeDeChef(type).subscribe((data: Chefs[]) => {
@@ -102,14 +140,11 @@ export class ListChefComponent implements OnInit {
     });
   }
 
-  onSearch(event: Event): void {
-    const searchTerm = (event.target as HTMLInputElement).value.toLowerCase();
-    if (searchTerm) {
-      this.filteredChefs = this.chefs.filter(chef =>
-        chef.nom.toLowerCase().includes(searchTerm) ||
-        chef.prenoms.toLowerCase().includes(searchTerm) ||
-        chef.id.toLowerCase().includes(searchTerm) ||
-        `${chef.nom.toLowerCase()} ${chef.prenoms.toLowerCase()}`.includes(searchTerm)
+  onSearch(event: Event) {
+    const input = (event.target as HTMLInputElement).value.toLowerCase();
+    if (input) {
+      this.filteredChefs = this.chefs.filter(chef => 
+        (chef.nom + ' ' + chef.prenoms).toLowerCase().includes(input)
       );
       this.searchActive = true;
     } else {
@@ -119,6 +154,7 @@ export class ListChefComponent implements OnInit {
     this.updateVisibleChefs();
   }
 
+
   selectChef(chef: Chefs): void {
     this.chefPhotoService.getPhotosByChef(chef.id).subscribe(photos => {
       chef.photos = photos;
@@ -127,7 +163,7 @@ export class ListChefComponent implements OnInit {
       chef.attributions = attributions.map(attr => ({ attribution: attr }));
     });
     this.visibleChefs = [chef];
-    this.filteredChefs = []; // Clear the search results
+    this.filteredChefs = []; 
     this.searchActive = false;
   }
 
@@ -167,26 +203,30 @@ export class ListChefComponent implements OnInit {
       this.fileType = this.selectedFile.type;
     }
   }
-
   onSubmitOrganizationalChart(): void {
     if (this.organizationalChartForm.valid && this.selectedFile) {
+      this.isLoading = true;
       const { type, addBy } = this.organizationalChartForm.value;
-      
-      const reader = new FileReader();
-      reader.onload = () => {
-        const base64File = reader.result as string;
 
-        
-        console.log(base64File);
-        console.log(type);
-        console.log(addBy);
-        console.log(this.fileType);
-
-        this.organizationalChartService.createOrganizationalChart(type, base64File, addBy, this.fileType!).subscribe(response => {
-        });
-      };
-
-      reader.readAsDataURL(this.selectedFile);
+      this.organizationalChartService.createOrganizationalChart(type, this.selectedFile, addBy, this.fileType!).subscribe(
+        response => {
+          console.log('Organizational chart created successfully', response);
+          setTimeout(() => {
+            this.isLoading = false;  
+            this.successMessage = 'Organigramme ajouté avec succès!'; 
+            setTimeout(() => {
+              this.successMessage = ''; 
+            }, 3000);
+          }, 2000);  
+        }, error => {
+          console.error('Error creating Chef:', error);
+          this.isLoading = false; 
+          this.errorMessage = 'Erreur lors de l\'ajout de l\'organigramme. Veuillez réessayer.';  
+          setTimeout(() => {
+            this.errorMessage = '';  
+          }, 3000);        
+        }
+      );
     } else {
       console.error('Formulaire invalide ou fichier manquant');
     }

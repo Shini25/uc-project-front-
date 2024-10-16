@@ -14,14 +14,14 @@ export class CourrierService {
   // creation livret
   creationLivret(
     titre: string, 
-    base64pdf: string, 
+    contenue: File, 
     type: string, 
     typeDeContenue: string, 
     userId: string
   ): Observable<Courrier> {
     const formData = new FormData();
     formData.append('titre', titre);
-    formData.append('contenue', base64pdf);
+    formData.append('contenue', contenue);
     formData.append('type', type);
     formData.append('typeDeContenue', typeDeContenue);
     formData.append('userId', userId);
@@ -32,7 +32,7 @@ export class CourrierService {
   // creation pta
   creationPta(
     titre: string, 
-    base64pdf: string, 
+    contenue: File, 
     type: string, 
     sousType: string,
     typeDeContenue: string, 
@@ -40,7 +40,7 @@ export class CourrierService {
   ): Observable<Courrier> {
     const formData = new FormData();
     formData.append('titre', titre);
-    formData.append('contenue', base64pdf);
+    formData.append('contenue', contenue);
     formData.append('type', type);
     formData.append('sousType', sousType);
     formData.append('typeDeContenue', typeDeContenue);
@@ -52,14 +52,14 @@ export class CourrierService {
   // creation activite
   createActivite(
     titre: string, 
-    base64pdf: string, 
+    contenue: File, 
     type: string, 
     typeDeContenue: string, 
     userId: string
   ): Observable<Courrier> {
     const formData = new FormData();
     formData.append('titre', titre);
-    formData.append('contenue', base64pdf);
+    formData.append('contenue', contenue);
     formData.append('type', type);
     formData.append('typeDeContenue', typeDeContenue);
     formData.append('userId', userId);
@@ -69,14 +69,14 @@ export class CourrierService {
 
   createTexte(
     titre: string, 
-    base64pdf: string, 
+    contenue: File, 
     type: string, 
     typeDeContenue: string, 
     userId: string
   ): Observable<Courrier> {
     const formData = new FormData();
     formData.append('titre', titre);
-    formData.append('contenue', base64pdf);
+    formData.append('contenue', contenue);
     formData.append('type', type);
     formData.append('typeDeContenue', typeDeContenue);
     formData.append('userId', userId);
@@ -86,14 +86,14 @@ export class CourrierService {
 
   createAutreDocument(
     titre: string, 
-    base64pdf: string, 
+    contenue: File, 
     type: string, 
     typeDeContenue: string, 
     userId: string
   ): Observable<Courrier> {
     const formData = new FormData();
     formData.append('titre', titre);
-    formData.append('contenue', base64pdf);
+    formData.append('contenue', contenue);
     formData.append('type', type);
     formData.append('typeDeContenue', typeDeContenue);
     formData.append('userId', userId);
@@ -103,21 +103,19 @@ export class CourrierService {
 
   createTableauDeBord(
     titre: string, 
-    base64pdf: string, 
+    contenue: File, 
     type: string, 
     typeDeContenue: string, 
     userId: string
   ): Observable<Courrier> {
     const formData = new FormData();
     formData.append('titre', titre);
-    formData.append('contenue', base64pdf);
+    formData.append('contenue', contenue);
     formData.append('type', type);
     formData.append('typeDeContenue', typeDeContenue);
     formData.append('userId', userId);
 
     return this.http.post<Courrier>(`${this.apiUrl}/acces-reserves/insertion/personalise`, formData);
   }
-
-
 }
 

@@ -4,11 +4,12 @@ import { TableauDeBord } from '../../../models/courriers/accesReserve.model';
 import { MimeService } from '../../../services/mime.service';
 import { CommonModule } from '@angular/common';
 import { DatePipe } from '@angular/common';
+import { ReplaceUnderscorePipe } from '../../../shared/pipe/replace-underscore.pipe';
 
 @Component({
   selector: 'app-liste-tableau-de-bord-eb',
   standalone: true,
-  imports: [CommonModule, DatePipe],
+  imports: [CommonModule, DatePipe, ReplaceUnderscorePipe],
   templateUrl: './liste-tableau-de-bord-eb.component.html',
   styleUrl: './liste-tableau-de-bord-eb.component.css'
 })
@@ -41,7 +42,7 @@ export class ListeTableauDeBordEBComponent {
   filterTableauDeBords(): void {
     this.filteredTableauDeBords = this.tableauDeBords.filter(tableauDeBord => {
       // Check tableauDeBord type first
-      const typeMatches = this.selectedType === '' || tableauDeBord.type.toString() === this.selectedType;
+      const typeMatches = this.selectedType === '' || tableauDeBord.accesReserveType.toString() === this.selectedType;
   
       let searchMatches = true;
       if (this.searchType === 'title') {
@@ -130,6 +131,19 @@ export class ListeTableauDeBordEBComponent {
     link.href = window.URL.createObjectURL(blob);
     link.download = fileName;
     link.click();
+  }
+
+  previewTableauDeBord(tableauDeBord: TableauDeBord): void {
+    const fileType = tableauDeBord.typeContenue;
+    const byteCharacters = atob(tableauDeBord.contenue);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    const blob = new Blob([byteArray], { type: fileType });
+    const fileURL = URL.createObjectURL(blob);
+    window.open(fileURL);
   }
 
 }

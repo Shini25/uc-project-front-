@@ -15,7 +15,7 @@ export class OrganizationalChartService {
         return this.http.get<OrganizationalChart[]>(this.apiUrl);
     }
 
-    createOrganizationalChart(type: string, contenue: string, addby: string, filetype: string): Observable<OrganizationalChart> {
+    createOrganizationalChart(type: string, contenue: File, addby: string, filetype: string): Observable<OrganizationalChart> {
         const formData = new FormData();
         formData.append('type', type);
         formData.append('contenue', contenue);
@@ -24,8 +24,12 @@ export class OrganizationalChartService {
         return this.http.post<OrganizationalChart>(`${this.apiUrl}/add`, formData);
     }
 
-    updateOrganizationalChart(id: number, organizationalChart: OrganizationalChart): Observable<OrganizationalChart> {
-        return this.http.put<OrganizationalChart>(`${this.apiUrl}/${id}`, organizationalChart);
+    updateOrganizationalChart(id: number, content: File, fileType: string, modifyby: string): Observable<OrganizationalChart> {
+        const formData = new FormData();
+        formData.append('contenue', content);
+        formData.append('fileType', fileType);
+        formData.append('modifyby', modifyby);
+        return this.http.put<OrganizationalChart>(`${this.apiUrl}/${id}`, formData);
     }
 
     deleteOrganizationalChart(id: number): Observable<void> {

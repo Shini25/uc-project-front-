@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, HostListener, Renderer2 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Livret } from '../../../models/courriers/livret.model';
 import { LivretAudit } from '../../../models/courriers/livretAudit.model';
@@ -10,11 +10,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlowbiteService } from '../../../services/flowbite.service';
 import { UserService } from '../../../services/user.service';
 import { LivretAuditService } from '../../../services/courrier/livretAudit.service'; 
+import { ReplaceUnderscorePipe } from '../../../shared/pipe/replace-underscore.pipe';
 
 @Component({
   selector: 'app-liste-livret',
   standalone: true,
-  imports: [CommonModule, DatePipe, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, DatePipe, FormsModule, ReactiveFormsModule, ReplaceUnderscorePipe],
   templateUrl: './liste-livret.component.html',
   styleUrls: ['./liste-livret.component.css']
 })
@@ -33,21 +34,28 @@ export class ListeLivretComponent implements OnInit, AfterViewInit {
   totalPages: number = 1;
   updateForm: FormGroup;
   isUpdateFormVisible: boolean = false;
-  selectedFile!: File;
-  selectedFileName!: string;
-  fileType!: string;
+  selectedFile!: File | null;
+  selectedFileName!: string | null;
+  fileType!: string | null;
   userNumero!: string; 
   user: any;
   finaluser: any;
   expandedRowIndex: number | null = null;
 
+  maxFileSize: number = 100 * 1024 * 1024; 
+  isLoading: boolean = false;
+  successMessage: string = '';
+  errorMessage: string = '';
+  isZoomed: boolean = false;
+  
   constructor(
     private livretService: LivretService, 
     private mimeService: MimeService, 
     private flowbiteService: FlowbiteService,
     private fb: FormBuilder,
     private userService: UserService, 
-    private livretAuditService: LivretAuditService 
+    private livretAuditService: LivretAuditService,
+    private renderer2: Renderer2
   ) {
     this.updateForm = this.fb.group({
       idCourrier: ['', Validators.required],
@@ -67,6 +75,27 @@ export class ListeLivretComponent implements OnInit, AfterViewInit {
     });
   }
 
+
+      @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const modalElement = document.querySelector('.form-content') as HTMLElement;
+    if (this.isUpdateFormVisible && modalElement && !modalElement.contains(event.target as Node)) {
+      this.zoomModal(modalElement, 'update');
+    }
+  
+  }
+
+
+  zoomModal(element: HTMLElement, modalType: string): void {
+    this.isZoomed = true;
+  
+    setTimeout(() => {
+      this.isZoomed = false;
+    }, 100); 
+  }
+  
+
+  
   getUserNumero(): void {
     this.userService.getUserInfo().subscribe(
       data => {
@@ -225,31 +254,63 @@ export class ListeLivretComponent implements OnInit, AfterViewInit {
   onFileChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length) {
-      this.selectedFile = input.files[0];
-      this.selectedFileName = this.selectedFile.name;
-      this.fileType = this.selectedFile.type;
+      const file = input.files[0];
+
+      // Validate file size
+      if (file.size > this.maxFileSize) {
+        console.error('File size exceeds limit');
+        this.errorMessage = 'File size exceeds the 10 MB limit.';
+        this.selectedFile = null;
+        this.selectedFileName = null;
+        this.fileType = null;
+        return;
+      }
+
+      this.selectedFile = file;
+      this.selectedFileName = file.name;
+      this.fileType = file.type;
+      this.errorMessage = ''; 
     }
-  }
+  } 
 
   updateLivret(): void { 
     if (this.updateForm.valid && this.selectedFile) {
+      this.closeUpdateForm();
+      this.isLoading = true;
       const { idCourrier } = this.updateForm.value;
-      const reader = new FileReader();
-      reader.onload = () => {
-        const base64File = reader.result as string;
+      const formData = new FormData();
+      formData.append('contenue', this.selectedFile);
+      formData.append('fileType', this.selectedFile.type);
+      formData.append('modifyby', this.userNumero);
 
-        console.log(idCourrier);
-        console.log(base64File);
-        this.livretService.updateLivret(idCourrier, base64File, this.userNumero).subscribe( // Pass userNumero as modifyby
-          () => {
-            this.getAllLivrets();
+      this.livretService.updateLivret(idCourrier, this.selectedFile, this.selectedFile.type, this.userNumero).subscribe(
+        response => {
+          console.log('Livret modifié avec succès', response);
+          setTimeout(() => {
+            this.isLoading = false;  
+            this.successMessage = 'Pta modifié avec succès!'; 
+            this.updateForm.reset(); 
+            this.selectedFile = null;
+            this.selectedFileName =''; 
+            this.fileType = null; 
             this.closeUpdateForm();
-          }
-        );
-      };
-      reader.readAsDataURL(this.selectedFile);
+            setTimeout(() => {
+              this.successMessage = ''; 
+            }, 3000);
+          }, 2000);  
+        }, error => {
+          console.error('Erreur lors de la mise à jour du Livret:', error);
+          this.isLoading = false; 
+          this.errorMessage = 'Une erreur est survenue pendant la mise à jour du Livret. Veuillez essayer de nouveau.';  
+          setTimeout(() => {
+            this.errorMessage = '';  
+          }, 3000);        
+        }
+      );
+    } else {
+      console.error('Formulaire invalide ou fichier manquant');
     }
-  }
+  } 
 
   toggleRow(index: number, livret: Livret) {
     if (this.expandedRowIndex === index) {

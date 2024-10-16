@@ -11,31 +11,27 @@ export class InfoBaseChefService {
 
   constructor(private http: HttpClient) {}
 
-
-  createChefs(chef: Chefs, base64Photo: string, attributions: string[], motsDuChef: string[]): Observable<Chefs> {
+  createChefs(chef: Chefs, photo: File, attributions: string[], motsDuChef: string[]): Observable<Chefs> {
     const formData = new FormData();
 
     const chefBlob = new Blob([JSON.stringify(chef)], { type: 'application/json' });
     formData.append('chef', chefBlob);
-
-    formData.append('photo', base64Photo);
-
+    formData.append('photo', photo);
     const attributionsBlob = new Blob([JSON.stringify(attributions)], { type: 'application/json' });
     formData.append('attributions', attributionsBlob);
-
     const motsDuChefBlob = new Blob([JSON.stringify(motsDuChef)], { type: 'application/json' });
     formData.append('motsDuChef', motsDuChefBlob);
 
     return this.http.post<Chefs>(`${this.apiUrl}/create`, formData);
   }
 
-  updateChefs(ancienContact: string, chef: Chefs, base64Photo: string, attributions: string[], motsDuChef: string[]): Observable<Chefs> {
+  updateChefs(ancienContact: string, chef: Chefs, photo: File, attributions: string[], motsDuChef: string[]): Observable<Chefs> {
     const formData = new FormData();
 
     const chefBlob = new Blob([JSON.stringify(chef)], { type: 'application/json' });
     formData.append('chef', chefBlob);
 
-    formData.append('photo', base64Photo);
+    formData.append('photo', photo);
 
     const attributionsBlob = new Blob([JSON.stringify(attributions)], { type: 'application/json' });
     formData.append('attributions', attributionsBlob);

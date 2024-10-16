@@ -1,4 +1,4 @@
-import { Component, OnInit, LOCALE_ID } from '@angular/core';
+import { Component, OnInit, LOCALE_ID, HostListener, Renderer2 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
@@ -17,7 +17,10 @@ import { LogisticsService } from '../../services/meeting/logistics.service';
 import { SendMailService } from '../../services/sendMail.service';
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, forkJoin, of } from 'rxjs';
+import { ParticipantOrganizerDTO } from '../../models/participantOrganizerDTO.model';
+import { UserService } from '../../services/user.service';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 
 registerLocaleData(localeFr);
 
@@ -30,6 +33,7 @@ registerLocaleData(localeFr);
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }]
 })
 export class ListeReunionComponent implements OnInit {
+
   meetings: InfoMeetingBase[] = [];
   filteredMeetings: InfoMeetingBase[] = [];
   paginatedMeetings: InfoMeetingBase[] = [];
@@ -41,20 +45,27 @@ export class ListeReunionComponent implements OnInit {
   updateForm: FormGroup;
   selectedFile: File | null = null;
   selectedFileName: string | null = null;
-  fileType!: string;
+  fileType!: string | null;
   isModalVisible: boolean = false;
   isLoading: boolean = false;
   successMessage: string = '';
   expandedRowIndex: number | null = null;
   logistique: string[] = [];
   observation: string[] = [];
-  responsables: string[] = [];
-  participants: string[] = [];
+  responsables: ParticipantOrganizerDTO[] = [];
+  participants: ParticipantOrganizerDTO[] = [];
   currentPage: number = 1;
   rowsPerPage: number = 10;
   totalPages: number = 1;
   isSendMailVisible: boolean = true; 
   isLoadingSpinner: boolean = false; 
+  errorMessage: string | null = null;
+  allowedFileTypes: string[] = ['application/pdf', 'image/jpeg', 'image/png'];
+  maxFileSize: number = 100 * 1024 * 1024; 
+  isZoomed: boolean = false;
+  user: any;
+  invalidEmails: string[] = [];
+
 
   constructor(
     private meetingService: MeetingService, 
@@ -66,7 +77,10 @@ export class ListeReunionComponent implements OnInit {
     private meetingParticipantsService: MeetingParticipantsService,
     private meetingObservationsService: MeetingObservationsService,
     private logistiqueService: LogisticsService,
-    private sendMailService: SendMailService
+    private sendMailService: SendMailService,
+    private renderer2: Renderer2,
+    private userService: UserService
+    
   ) {
     const userId = this.userSessionService.getNumero();
     this.updateForm = this.fb.group({
@@ -77,7 +91,29 @@ export class ListeReunionComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchMeetings();
+
+    this.userService.getUserInfo().subscribe(user => {
+      this.user = user;
+      console.log('User retrieved:', this.user.username);
+    });
   }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const modalElement = document.querySelector('.form-content') as HTMLElement;
+    if (this.isModalVisible && modalElement && !modalElement.contains(event.target as Node)) {
+      this.zoomModal(modalElement, 'update');
+    }
+  }
+
+  zoomModal(element: HTMLElement, modalType: string): void {
+    this.isZoomed = true;
+  
+    setTimeout(() => {
+      this.isZoomed = false;
+    }, 100); 
+  }
+
 
   fetchMeetings(): void {
     this.meetingService.getAllMeetings().subscribe((data: InfoMeetingBase[]) => {
@@ -101,38 +137,65 @@ export class ListeReunionComponent implements OnInit {
   onFileChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length) {
-      this.selectedFile = input.files[0];
-      this.selectedFileName = this.selectedFile.name;
-      this.fileType = this.selectedFile.type;
+      const file = input.files[0];
+
+      // Validate file size
+      if (file.size > this.maxFileSize) {
+        console.error('File size exceeds limit');
+        this.errorMessage = 'File size exceeds the 10 MB limit.';
+        this.selectedFile = null;
+        this.selectedFileName = null;
+        this.fileType = null;
+        return;
+      }
+
+      this.selectedFile = file;
+      this.selectedFileName = file.name;
+      this.fileType = file.type;
+      this.errorMessage = null; 
     }
   }
 
+
   addAttendanceSheet(): void {
     if (this.updateForm.valid && this.selectedFile) {
-      this.isLoading = true;  // Afficher le spinner
+      this.isLoading = true;  
       const { meetingId, modifyby } = this.updateForm.value;
-      const reader = new FileReader();
-      reader.onload = () => {
-        const base64File = reader.result as string;
-        this.meetingService.addAttendanceSheet(meetingId, base64File, this.fileType, modifyby).subscribe(() => {
+      const formData = new FormData();
+      formData.append('attendanceSheet', this.selectedFile);
+      formData.append('fileType', this.fileType!);
+      formData.append('modifyby', modifyby);
+
+      this.meetingService.addAttendanceSheet(meetingId, this.selectedFile, this.fileType!, this.user.username).subscribe( 
+        response => {
+
+          console.log('Fiche de présence ajoutée avec succès', response);
+          setTimeout(() => {
+          this.successMessage = 'Fiche de présence ajoutée avec succès'; 
+          this.updateForm.reset(); 
+          this.isLoading = false;  
           this.fetchMeetings();
           this.selectedFile = null;
           this.selectedFileName = null;
           this.updateForm.reset();
-
+          this.isModalVisible = false;  
           setTimeout(() => {
-            this.isLoading = false;  // Masquer le spinner
-            this.isModalVisible = false;  // Fermer le modal
-            this.successMessage = 'Fiche de présence ajoutée avec succès !';  // Afficher le message
-            setTimeout(() => {
-              this.successMessage = '';  // Masquer le message après 3s
-            }, 2000);  // Délai de 3s pour masquer le message
-          }, 1500);  // Délai de 1s pour simuler le chargement
-        });
-      };
-      reader.readAsDataURL(this.selectedFile);
-    }
+            this.successMessage = ''; 
+          }, 3000);
+        }, 2000);  
+        }, error => {
+          console.error('Erreur lors de l\'ajout de la fiche de présence:', error);
+        this.isLoading = false; 
+        this.errorMessage = 'Une erreur est survenue lors de l\'ajout de la fiche de présence. Veuillez essayer de nouveau.';  
+        setTimeout(() => {
+          this.errorMessage = '';  
+        }, 3000);        
+      }
+    );
+  } else {
+    console.error('Formulaire invalide ou fichier manquant');
   }
+} 
 
   openModal(meetingId: number): void {
     this.updateForm.patchValue({ meetingId });
@@ -186,58 +249,26 @@ export class ListeReunionComponent implements OnInit {
   }
 
   fetchResponsables(meetingId: number): void {
-    this.meetingOrganizersService.getOrganizersByMeeting(meetingId).subscribe((data: string[]) => {
+      this.meetingOrganizersService.getOrganizersByMeeting(meetingId).subscribe((data: ParticipantOrganizerDTO[]) => {
       this.responsables = data;
+      console.log('Responsables:', this.responsables);
     });
   }
   
   fetchParticipants(meetingId: number): void {
-    this.meetingParticipantsService.getParticipantsByMeeting(meetingId).subscribe((data: string[]) => {
+    this.meetingParticipantsService.getParticipantsByMeeting(meetingId).subscribe((data: ParticipantOrganizerDTO[]) => {
       this.participants = data;
+      console.log('Participants andramana:', this.participants);
     });
   }
 
-  getResponsables(meetingId: number): Observable<string[]> {
+  getResponsables(meetingId: number): Observable<ParticipantOrganizerDTO[]> {
     return this.meetingOrganizersService.getOrganizersByMeeting(meetingId);
   }
 
-  getParticipants(meetingId: number): Observable<string[]> {
+  getParticipants(meetingId: number): Observable<ParticipantOrganizerDTO[]> {
     return this.meetingParticipantsService.getParticipantsByMeeting(meetingId);
   }
-
-  
-  sendReminderEmail(meeting: any): Observable<void> {
-    const objet = meeting.objet;
-    const date = meeting.meetingDate;
-    const lieu = meeting.location;
-
-    // Send email to participants
-    this.getParticipants(meeting.id).subscribe((participants: string[]) => {
-      participants.forEach((participant: string) => {
-        this.sendMailService.sendReminderEmail(participant, objet, date, lieu).subscribe({
-          next: () => console.log(`Email sent to participant: ${participant}`),
-          error: (err) => console.error(`Error sending email to participant: ${participant}`, err)
-        });
-      });
-    });
-
-    // Send email to responsible persons
-    this.getResponsables(meeting.id).subscribe((responsables: string[]) => {
-      responsables.forEach((responsable: string) => {
-        this.sendMailService.sendReminderEmail(responsable, objet, date, lieu).subscribe({
-          next: () => console.log(`Email sent to responsable: ${responsable}`),
-          error: (err) => console.error(`Error sending email to responsable: ${responsable}`, err)
-        });
-      });
-    });
-
-    console.log('Reminder emails sent for meeting:', meeting.objet);
-    return new Observable<void>(subscriber => {
-      subscriber.next();
-      subscriber.complete();
-    });
-  }
-  
 
 
 
@@ -337,43 +368,131 @@ export class ListeReunionComponent implements OnInit {
     return date >= startOfWeek && date <= endOfWeek;
   }
 
-  sendGlobalReminderEmails(): void {
+  sendReminderEmail(meeting: any): Observable<void> {
+    const { objet, meetingDate: date, location: lieu, id: meetingId } = meeting;
+    const addby = this.user.username;
+
+    if (!navigator.onLine) {
+        console.error('No internet connection. Emails cannot be sent.');
+        return throwError(() => new Error('No internet connection.'));
+    }
+
+    return forkJoin({
+        participants: this.getParticipants(meetingId),
+        responsables: this.getResponsables(meetingId)
+    }).pipe(
+        switchMap(({ participants, responsables }) => {
+            const emailObservables: Observable<string>[] = [];
+
+            participants.forEach((participant: ParticipantOrganizerDTO) => {
+                emailObservables.push(
+                    this.sendMailService.sendReminderEmail(
+                        participant.email,
+                        objet,
+                        date,
+                        lieu,
+                        addby,
+                        meetingId
+                    ).pipe(
+                        tap(() => console.log(`Email sent to participant: ${participant.email}`)),
+                        catchError(err => {
+                            console.error(`Error sending email to participant: ${participant.email}`, err);
+                            // Return a value to continue the forkJoin
+                            return of(`Failed to send email to participant: ${participant.email}`);
+                        })
+                    )
+                );
+            });
+
+            responsables.forEach((responsable: ParticipantOrganizerDTO) => {
+                emailObservables.push(
+                    this.sendMailService.sendReminderEmail(
+                        responsable.email,
+                        objet,
+                        date,
+                        lieu,
+                        addby,
+                        meetingId
+                    ).pipe(
+                        tap(() => console.log(`Email sent to responsable: ${responsable.email}`)),
+                        catchError(err => {
+                            console.error(`Error sending email to responsable: ${responsable.email}`, err);
+                            // Return a value to continue the forkJoin
+                            return of(`Failed to send email to responsable: ${responsable.email}`);
+                        })
+                    )
+                );
+            });
+
+            return forkJoin(emailObservables).pipe(
+                tap(() => console.log('All reminder emails processed for meeting:', objet)),
+                map(() => void 0)
+            );
+        }),
+        catchError(err => {
+            console.error('Error in sendReminderEmail:', err);
+            return throwError(() => err);
+        })
+    );
+}
+sendGlobalReminderEmails(): void {
     this.isLoadingSpinner = true;
     let completedRequests = 0;
     const totalRequests = this.paginatedMeetings.length;
     let hasError = false;
-  
+    const allInvalidEmails: string[] = [];  // Stocker tous les emails invalides
+
+    if (!navigator.onLine) {
+        this.hideSpinnerWithErrorMessage('Vérifiez votre connexion internet.', null);
+        return;
+    }
+
+    if (totalRequests === 0) {
+        this.hideSpinnerWithSuccessMessage('Aucune réunion à traiter.');
+        return;
+    }
+
     this.paginatedMeetings.forEach(meeting => {
-      this.sendReminderEmail(meeting).subscribe({
-        next: () => {
-          completedRequests++;
-          if (completedRequests === totalRequests) {
-            setTimeout(() => {
-              this.isLoadingSpinner = false; // Hide spinner after a delay
-              this.successMessage = 'Mails envoyés avec succès!';
-              setTimeout(() => {
-                this.successMessage = '';  // Clear the message after 3 seconds
-              }, 3000);
-            }, 2000); // Delay of 2 seconds
-          }
-        },
-        error: () => {
-          hasError = true;
-          completedRequests++;
-          if (completedRequests === totalRequests) {
-            setTimeout(() => {
-              this.isLoadingSpinner = false; // Hide spinner after a delay
-              this.successMessage = 'Certains e-mails n\'ont pas pu être envoyés.';
-              setTimeout(() => {
-                this.successMessage = '';  // Clear the message after 3 seconds
-              }, 3000);
-            }, 2000); // Delay of 2 seconds
-          }
-        }
-      });
+        this.sendReminderEmail(meeting).subscribe({
+            next: () => {
+                completedRequests++;
+                if (completedRequests === totalRequests && !hasError) {
+                    if (allInvalidEmails.length > 0) {
+                        this.hideSpinnerWithErrorMessage('Certains e-mails n\'ont pas pu être envoyés.', null);
+                        console.log('Invalid emails:', allInvalidEmails);  // Afficher les e-mails invalides
+                    } else {
+                        this.hideSpinnerWithSuccessMessage('Tous les mails ont été envoyés avec succès!');
+                    }
+                }
+            },
+            error: (error) => {
+                hasError = true;
+                completedRequests++;
+                if (completedRequests === totalRequests) {
+                    this.hideSpinnerWithErrorMessage('Certains e-mails n\'ont pas pu être envoyés.', error);
+                }
+            }
+        });
     });
-  }
-  
+}
+
+hideSpinnerWithSuccessMessage(message: string): void {
+    setTimeout(() => {
+        this.isLoadingSpinner = false;
+        this.successMessage = message;
+        setTimeout(() => this.successMessage = '', 3000);
+    }, 2000);
+}
+
+hideSpinnerWithErrorMessage(message: string, error: any): void {
+    setTimeout(() => {
+        this.isLoadingSpinner = false;
+        this.errorMessage = message;  // Afficher l'erreur dans `errorMessage`
+        console.error('Error:', error);
+        setTimeout(() => this.errorMessage = '', 3000);
+    }, 2000);
+}
+    
   toggleSendMailVisibility(): void {
     this.isSendMailVisible = !this.isSendMailVisible;
   }

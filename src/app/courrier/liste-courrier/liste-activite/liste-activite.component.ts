@@ -8,11 +8,12 @@ import { DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlowbiteService } from '../../../services/flowbite.service';
 import { UserService } from '../../../services/user.service';
+import { ReplaceUnderscorePipe } from '../../../shared/pipe/replace-underscore.pipe';
 
 @Component({
   selector: 'app-liste-activite',
   standalone: true,
-  imports: [CommonModule, DatePipe, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, DatePipe, FormsModule, ReactiveFormsModule, ReplaceUnderscorePipe],
   templateUrl: './liste-activite.component.html',
   styleUrls: ['./liste-activite.component.css']
 })
@@ -21,7 +22,7 @@ export class ListeActiviteComponent implements OnInit, AfterViewInit {
   filteredActivites: Activite[] = [];
   paginatedActivites: Activite[] = [];
   selectedType: string = '';
-  activiteTypes: string[] = ['REFORMES', 'HEBDOMADAIRE', 'MENSUEL', 'TRIMESTRIEL', 'SEMESTRIEL', 'ANNUEL', 'GRANDES_REALISATIONS'];
+  activiteTypes: string[] = ['REFORMES', 'HEBDOMADAIRE', 'MENSUEL', 'TRIMESTRIEL', 'SEMESTRIEL', 'ANNUITE', 'GRANDES_REALISATIONS'];
   searchQuery: string = '';
   searchDate: string = '';
   searchType: string = 'title';
@@ -37,8 +38,13 @@ export class ListeActiviteComponent implements OnInit, AfterViewInit {
   user: any;
   finaluser: any;
   expandedRowIndex: number | null = null;
-
   selectedDateFilter: string = '';
+  filteredActivitesCount: number = 0;
+  countToday: number = 0;
+  countWeek: number = 0;
+  countMonth: number = 0;
+  count3Months: number = 0;
+  count6Months: number = 0;
 
   constructor(
     private activiteService: ActiviteService, 
@@ -82,8 +88,24 @@ export class ListeActiviteComponent implements OnInit, AfterViewInit {
   getAllActivites(): void {
     this.activiteService.getAllActivites().subscribe((data: Activite[]) => {
       this.activites = data;
+      this.updateCounts();
       this.filterActivites();
     });
+  }
+
+  updateCounts(): void {
+    const now = new Date();
+    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const startOf3Months = new Date(now.getFullYear(), now.getMonth() - 3, 1);
+    const startOf6Months = new Date(now.getFullYear(), now.getMonth() - 6, 1);
+
+    this.countToday = this.activites.filter(activite => new Date(activite.dateModification || activite.dateInsertion) >= startOfToday).length;
+    this.countWeek = this.activites.filter(activite => new Date(activite.dateModification || activite.dateInsertion) >= startOfWeek).length;
+    this.countMonth = this.activites.filter(activite => new Date(activite.dateModification || activite.dateInsertion) >= startOfMonth).length;
+    this.count3Months = this.activites.filter(activite => new Date(activite.dateModification || activite.dateInsertion) >= startOf3Months).length;
+    this.count6Months = this.activites.filter(activite => new Date(activite.dateModification || activite.dateInsertion) >= startOf6Months).length;
   }
 
   filterActivites(): void {
@@ -98,6 +120,7 @@ export class ListeActiviteComponent implements OnInit, AfterViewInit {
       }
       return typeMatches && searchMatches;
     });
+    this.filteredActivitesCount = this.filteredActivites.length; // Update the count
     this.updatePagination();
   }
 
@@ -211,8 +234,7 @@ export class ListeActiviteComponent implements OnInit, AfterViewInit {
   }
 
   onDateFilterChange(event: Event): void {
-    const selectElement = event.target as HTMLSelectElement;
-    this.selectedDateFilter = selectElement.value;
+    this.selectedDateFilter = (event.target as HTMLSelectElement).value;
     this.filterActivitesByDate();
   }
 
@@ -245,6 +267,7 @@ export class ListeActiviteComponent implements OnInit, AfterViewInit {
       return activiteDate >= startDate;
     });
 
+    this.filteredActivitesCount = this.filteredActivites.length; // Update the count
     this.updatePagination();
   }
 }

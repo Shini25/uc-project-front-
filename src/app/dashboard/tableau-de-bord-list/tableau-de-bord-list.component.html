@@ -48,7 +48,7 @@
                 <div class="w-full  flex justify-end">
                     <select id="tableauDeBordTypeSelect" (change)="onTypeChange($event)" 
                             class="block w-1/2 pl-3 pr-10 text-base text-gray-800 bg-gray-50 border-gray-600 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
-                    <option *ngFor="let type of tableauDeBordTypes" [value]="type">{{ type }}</option>
+                    <option *ngFor="let type of tableauDeBordTypes" [value]="type">{{ type | replaceUnderscore }}</option>
                     </select>
                 </div>    
             </div>
@@ -71,7 +71,7 @@
           <tr *ngFor="let tableauDeBord of paginatedTableauDeBords" class="bg-white text-gray-800 border-b border-gray-700">
             <td class="px-6 py-4">{{ tableauDeBord.titre }}</td>
             <td class="px-6 py-4">{{ tableauDeBord.dateInsertion | date:'medium' }}</td>
-            <td class="px-6 py-4">{{ tableauDeBord.type }}</td>
+            <td class="px-6 py-4">{{ tableauDeBord.accesReserveType.toString() | replaceUnderscore }}</td>
             <td class="px-6 py-4">{{ tableauDeBord.user_account.numero }}</td>
             <td class="px-6 py-4">
               <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" (click)="downloadTableauDeBord(tableauDeBord)">

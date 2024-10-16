@@ -4,11 +4,11 @@ import { TableauDeBord } from '../../models/courriers/accesReserve.model';
 import { MimeService } from '../../services/mime.service';
 import { CommonModule } from '@angular/common';
 import { DatePipe } from '@angular/common';
-
+import { ReplaceUnderscorePipe } from '../../shared/pipe/replace-underscore.pipe';
 @Component({
   selector: 'app-tableau-de-bord-list',
   standalone: true,
-  imports: [CommonModule, DatePipe],
+  imports: [CommonModule, DatePipe, ReplaceUnderscorePipe],
   templateUrl: './tableau-de-bord-list.component.html',
   styleUrl: './tableau-de-bord-list.component.css'
 })
@@ -42,7 +42,7 @@ export class TableauDeBordListComponent {
   filterTableauDeBords(): void {
     this.filteredTableauDeBords = this.tableauDeBords.filter(tableauDeBord => {
       // Check tableauDeBord type first
-      const typeMatches = this.selectedType === '' || tableauDeBord.type.toString() === this.selectedType;
+      const typeMatches = this.selectedType === '' || tableauDeBord.accesReserveType.toString() === this.selectedType;
   
       let searchMatches = true;
       if (this.searchType === 'title') {

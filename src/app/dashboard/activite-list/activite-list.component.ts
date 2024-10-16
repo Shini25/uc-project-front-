@@ -8,11 +8,11 @@ import { DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlowbiteService } from './../../services/flowbite.service';
 import { UserService } from './../../services/user.service';
-
+import { ReplaceUnderscorePipe } from '../../shared/pipe/replace-underscore.pipe';
 @Component({
   selector: 'app-activite-list',
   standalone: true,
-  imports: [CommonModule, DatePipe, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, DatePipe, FormsModule, ReactiveFormsModule, ReplaceUnderscorePipe],
   templateUrl: './activite-list.component.html',
   styleUrl: './activite-list.component.css'
 })
@@ -238,8 +238,8 @@ export class ActiviteListComponent implements OnInit, AfterViewInit {
     }
   }
 
-  onDateFilterChange(selectedDateFilter: string): void {
-    this.selectedDateFilter = selectedDateFilter;
+  onDateFilterChange(event: Event): void {
+    this.selectedDateFilter = (event.target as HTMLSelectElement).value;
     this.filterActivitesByDate();
   }
 

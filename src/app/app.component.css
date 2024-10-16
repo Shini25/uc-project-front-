@@ -1,9 +1,24 @@
-.no-scrollbar::-webkit-scrollbar {
-    display: none; /* Masque la barre de défilement dans les navigateurs Webkit */
-  }
-
 
 a {
     text-decoration:none
+}
+
+.sidebar {
+    background-color: #ffffff;
+    overflow: hidden; /* Cache la barre de défilement par défaut */
+}
+
+.sidebar:hover {
+    overflow-y: auto; /* Affiche la barre de défilement au survol */
+}
+
+.sidebar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background-color: #F1F1F1;
+    border-radius: 2px;
+    cursor: pointer;
 }
 

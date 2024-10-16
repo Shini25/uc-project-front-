@@ -29,11 +29,16 @@ export class ArchivageCourrierComponent {
   @Output() courrierArchived = new EventEmitter<void>();
 
   courrierForm: FormGroup;
-  selectedFile: File | null = null;
+  selectedFile: File |  null = null;
   selectedFileName: string | null = null;
   fileType: string | null = null;
   selectedDocumentType: string = 'LIVRET'; 
   selectedSousType: string | null = null;
+
+  errorMessage: string | null = null;
+
+  allowedFileTypes: string[] = ['application/pdf', 'image/jpeg', 'image/png'];
+  maxFileSize: number = 100 * 1024 * 1024; // 100 MB
 
   constructor(
     private fb: FormBuilder,
@@ -59,9 +64,23 @@ export class ArchivageCourrierComponent {
   onFileChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length) {
-      this.selectedFile = input.files[0];
-      this.selectedFileName = this.selectedFile.name;
-      this.fileType = this.selectedFile.type;
+      const file = input.files[0];
+
+      // Remove file type validation
+      // Validate file size
+      if (file.size > this.maxFileSize) {
+        console.error('File size exceeds limit');
+        this.errorMessage = 'File size exceeds the 10 MB limit.';
+        this.selectedFile = null;
+        this.selectedFileName = null;
+        this.fileType = null;
+        return;
+      }
+
+      this.selectedFile = file;
+      this.selectedFileName = file.name;
+      this.fileType = file.type;
+      this.errorMessage = null; // Clear previous error messages
     }
   }
 
@@ -75,61 +94,54 @@ export class ArchivageCourrierComponent {
   onSubmit(): void {
     if (this.courrierForm.valid && this.selectedFile) {
       const { titre, type, userId, sousType } = this.courrierForm.value;
-      
-      const reader = new FileReader();
-      reader.onload = () => {
-        const base64File = reader.result as string;
-
-        console.log(this.selectedDocumentType);
-        console.log(titre);
-        console.log(base64File);
-        console.log(type);
-        console.log(this.fileType);
-        console.log(userId);
-        console.log(sousType);
-
-        // Submit logic based on the selected document type
-        switch (this.selectedDocumentType) {
-          case 'LIVRET':
-            this.courrierService.creationLivret(titre, base64File, type, this.fileType!, userId).subscribe(response => {
-              this.handleSuccess(response);
-            });
-            break;
-          case 'PTA':
-            this.courrierService.creationPta(titre, base64File, type, sousType, this.fileType!, userId).subscribe(response => {
-              this.handleSuccess(response);
-            });
-            break;
-          case 'ACTIVITE':
-            this.courrierService.createActivite(titre, base64File, type, this.fileType!, userId).subscribe(response => {
-              this.handleSuccess(response);
-            });
-            break;
-          case 'TEXTE':
-            this.courrierService.createTexte(titre, base64File, type, this.fileType!, userId).subscribe(response => {
-              this.handleSuccess(response);
-            });
-            break;
-          case 'AUTRE_DOCUMENT':
-            this.courrierService.createAutreDocument(titre, base64File, type, this.fileType!, userId).subscribe(response => {
-              this.handleSuccess(response);
-            });
-            break;
-          case 'TABLEAU_DE_BORD':
-            this.courrierService.createTableauDeBord(titre, base64File, type, this.fileType!, userId).subscribe(response => {
-              this.handleSuccess(response);
-            });
-            break;
-          default:
-            console.error('Type de document inconnu');
-        }
-      };
-
-      reader.readAsDataURL(this.selectedFile);
+  
+      const formData = new FormData();
+      formData.append('titre', titre);
+      formData.append('contenue', this.selectedFile);
+      formData.append('type', type);
+      formData.append('typeDeContenue', this.fileType!);
+      formData.append('userId', userId);
+      formData.append('sousType', sousType);
+  
+      switch (this.selectedDocumentType) {
+        case 'LIVRET':
+          this.courrierService.creationLivret(titre, this.selectedFile, type, this.fileType!, userId).subscribe(response => {
+            this.handleSuccess(response);
+          });
+          break;
+        case 'PTA':
+          this.courrierService.creationPta(titre, this.selectedFile, type, sousType, this.fileType!, userId).subscribe(response => {
+            this.handleSuccess(response);
+          });
+          break;
+        case 'ACTIVITE':
+          this.courrierService.createActivite(titre, this.selectedFile, type, this.fileType!, userId).subscribe(response => {
+            this.handleSuccess(response);
+          });
+          break;
+        case 'TEXTE':
+          this.courrierService.createTexte(titre, this.selectedFile, type, this.fileType!, userId).subscribe(response => {
+            this.handleSuccess(response);
+          });
+          break;
+        case 'AUTRE_DOCUMENT':
+          this.courrierService.createAutreDocument(titre, this.selectedFile, type, this.fileType!, userId).subscribe(response => {
+            this.handleSuccess(response);
+          });
+          break;
+        case 'TABLEAU_DE_BORD':
+          this.courrierService.createTableauDeBord(titre, this.selectedFile, type, this.fileType!, userId).subscribe(response => {
+            this.handleSuccess(response);
+          });
+          break;
+        default:
+          console.error('Type de document inconnu');
+      }
     } else {
       console.error('Formulaire invalide ou fichier manquant');
     }
   }
+  
 
   handleSuccess(response: any): void {
     console.log('Document créé avec succès', response);

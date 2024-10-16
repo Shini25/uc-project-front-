@@ -57,19 +57,16 @@ export class UserService {
     });
   }
 
-  // Requête pour récupérer les informations utilisateur avec token JWT
   getUserInfo(): Observable<User_account> {
-    const token = this.authService.getToken(); // Récupération du token JWT
-    console.log('Token ito ilay  token:', token);
+    const token = this.authService.getToken();
     if (!token) {
-      console.error('No token found');
       throw new Error('No token found');
     }
 
     // Ajout du token à l'entête de la requête
     return this.http.get<User_account>(`${this.apiUrl}/user-info`, {
       headers: {
-        Authorization: `Bearer ${token}`  // Ajout du token dans l'en-tête
+        Authorization: `Bearer ${token}` 
       }
     });
   }

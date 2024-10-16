@@ -22,11 +22,12 @@ export class LivretService {
   }
 
   // Mettre à jour un livret
-  updateLivret(id: number, contenue: string, modifyby: string): Observable<void> {
+  updateLivret(id: number, contenue: File, fileType: string, modifyby: string): Observable<void> {
 
     const formData = new FormData();
     formData.append('contenue', contenue);
     formData.append('modifyby', modifyby);
+    formData.append('fileType', fileType);
     return this.http.put<void>(`${this.apiUrl}/${id}`, formData);
   }
   

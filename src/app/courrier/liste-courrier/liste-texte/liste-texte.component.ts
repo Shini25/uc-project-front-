@@ -8,11 +8,12 @@ import { DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlowbiteService } from '../../../services/flowbite.service';
 import { UserService } from '../../../services/user.service';
+import { ReplaceUnderscorePipe } from '../../../shared/pipe/replace-underscore.pipe';
 
 @Component({
   selector: 'app-liste-texte',
   standalone: true,
-  imports: [CommonModule, DatePipe, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, DatePipe, FormsModule, ReactiveFormsModule, ReplaceUnderscorePipe],
   templateUrl: './liste-texte.component.html',
   styleUrls: ['./liste-texte.component.css']
 })

@@ -5,6 +5,18 @@ import { InfoBaseChefService } from '../services/chefs/infoBaseChef.service';
 import { Chefs } from '../models/chefs.model';
 import { MatDialog } from '@angular/material/dialog';
 import { FlowbiteService } from '../services/flowbite.service';
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+
+export const matchFieldsValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+  const numero = control.get('numero');
+  const contact = control.get('contact');
+
+  if (!numero || !contact) {
+    return null;
+  }
+
+  return numero.value === contact.value ? null : { fieldsDoNotMatch: true };
+};
 
 @Component({
   selector: 'app-chef-form',
@@ -21,8 +33,6 @@ import { FlowbiteService } from '../services/flowbite.service';
 export class ChefFormComponent implements AfterViewInit {
   chefsForm: FormGroup;
   firstFormGroup: FormGroup;
-  secondFormGroup: FormGroup;
-  thirdFormGroup: FormGroup;
   selectedPhoto: File | null = null;
   isLinear = true;
   currentStep = 1;
@@ -31,39 +41,35 @@ export class ChefFormComponent implements AfterViewInit {
   sousTypeOptions: string[] = [];
   errorMessage: string = '';
 
-
   constructor(private fb: FormBuilder, private chefcService: InfoBaseChefService, public dialog: MatDialog, private flowbiteService: FlowbiteService) {
     this.chefsForm = this.fb.group({
-      numero: ['', Validators.required],
+      numero: ['', [Validators.required, Validators.pattern('^[0-9]+$')]], 
       nom: ['', Validators.required],
       prenoms: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      contact: ['', Validators.required],
+      contact: ['', [Validators.required, Validators.pattern('^[0-9]+$')]], 
       photos: this.fb.array([]),
       attributions: this.fb.array([]),
       motDuChefs: this.fb.array([]),
       typeChef: ['', Validators.required],
-      sousType:['']
+      sousType:[''],
+
     });
 
     this.firstFormGroup = this.fb.group({
-      numero: ['', Validators.required],
+      numero:  ['', [Validators.required, Validators.pattern('^[0-9]+$')]], 
       nom: ['', Validators.required],
       prenoms: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      contact: ['', Validators.required],
+      contact:  ['', [Validators.required, Validators.pattern('^[0-9]+$')]], 
       photos: this.fb.array([]),
       typeChef: ['', Validators.required],
-      sousType: ['']  
-    });
-
-    this.secondFormGroup = this.fb.group({
+      sousType: [''] ,
       attributions: this.fb.array([]),
-    });
-
-    this.thirdFormGroup = this.fb.group({
       motDuChefs: this.fb.array([]),
-    });
+
+    }, { validators: matchFieldsValidator });
+
   }
 
   ngAfterViewInit(): void {
@@ -77,11 +83,11 @@ export class ChefFormComponent implements AfterViewInit {
   }
 
   get attributions(): FormArray {
-    return this.secondFormGroup.get('attributions') as FormArray;
+    return this.firstFormGroup.get('attributions') as FormArray;
   }
 
   get motDuChefs(): FormArray {
-    return this.thirdFormGroup.get('motDuChefs') as FormArray;
+    return this.firstFormGroup.get('motDuChefs') as FormArray;
   }
 
   addPhoto(): void {
@@ -119,10 +125,8 @@ export class ChefFormComponent implements AfterViewInit {
     }
   }
 
-
   onSubmit(): void {
-    if (this.firstFormGroup.valid && this.secondFormGroup.valid && this.thirdFormGroup.valid) {
-      // Automatically set sousType based on typeChef
+    if (this.firstFormGroup.valid) {
       const typeChef = this.firstFormGroup.get('typeChef')?.value;
       if (typeChef === 'UC') {
         this.firstFormGroup.get('sousType')?.setValue('UC');
@@ -130,35 +134,33 @@ export class ChefFormComponent implements AfterViewInit {
         this.firstFormGroup.get('sousType')?.setValue('DGFAG');
       }
   
-      this.isLoading = true;  // Show spinner
-      const Chef: Chefs = { ...this.firstFormGroup.value, ...this.secondFormGroup.value, ...this.thirdFormGroup.value };
+      this.isLoading = true; 
+      const Chef: Chefs = { ...this.firstFormGroup.value };
       const attributions = this.attributions.value.map((attr: any) => attr.attribution);
       const motsDuChef = this.motDuChefs.value.map((mot: any) => mot.paragraphe);
   
       if (this.selectedPhoto) {
         const reader = new FileReader();
         reader.onload = () => {
-          const base64Photo = reader.result as string;
           console.log('Chef:', Chef);
-          console.log('Base64 Photo:', base64Photo);
           console.log('Attributions:', attributions);
           console.log('Mots du Chef:', motsDuChef);
   
-          this.chefcService.createChefs(Chef, base64Photo, attributions, motsDuChef).subscribe(response => {
+          this.chefcService.createChefs(Chef, this.selectedPhoto!, attributions, motsDuChef).subscribe(response => {
             console.log('Chef created', response);
             setTimeout(() => {
-              this.isLoading = false;  // Hide spinner
-              this.successMessage = 'Chef créé avec succès!';  // Show success message
+              this.isLoading = false;  
+              this.successMessage = 'Chef créé avec succès!';  
               setTimeout(() => {
-                this.successMessage = '';  // Hide success message after 3s
+                this.successMessage = '';  
               }, 3000);
-            }, 2000);  // Delay to simulate loading
+            }, 2000);  
           }, error => {
             console.error('Error creating Chef:', error);
-            this.isLoading = false;  // Hide spinner
-            this.errorMessage = 'Erreur lors de la création du Chef. Veuillez réessayer.';  // Afficher le message d'erreur
+            this.isLoading = false;  
+            this.errorMessage = 'Erreur lors de la création du Chef. Veuillez réessayer.';  
             setTimeout(() => {
-              this.errorMessage = '';  // Hide error message after 3s
+              this.errorMessage = ''; 
             }, 3000);
           });
         };
@@ -223,6 +225,20 @@ export class ChefFormComponent implements AfterViewInit {
         break;
       default:
         this.sousTypeOptions = [];
+    }
+  }
+
+  removeAttribution() {
+    const attributions = this.firstFormGroup.get('attributions') as FormArray;
+    if (attributions.length > 0) {
+      attributions.removeAt(attributions.length - 1);
+    }
+  }
+
+  removeMotDuChef() {
+    const motDuChefs = this.firstFormGroup.get('motDuChefs') as FormArray;
+    if (motDuChefs.length > 0) {
+      motDuChefs.removeAt(motDuChefs.length - 1);
     }
   }
 }
