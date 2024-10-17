@@ -65,6 +65,8 @@ export class ListeReunionComponent implements OnInit {
   isZoomed: boolean = false;
   user: any;
   invalidEmails: string[] = [];
+  meetingReminderMessage: string | null = null;
+
 
 
   constructor(
@@ -369,12 +371,18 @@ export class ListeReunionComponent implements OnInit {
   }
 
   sendReminderEmail(meeting: any): Observable<void> {
-    const { objet, meetingDate: date, location: lieu, id: meetingId } = meeting;
+    const { objet, meetingDate: date, location: lieu, id: meetingId, reminder } = meeting;
     const addby = this.user.username;
 
     if (!navigator.onLine) {
         console.error('No internet connection. Emails cannot be sent.');
         return throwError(() => new Error('No internet connection.'));
+    }
+
+    if (reminder) {
+        this.meetingReminderMessage = `La réunion de cette semaine a déjà été rappelée.`;
+        setTimeout(() => this.meetingReminderMessage = '', 5000);
+        return of(void 0); 
     }
 
     return forkJoin({
@@ -397,7 +405,7 @@ export class ListeReunionComponent implements OnInit {
                         tap(() => console.log(`Email sent to participant: ${participant.email}`)),
                         catchError(err => {
                             console.error(`Error sending email to participant: ${participant.email}`, err);
-                            // Return a value to continue the forkJoin
+                            this.invalidEmails.push(participant.email);
                             return of(`Failed to send email to participant: ${participant.email}`);
                         })
                     )
@@ -417,7 +425,7 @@ export class ListeReunionComponent implements OnInit {
                         tap(() => console.log(`Email sent to responsable: ${responsable.email}`)),
                         catchError(err => {
                             console.error(`Error sending email to responsable: ${responsable.email}`, err);
-                            // Return a value to continue the forkJoin
+                            this.invalidEmails.push(responsable.email);
                             return of(`Failed to send email to responsable: ${responsable.email}`);
                         })
                     )
@@ -435,10 +443,12 @@ export class ListeReunionComponent implements OnInit {
         })
     );
 }
+
 sendGlobalReminderEmails(): void {
     this.isLoadingSpinner = true;
     let completedRequests = 0;
-    const totalRequests = this.paginatedMeetings.length;
+    const meetingsThisWeek = this.paginatedMeetings.filter(meeting => this.isThisWeek(meeting.dateCreation));
+    const totalRequests = meetingsThisWeek.length;
     let hasError = false;
     const allInvalidEmails: string[] = [];  // Stocker tous les emails invalides
 
@@ -452,7 +462,7 @@ sendGlobalReminderEmails(): void {
         return;
     }
 
-    this.paginatedMeetings.forEach(meeting => {
+    meetingsThisWeek.forEach(meeting => {
         this.sendReminderEmail(meeting).subscribe({
             next: () => {
                 completedRequests++;
@@ -474,6 +484,7 @@ sendGlobalReminderEmails(): void {
             }
         });
     });
+
 }
 
 hideSpinnerWithSuccessMessage(message: string): void {
