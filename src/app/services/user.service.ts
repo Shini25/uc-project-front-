@@ -18,6 +18,10 @@ export class UserService {
     return this.http.post<User_account>(`${this.apiUrl}/adduser`, user_account);
   }
 
+  getAllUsers(): Observable<User_account[]> {
+    return this.http.get<User_account[]>(`${this.apiUrl}`);
+  }
+
   checkUsernameExists(numero: string): Observable<boolean> {
     return this.http.get<boolean>(`${this.apiUrl}/check-numero?numero=${numero}`);
   }
@@ -25,7 +29,7 @@ export class UserService {
   setNumero(numero: string) {
     if (typeof localStorage !== 'undefined') {
       localStorage.setItem(this.numeroKey, numero);
-      console.log('Numero stored in UserService:', numero); // Log the stored numero
+      console.log('Numero stored in UserService:', numero); 
     } else {
       console.error('localStorage is not available');
     }
@@ -70,5 +74,16 @@ export class UserService {
       }
     });
   }
-  
+
+  updateEtat(numero: string, etat: string): Observable<User_account> {
+    const formData = new FormData();
+    formData.append('etat', etat);
+    return this.http.put<User_account>(`${this.apiUrl}/${numero}/etat`, formData);
+  }
+
+  updateStatus(numero: string, status: string): Observable<User_account> {
+    const formData = new FormData();
+    formData.append('status', status);
+    return this.http.put<User_account>(`${this.apiUrl}/${numero}/status`, formData);
+  }
 }

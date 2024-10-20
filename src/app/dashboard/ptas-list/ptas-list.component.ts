@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, HostListener, Renderer2 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Pta, SousType } from './../../models/courriers/pta.model';
 import { PtaAudit } from './../../models/courriers/ptaAudit.model';
@@ -48,12 +48,15 @@ export class PtasListComponent implements OnInit, AfterViewInit {
   user: any;
   finaluser: any;
   expandedRowIndex: number | null = null;
-
   isConfirmModalVisible: boolean = false;
   ptaToValidate: Pta | null = null;
-
-  errorMessage: string | null = null;
   maxFileSize: number = 100 * 1024 * 1024; // 10 MB
+  invalidPtasCount: number = 0;
+  isLoading: boolean = false;
+  successMessage: string = '';
+  errorMessage: string = '';
+  isZoomed: boolean = false;
+
   
   constructor(
     private ptaService: PtaService, 
@@ -61,7 +64,8 @@ export class PtasListComponent implements OnInit, AfterViewInit {
     private flowbiteService: FlowbiteService,
     private fb: FormBuilder,
     private userService: UserService, 
-    private ptaAuditService: PtaAuditService
+    private ptaAuditService: PtaAuditService,
+    private renderer: Renderer2
   ) {
     this.updateForm = this.fb.group({
       idCourrier: ['', Validators.required],
@@ -80,6 +84,23 @@ export class PtasListComponent implements OnInit, AfterViewInit {
     this.getAllPtas();
     this.getUserNumero(); 
   }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const modalElement = document.querySelector('.form-content') as HTMLElement;
+    if (this.isUpdateFormVisible && modalElement && !modalElement.contains(event.target as Node)) {
+      this.zoomModal(modalElement, 'update');
+    }
+  }
+
+  zoomModal(element: HTMLElement, modalType: string): void {
+    this.isZoomed = true;
+  
+    setTimeout(() => {
+      this.isZoomed = false;
+    }, 100); 
+  }
+
 
   toggleRow(index: number, pta: Pta) {
     if (this.expandedRowIndex === index) {
@@ -116,6 +137,7 @@ export class PtasListComponent implements OnInit, AfterViewInit {
     this.ptaService.getAllPtas().subscribe((data: Pta[]) => {
       this.ptas = data.sort((a, b) => new Date(b.dateInsertion).getTime() - new Date(a.dateInsertion).getTime());
       this.filterPtas();
+      this.invalidPtasCount = this.ptas.filter(pta => !pta.valide).length;
     });
   }
 
@@ -130,7 +152,7 @@ export class PtasListComponent implements OnInit, AfterViewInit {
         const ptaDate = new Date(pta.dateInsertion).toISOString().split('T')[0];
         searchMatches = ptaDate === this.searchDate;
       }
-      return typeMatches && sousTypeMatches && searchMatches;
+      return typeMatches && sousTypeMatches && searchMatches && !pta.valide;
     });
     this.updatePagination();
   }
@@ -282,22 +304,42 @@ export class PtasListComponent implements OnInit, AfterViewInit {
       this.selectedFile = file;
       this.selectedFileName = file.name;
       this.fileType = file.type;
-      this.errorMessage = null; 
+      this.errorMessage = ''; 
     }
   } 
 
   updatePta(): void { 
     if (this.updateForm.valid && this.selectedFile) {
+      this.closeUpdateForm();
+      this.isLoading = true;
       const { idCourrier } = this.updateForm.value;
       const formData = new FormData();
       formData.append('contenue', this.selectedFile);
-      formData.append('fileType', this.fileType!);
+      formData.append('fileType', this.selectedFile.type);
       formData.append('modifyby', this.userNumero);
 
-      this.ptaService.updatePta(idCourrier, this.selectedFile, this.fileType!, this.userNumero).subscribe(() => {
-        this.getAllPtas();
-        this.closeUpdateForm();
-      });
+      this.ptaService.updatePta(idCourrier, this.selectedFile, this.selectedFile.type, this.userNumero).subscribe(
+        response => {
+          console.log('PTA confirmé avec succès', response);
+          setTimeout(() => {
+            this.isLoading = false;  
+            this.successMessage = 'PTA confirmé avec succès!'; 
+            this.getAllPtas();
+            this.closeUpdateForm();
+            setTimeout(() => {
+              this.successMessage = ''; 
+            }, 3000);
+          }, 2000);  
+        },
+        error => {
+          console.error('Erreur lors de la confirmation du PTA', error);
+          this.isLoading = false; 
+          this.errorMessage = 'Une erreur est survenue pendant la confirmation du PTA. Veuillez essayer de nouveau.';  
+          setTimeout(() => {
+            this.errorMessage = '';  
+          }, 3000);        
+        }
+      );
     }
   }
 
@@ -321,9 +363,18 @@ export class PtasListComponent implements OnInit, AfterViewInit {
 
   confirmValiderPta(): void {
     if (this.ptaToValidate) {
+      this.isLoading = true;
+      
       this.validerPta(this.ptaToValidate);
       this.closeConfirmModal();
+      
+      setTimeout(() => {
+        this.isLoading = false;
+        this.successMessage = 'PTA validé avec succès!';
+        setTimeout(() => {
+          this.successMessage = '';
+        }, 3000);
+      }, 2000);
     }
   }
 }
-

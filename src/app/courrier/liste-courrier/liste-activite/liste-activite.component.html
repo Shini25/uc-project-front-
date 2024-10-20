@@ -1,14 +1,14 @@
 <div class="mx-auto px-4 py-6 z-10 min-h-screen verflow-hidden backdrop-blur-sm">
 
-  <h6 class="text-gray-800 text-2xl m-0"><span class="font-medium">Activités</span></h6>
+  <h6 class="text-gray-800 dark:text-zinc-100 text-2xl m-0"><span class="font-medium">Activités</span></h6>
    <div class="grid !grid-cols-1 md:!grid-cols-2 gap-4 mb-4">
-    <div class="w-full h-12 ">
-      <div class="flex">
+    <div class="w-full h-full ">
+      <div class="flex !h-11">
 
         <div class="w-auto">
             <select id="searchTypeSelect" (change)="onSearchTypeChange($event)" 
-                    class="block w-auto pl-3 pr-10 py-2 text-sm text-gray-800 bg-gray-100 border-gray-400 focus:outline-none focus:ring-sky-800 focus:border-sky-800 sm:text-sm rounded-s-md cursor-pointer">
-              <option value="title">Titre</option>
+              class="block w-auto h-full pl-3 pr-10 py-2 text-sm text-zinc-500 dark:text-zinc-300 bg-transparent border-zinc-400/50 focus:outline-none focus:ring-sky-800 focus:border-sky-800 sm:text-sm rounded-s-md cursor-pointer">
+            <option value="title">Titre</option>
               <option value="date">Date</option>
             </select>
         </div>
@@ -19,7 +19,7 @@
             id="searchInput" 
             placeholder="Rechercher par titre" 
             (input)="onSearch($event)" 
-            class="block w-full pl-3 pr-3 py-2 text-sm text-black bg-white border-gray-400 focus:outline-none focus:ring-sky-800 focus:border-sky-800 sm:text-sm" />
+            class="block w-full h-full pl-3 pr-3 py-2 text-sm text-zinc-800 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-200 bg-white dark:bg-zinc-400/30 border-zinc-400/50 focus:outline-none focus:ring-sky-800 focus:border-sky-800 sm:text-sm" />
 
         </div>
 
@@ -28,14 +28,13 @@
                   type="date" 
                   id="searchDate" 
                   (change)="onDateChange($event)" 
-                  class="block w-full pl-3 pr-3 py-2 text-sm text-black bg-white border-gray-400 focus:outline-none focus:ring-sky-800 focus:border-sky-800 sm:text-sm rounded-md" />
+                  class="block w-full h-full pl-3 pr-3 py-2 text-sm text-zinc-800 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-200 bg-white dark:bg-zinc-400/30 border-zinc-400/50 focus:outline-none focus:ring-sky-800 focus:border-sky-800 sm:text-sm" />
         </div>
         
-        <div class="flex justify-center items-center cursor-pointer bg-sky-900 p-1 rounded-e-md" (click)="resetFilters() ">
-              <svg  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-white dark:text-gray-800">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
-              </svg>
-          
+        <div class="bg-white dark:bg-zinc-400/30 border-t border-b border-r border-zinc-400/50 flex justify-center items-center cursor-pointer p-1 rounded-e-md" (click)="resetFilters() ">
+          <svg  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 dark:text-white text-zinc-500">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+          </svg>
         </div>
       </div>
     </div>
@@ -43,7 +42,7 @@
     <div class="w-full flex justify-end ">
         <div class="w-full lg:w-auto">
             <select id="ptaTypeSelect" (change)="onTypeChange($event)" 
-                    class="block w-full pl-3 pr-10 text-sm text-gray-100 bg-sky-900 border-gray-400 focus:outline-none focus:ring-sky-800 focus:border-sky-800 sm:text-sm rounded-md">
+                class="block w-full h-full pl-3 pr-10 text-sm text-zinc-100 border border-transparent bg-zinc-400  outline-none sm:text-sm rounded-md">
             <option *ngFor="let type of activiteTypes" [value]="type">{{ type | replaceUnderscore }}</option>
             </select>
         </div>
@@ -52,11 +51,10 @@
    </div>
 
   <!-- Activite Table -->
-  <div class="relative overflow-x-auto shadow-md sm:rounded-lg overflow-auto max-h-[520px]">
-
+  <div class="relative overflow-x-auto shadow-md sm:rounded-lg  overflow-auto max-h-[480px]">
     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-      <thead class="text-xs text-gray-700 uppercase whitespace-nowrap bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-          <tr>
+      <thead class="text-xs text-zinc-500   uppercase sticky top-0 backdrop-blur-lg shadow-lg z-10 bg-zinc-100 dark:bg-sky-950 dark:text-zinc-400">
+          <tr class="">
               <th scope="col" class="px-4 py-3">Titre</th>
               <th scope="col" class="px-4 py-3">Date d'insertion</th>
               <th scope="col" class="px-4 py-3">Type</th>
@@ -64,25 +62,24 @@
               <th scope="col" class="px-4 py-3">Consulter</th>
           </tr>
       </thead>
-      <tbody  class="bg-white">
+      <tbody  class="bg-white dark:bg-sky-900">
         <ng-container *ngFor="let activite of paginatedActivites; let i = index">
         <tr class="border-b dark:border-gray-700 whitespace-nowrap" >
           <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ activite.titre }}</th>
           <!-- if datemodification = null show activite.date.insertion else date.modification -->
-              <td class="px-4 py-3">{{ activite.dateModification ? (activite.dateModification | date:'medium') : (activite.dateInsertion | date:'medium') }}</td>
-              <td class="px-4 py-3 text-yellow-500">{{ activite.type.toString() | replaceUnderscore }}</td>
+              <td class="px-4 py-3">{{ activite.dateModification ? (activite.dateModification | date:'short') : (activite.dateInsertion | date:'short') }}</td>
+              <td class="px-4 py-3 text-yellow-500 font-medium whitespace-nowrap">{{ activite.type.toString() | replaceUnderscore }}</td>
               <td class="px-4 py-3">{{ activite.user_account.numero }}</td>
 
               <td class="px-4 py-3">
                 <div class="flex flex-row gap-2">
-                  <button class=" text-sky-900 px-2 py-1 rounded" (click)="downloadActivite(activite)">
+                  <button class=" text-sky-900 dark:text-zinc-200 px-2 py-1 rounded" (click)="downloadActivite(activite)">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
                     </svg>
                   </button>
-
-                <button class=" text-white px-2 py-1 rounded" (click)="previewActivite(activite)">
-                  <div class=" bg-yellow-500 flex flex-row gap-2 items-center justify-center px-2 py-1 rounded-md">
+                <button class=" text-zinc-100 bg-zinc-400   rounded-md shadow-md" (click)="previewActivite(activite)">
+                  <div class=" flex flex-row gap-2 items-center justify-center px-2 py-1 rounded-md">
                     <div>
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />

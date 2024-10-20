@@ -66,12 +66,10 @@ addNewForm(): void {
 }
 
 ngOnInit(): void {
-  // Récupérer les informations de l'utilisateur avant d'initialiser le formulaire
   this.userService.getUserInfo().subscribe(user => {
     this.user = user;
     console.log('User retrieved:', this.user.username);
 
-    // Une fois que l'utilisateur est récupéré, ajouter le formulaire
     this.addNewForm();  // Initialiser le formulaire ici
 
     // S'abonner aux changements dans le champ 'meetingType'

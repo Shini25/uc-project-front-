@@ -2,10 +2,10 @@
 
 
   <div class="flex justify-center items-center w-full h-20 bg-transparent backdrop-blur-lg sticky top-[8vh] !z-[10]">
-    <h6 class="text-2xl text-center  "><span class="text-blue-950 font-semibold">Enregistrer un nouveau Chef</span> </h6>
+    <h6 class="text-2xl text-center"><span class="text-blue-950 dark:text-zinc-100 font-semibold">Enregistrer un nouveau Chef</span></h6>
   </div>
 
-  <form [formGroup]="firstFormGroup" class="w-full h-auto bg-zinc-50 lg:grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-2 border-2 border-gray-200 rounded-md p-3 !z-[2]">
+  <form [formGroup]="firstFormGroup" class="w-full h-auto bg-zinc-50 dark:bg-sky-950 lg:grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-2 border-2 border-gray-200 dark:border-zinc-400/50 rounded-md p-3 !z-[2]">
 
     <div class="col-span-2 w-full flex flex-row gap-1 h-auto text-sm text-yellow-500">
         <div>
@@ -17,26 +17,26 @@
           Vérifier le numéro avant d'effectuer la modification
         </div>
     </div>
-      <div class="w-full h-auto bg-white p-4 border-2 grid grid-cols-1 gap-2 border-gray-200 rounded-md">
+      <div class="w-full h-auto bg-white dark:bg-sky-900 p-4 border-2 grid grid-cols-1 gap-2 border-gray-200 dark:border-zinc-400/50 rounded-md mb-2 lg:mb-0">
         <div class="relative ">
-          <input type="text" id="ancienContact" formControlName="ancienContact" class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
-          <label for="ancienContact" class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Ancien contact</label>
+          <input type="text" id="ancienContact" formControlName="ancienContact" class=" dark:bg-sky-950 block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 dark:border-zinc-400 appearance-none dark:text-white dark:focus:border-sky-800 focus:outline-none focus:ring-0 focus:border-sky-900 peer" placeholder=" " />
+          <label for="ancienContact" class="absolute  text-sm text-gray-500 dark:rounded-full dark:text-zinc-400 dark:bg-sky-950 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-sky-900 peer-focus:dark:text-zinc-300 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Ancien contact</label>
         </div>
         <div class="relative ">
-          <input type="text" id="nom" formControlName="nom" class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
-          <label for="nom" class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Nom</label>
+          <input type="text" id="nom" formControlName="nom" class=" dark:bg-sky-950 block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 dark:border-zinc-400 appearance-none dark:text-white dark:focus:border-sky-800 focus:outline-none focus:ring-0 focus:border-sky-900 peer" placeholder=" " />
+          <label for="nom" class="absolute  text-sm text-gray-500 dark:rounded-full dark:text-zinc-400 dark:bg-sky-950 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-sky-900 peer-focus:dark:text-zinc-300 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Nom</label>
         </div>
 
         <div class="relative">
-            <input type="text" formControlName="prenoms" id="prenoms" class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
-            <label for="prenoms" class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Prénoms</label>
+            <input type="text" formControlName="prenoms" id="prenoms" class="dark:bg-sky-950 block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-zinc-400 dark:focus:border-sky-800 focus:outline-none focus:ring-0 focus:border-sky-900 peer" placeholder=" " />
+            <label for="prenoms" class="absolute text-sm text-gray-500 dark:rounded-full  dark:text-zinc-400 dark:bg-sky-950 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-sky-900 peer-focus:dark:text-zinc-300 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Prénoms</label>
         </div>
 
         <div class="relative">
           <input type="email" formControlName="email" id="email" 
-                 class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+          class="dark:bg-sky-950 block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-zinc-400 dark:focus:border-sky-800 focus:outline-none focus:ring-0 focus:border-sky-900 peer"
                  placeholder=" " />
-          <label for="email" class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Email</label>
+          <label for="email" class="absolute text-sm text-gray-500 dark:rounded-full  dark:text-zinc-400 dark:bg-sky-950 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-sky-900 peer-focus:dark:text-zinc-300 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Email</label>
           <div *ngIf="firstFormGroup.get('email')?.invalid && firstFormGroup.get('email')?.touched" class="text-red-500 text-sm mt-1">
               Adresse e-mail invalide
           </div>
@@ -44,9 +44,9 @@
       
         <div class="relative">
             <input type="text" formControlName="numero" 
-                  class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+            class="dark:bg-sky-950 block px-2.5 pb-2.5 pt-4 w-full  text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-zinc-400 dark:focus:border-sky-800 focus:outline-none focus:ring-0 focus:border-sky-900 peer"
                   placeholder=" " />
-            <label for="numero" class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Numero</label>
+            <label for="numero" class="absolute text-sm dark:rounded-full text-gray-500 dark:text-zinc-400 dark:bg-sky-950 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-sky-900 peer-focus:dark:text-zinc-300 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Numero</label>
             <div *ngIf="firstFormGroup.get('numero')?.invalid && firstFormGroup.get('numero')?.touched" class="text-red-500 text-sm mt-1">
                 Numéro invalide
             </div>
@@ -54,19 +54,18 @@
         
         <div class="relative">
             <input type="text" formControlName="contact" id="contact" 
-                  class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  class="dark:bg-sky-950 block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-zinc-400 dark:focus:border-sky-800 focus:outline-none focus:ring-0 focus:border-sky-900 peer"
                   placeholder=" " />
-            <label for="contact" class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Confirmé le numéro</label>
+            <label for="contact" class="absolute dark:rounded-full text-sm text-gray-500 dark:text-zinc-400 dark:bg-sky-950 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-sky-900 peer-focus:dark:text-zinc-300 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Confirmé le numéro</label>
             <div *ngIf="firstFormGroup.hasError('fieldsDoNotMatch') && firstFormGroup.get('contact')?.touched" class="text-red-500 text-sm mt-1">
                 Les numéros ne correspondent pas
             </div>
         </div>
-
       </div>
   
-      <div class="w-full h-auto bg-white p-4 border-2 flex flex-col gap-2 border-gray-200 rounded-md">
+      <div class="w-full h-auto bg-white dark:bg-sky-900 p-4 border-2 flex flex-col gap-2 border-gray-200 dark:border-zinc-400/50 rounded-md mb-4 lg:mb-0">
         <div class="h-auto">
-          <select id="typeChef" formControlName="typeChef" class="block  !py-3  w-full text-sm text-gray-900 bg-transparent !p-2 rounded-md border-1 border-gray-300 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer" (change)="onTypeChefChange($event)">
+          <select id="typeChef" formControlName="typeChef" class="block  !py-3  w-full text-sm text-gray-900 dark:text-zinc-400 dark:font-medium  bg-transparent !p-2 rounded-md border-1 border-gray-300 appearance-none  dark:border-zinc-300 focus:outline-none focus:ring-0 focus:border-gray-200 peer" (change)="onTypeChefChange($event)">
             <option value="" disabled selected>Choisir le type de chef</option>
             <option value="UC">Unité de coordination</option>
             <option value="CELLULES">Cellule</option>
@@ -82,7 +81,7 @@
 
         <!-- Sous Type Options -->
         <div class="h-auto" *ngIf="sousTypeOptions.length > 0">
-          <select formControlName="sousType" class="block !py-3 px-0 w-full text-sm text-gray-900 bg-transparent !p-2 rounded-md border-1 border-gray-300 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
+          <select formControlName="sousType" class="block !py-3 px-0 w-full text-sm text-gray-900 dark:text-zinc-400 dark:font-medium  bg-transparent !p-2 rounded-md border-1 border-gray-300 appearance-none dark:border-zinc-300 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
             <option value="" disabled selected>Choisir</option>
             <option *ngFor="let option of sousTypeOptions" [value]="option">{{ option }}</option>
           </select>
@@ -90,16 +89,16 @@
 
  
         <div class="w-full mt-4 h-auto ">
-          <input class="block w-full mb-5 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="small_size" type="file"
+          <input class="block w-full mb-5 text-xs text-gray-900 dark:text-zinc-400 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-700 dark:border-zinc-400 dark:placeholder-gray-400" id="small_size" type="file"
           (change)="onFileChange($event)">
         </div>
       </div>
     
 
       <!-- second form -->
-      <div class="col-span-2 w-full h-auto bg-white p-4 border-2 border-gray-200 rounded-md">
+      <div class="col-span-2 w-full h-auto bg-white dark:bg-sky-900 p-4 border-2 border-gray-200 dark:border-zinc-400/50 rounded-md mb-4 lg:mb-0">
         <div>
-          <h6 class="text-left "><span class="text-sm font-medium" >Attributions</span></h6>
+          <h6 class="text-left "><span class="text-sm dark:text-zinc-100 font-medium" >Attributions</span></h6>
         </div>
         <div class="form-group">
           <button type="button" (click)="addAttribution()" class="px-4 py-2 bg-sky-950 text-white rounded-md">
@@ -115,16 +114,16 @@
         </div>
         <div class="form-group" formArrayName="attributions">
           <div *ngFor="let attribution of attributions.controls; let i = index" [formGroupName]="i" class="space-y-2">
-            <label class="block text-sm mt-4 text-gray-900">Attribution {{i + 1}}</label>
-            <textarea formControlName="attribution" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-sky-900 focus:border-sky-900 sm:text-sm"></textarea>
+            <label class="block text-sm mt-4 text-gray-900 dark:text-zinc-100">Attribution {{i + 1}}</label>
+            <textarea formControlName="attribution" placeholder="Attribution" class="dark:bg-sky-950 dark:text-zinc-100 mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-sky-900 focus:border-sky-900 sm:text-sm"></textarea>
           </div>
         </div>
       </div>
 
       <!-- third form -->
-      <div class="col-span-2 w-full h-auto bg-white p-4 border-2 border-gray-200 rounded-md">
+      <div class="col-span-2 w-full h-auto bg-white dark:bg-sky-900 p-4 border-2 border-gray-200 dark:border-zinc-400/50 rounded-md mb-4 lg:mb-0">
         <div>
-          <h6 class="text-left font-medium"><span class="font-medium text-sm">Mot du chef</span></h6>
+          <h6 class="text-left font-medium"><span class="font-medium text-sm dark:text-zinc-100">Mot du chef</span></h6>
         </div>
         <div class="form-group">
           <button type="button" (click)="addMotDuChef()" class="px-4 py-2 bg-sky-950 text-white rounded-md">
@@ -141,15 +140,15 @@
         </div>
         <div class="form-group" formArrayName="motDuChefs">
           <div *ngFor="let motDuChef of motDuChefs.controls; let i = index" [formGroupName]="i" class="space-y-2">
-            <label class="block text-sm mt-4  text-gray-900">Paragraphe {{i + 1}}</label>
-            <textarea formControlName="paragraphe" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-sky-900 focus:border-sky-900 sm:text-sm"></textarea>
+            <label class="block text-sm mt-4  text-gray-900 dark:text-zinc-100">Paragraphe {{i + 1}}</label>
+            <textarea formControlName="paragraphe" placeholder="Paragraphe" class="dark:bg-sky-950 dark:text-zinc-100 mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-sky-900 focus:border-sky-900 sm:text-sm"></textarea>
           </div>
         </div>
       </div>
 
       <!-- save button -->
-       <div class="col-span-2 h-auto w-full text-right bg-white p-4 border-2 border-gray-200 rounded-md">
-        <button type="button" (click)="onSubmit()" class="px-4 py-2 bg-blue-950 text-white rounded-md">Enregistrer</button>
+       <div class="col-span-2 h-auto w-full text-right bg-white dark:bg-sky-900 p-4 border-2 border-gray-200 dark:border-zinc-400/50 rounded-md mb-4 lg:mb-0">
+        <button type="button" (click)="onSubmit()" class="px-4 py-2 bg-yellow-500 text-white rounded-md">Enregistrer</button>
        </div>
   </form>
 

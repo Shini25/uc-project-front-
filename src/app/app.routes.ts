@@ -3,11 +3,11 @@ import { HomeComponent } from './accueil/home.component';
 
 //auth 
 import { PageNotFoundComponentComponent } from './page-introuvable/page-not-found-component.component';
-import { AccountCreatedDialogComponent } from './create-account/account-created-dialog/account-created-dialog.component';
-import { CreateAccountComponent } from './create-account/create-account.component';
+import { AccountCreatedDialogComponent } from './user/create-account/account-created-dialog/account-created-dialog.component';
+import { CreateAccountComponent } from './user/create-account/create-account.component';
 import { MotDuChefComponent } from './list-chef/motduchef/motduchef.component';
 import { ArchivageCourrierComponent } from './courrier/archivage-courrier/archivage-courrier.component';
-import { LoginComponent } from './login/login.component';
+import { LoginComponent } from './user/login/login.component';
 import { ListChefComponent } from './list-chef/list-chef.component';
 import { ChefFormComponent } from './chef-form/chef-form.component';
 import { PlanifierReunionComponent } from './meeting/planifier-reunion/planifier-reunion.component';
@@ -26,6 +26,9 @@ import { TableauDeBordListComponent } from './dashboard/tableau-de-bord-list/tab
 import { ActiviteListComponent } from './dashboard/activite-list/activite-list.component';
 import { UpdateChefComponent } from './update-chef/update-chef.component';
 import { OrganizationalChartComponent } from './organizational-chart/organizational-chart.component';
+import { UserListComponent } from './user/user-list/user-list.component';
+import { ChartComponent } from './chart/chart.component';
+import { MeetingweekComponent } from './meeting/meetingweek/meetingweek.component';
 
 export const routes: Routes = [
     {
@@ -54,7 +57,10 @@ export const routes: Routes = [
         { path: 'tableau-de-bord-list', component: TableauDeBordListComponent },
         { path: 'liste-activite-chef', component: ActiviteListComponent},
         { path: 'modification', component: UpdateChefComponent},
-        { path: 'organigramme', component: OrganizationalChartComponent}
+        { path: 'organigramme', component: OrganizationalChartComponent},
+        { path: 'liste-utilisateur', component: UserListComponent},
+        { path: 'chart', component: ChartComponent},
+        { path: 'semaine-reunion', component: MeetingweekComponent}
       ]
     },
     {
