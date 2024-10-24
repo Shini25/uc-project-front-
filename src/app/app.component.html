@@ -1,4 +1,4 @@
-<div class="fixed top-0 z-20 w-full h-[8vh] md:pl-64 bg-gray-50 dark:bg-sky-950 border-b border-gray-200 shadow-md  dark:border-gray-700">
+<div class="fixed top-0 z-20 w-full h-[62px] md:pl-64 bg-gray-50 dark:bg-sky-950 border-b border-gray-200 shadow-md  dark:border-gray-700">
   <div class="flex p-2  justify-between md:justify-end items-center  h-full">
     <div class="flex md:hidden">
       <button type="button" data-drawer-target="sidebar-toggle" data-drawer-toggle="sidebar-toggle" class="" aria-label="Sidebar">
@@ -16,11 +16,11 @@
           <div class="cursor-pointer" (click)="toggleDarkMode()">
             <svg *ngIf="!isDarkMode" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
               <path fill-rule="evenodd" d="M9.528 1.718a.75.75 0 0 1 .162.819A8.97 8.97 0 0 0 9 6a9 9 0 0 0 9 9 8.97 8.97 0 0 0 3.463-.69.75.75 0 0 1 .981.98 10.503 10.503 0 0 1-9.694 6.46c-5.799 0-10.5-4.7-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 0 1 .818.162Z" clip-rule="evenodd" />
-            </svg>
-      
+            </svg>            
             <svg *ngIf="isDarkMode" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 text-zinc-100">
               <path d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3a.75.75 0 0 1 .75-.75ZM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM18.894 6.166a.75.75 0 0 0-1.06-1.06l-1.591 1.59a.75.75 0 1 0 1.06 1.061l1.591-1.59ZM21.75 12a.75.75 0 0 1-.75.75h-2.25a.75.75 0 0 1 0-1.5H21a.75.75 0 0 1 .75.75ZM17.834 18.894a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 1 0-1.061 1.06l1.59 1.591ZM12 18a.75.75 0 0 1 .75.75V21a.75.75 0 0 1-1.5 0v-2.25A.75.75 0 0 1 12 18ZM7.758 17.303a.75.75 0 0 0-1.061-1.06l-1.591 1.59a.75.75 0 0 0 1.06 1.061l1.591-1.59ZM6 12a.75.75 0 0 1-.75.75H3a.75.75 0 0 1 0-1.5h2.25A.75.75 0 0 1 6 12ZM6.697 7.757a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 0 0-1.061 1.06l1.59 1.591Z" />
             </svg>
+
           </div>
         </div>
       </div>
@@ -50,8 +50,12 @@
           </div>
         </div>
       </div>
+
       <ng-template #loginButton>
-        <button type="button" class="text-sky-950 hover:text-neutral-500 border border-sky-950 hover:bg-blue-900  focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-neutral-500 dark:hover:bg-blue-500 dark:focus:ring-sky-950" routerLink="/login">Se connecter</button>
+        <div class=" h-full flex justify-center items-center">
+          <button type="button" class="py-2 px-2 rounded-md border border-sky-900/30 text-sm text-sky-900 hover:bg-sky-900 hover:text-zinc-100 dark:bg-sky-800 dark:text-zinc-100" routerLink="/login">Se connecter</button>
+
+        </div>
       </ng-template>
     </div>
   </div>
@@ -100,12 +104,12 @@
   <div class="flex-1 w-full rounded-sm  ">
     <div class="flex flex-col h-full">
       <div class="justify-start flex  ">  
-        <span class="font-semibold text-zinc-800 dark:text-gray-50">Menus</span>
+        <span class="font-semibold text-zinc-800 mb-2 dark:text-gray-50">Menus</span>
       </div>
       <div class="grid grid-cols-1 gap-2 overflow-y-auto pl-4">
-        <a class="relative w-full h-12 rounded-lg text-zinc-500 dark:text-zinc-300 flex items-center cursor-pointer group hover:bg-gray-50 dark:hover:bg-zinc-400/30" 
+        <a class="relative w-full h-12  text-zinc-500 dark:text-zinc-300 flex items-center cursor-pointer group hover:bg-gray-50 dark:hover:bg-zinc-400/30" 
             routerLink="auth/uc-presentation" 
-            routerLinkActive="bg-gray-100 dark:bg-zinc-400/20 text-gray-800">
+            routerLinkActive="border-l-2 border-zinc-400 dark:border-zinc-400 text-gray-800">
           <div class="inline-flex ml-3 text-base">
             <div class="mr-7 flex justify-center items-center">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4  group-hover:text-neutral-800 dark:group-hover:text-gray-50">
@@ -122,10 +126,9 @@
 
 
         <div class="relative">
-          <button type="button" class="relative w-full h-12  text-zinc-500 dark:text-zinc-300  dark:text-zinc-00 rounded-lg flex items-center  cursor-pointer group hover:bg-gray-50 dark:hover:bg-zinc-400/30"
+          <button type="button" class="relative w-full h-12  text-zinc-500 dark:text-zinc-300  dark:text-zinc-00  flex items-center  cursor-pointer group hover:bg-gray-50 dark:hover:bg-zinc-400/30"
             routerLink="auth/liste-chef"
-            routerLinkActive="bg-gray-100 dark:bg-zinc-400/20 text-gray-800"
-            [routerLinkActiveOptions]="{ exact: false }">
+            routerLinkActive="border-l-2 border-zinc-400 dark:border-zinc-400 text-gray-800"            [routerLinkActiveOptions]="{ exact: false }">
             
             <div class="inline-flex ml-3 text-base">
               <div class="mr-7 flex justify-center items-center">
@@ -146,9 +149,9 @@
 
         <!-- organigramme -->
         <div class="relative">
-          <button type="button" class="relative w-full h-12  text-zinc-500 dark:text-zinc-300  rounded-lg flex items-center  cursor-pointer group hover:bg-gray-50 dark:hover:bg-zinc-400/30 "
+          <button type="button" class="relative w-full h-12  text-zinc-500 dark:text-zinc-300  flex items-center  cursor-pointer group hover:bg-gray-50 dark:hover:bg-zinc-400/30 "
            routerLink="auth/organigramme"
-           routerLinkActive="bg-gray-100 dark:bg-zinc-400/20 text-gray-800" >
+           routerLinkActive="border-l-2 border-zinc-400 dark:border-zinc-400 text-gray-800">
             <div class="inline-flex ml-3 text-base">
               <div class="mr-7 flex justify-center items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4 group-hover:text-neutral-800 dark:group-hover:text-gray-50 ">
@@ -167,9 +170,9 @@
 
 
         <div class="relative">
-          <button type="button" class="relative w-full h-12 text-zinc-500 dark:text-zinc-300 rounded-lg flex items-center cursor-pointer group hover:bg-gray-50 dark:hover:bg-zinc-400/30"
+          <button type="button" class="relative w-full h-12 text-zinc-500 dark:text-zinc-300 flex items-center cursor-pointer group hover:bg-gray-50 dark:hover:bg-zinc-400/30"
             routerLink="auth/liste-livret"
-            routerLinkActive="bg-gray-100 dark:bg-zinc-400/20 text-gray-800">
+            routerLinkActive="border-l-2 border-zinc-400 dark:border-zinc-400 text-gray-800">
             <div class="inline-flex ml-3 text-base">
               <div class="mr-7 flex justify-center items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4  group-hover:text-neutral-800 dark:group-hover:text-gray-50">
@@ -185,9 +188,9 @@
           </button>
         </div>
 
-        <a class="relative w-full h-12  text-zinc-500 dark:text-zinc-300  rounded-lg flex items-center  cursor-pointer group hover:bg-gray-50 dark:hover:bg-zinc-400/30"
+        <a class="relative w-full h-12  text-zinc-500 dark:text-zinc-300  flex items-center  cursor-pointer group hover:bg-gray-50 dark:hover:bg-zinc-400/30"
          routerLink="auth/liste-pta"
-         routerLinkActive="bg-gray-100 dark:bg-zinc-400/20 text-gray-800" >
+         routerLinkActive="border-l-2 border-zinc-400 dark:border-zinc-400 text-gray-800">
           <div class="inline-flex ml-3 text-base">
             <div class="mr-7 flex justify-center items-center">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4  group-hover:text-neutral-800 dark:group-hover:text-gray-50">
@@ -203,9 +206,9 @@
         </a>
 
         <!-- activité -->
-        <a class="relative w-full h-12  text-zinc-500 dark:text-zinc-300  rounded-lg flex items-center  cursor-pointer group hover:bg-gray-50 dark:hover:bg-zinc-400/30"
+        <a class="relative w-full h-12  text-zinc-500 dark:text-zinc-300 flex items-center  cursor-pointer group hover:bg-gray-50 dark:hover:bg-zinc-400/30"
          routerLink="auth/liste-activite"
-         routerLinkActive="bg-gray-100 dark:bg-zinc-400/20 text-gray-800" >
+         routerLinkActive="border-l-2 border-zinc-400 dark:border-zinc-400 text-gray-800">
           <div class="inline-flex ml-3 text-base">
             <div class="mr-7 flex justify-center items-center">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4  group-hover:text-neutral-800 dark:group-hover:text-gray-50">
@@ -221,9 +224,9 @@
         </a>
 
         <!-- texte -->
-        <a class="relative w-full h-12  text-zinc-500 dark:text-zinc-300  rounded-lg flex items-center  cursor-pointer group hover:bg-gray-50 dark:hover:bg-zinc-400/30"
+        <a class="relative w-full h-12  text-zinc-500 dark:text-zinc-300 flex items-center  cursor-pointer group hover:bg-gray-50 dark:hover:bg-zinc-400/30"
          routerLink="auth/liste-texte"
-         routerLinkActive="bg-gray-100 dark:bg-zinc-400/20 text-gray-800" >
+         routerLinkActive="border-l-2 border-zinc-400 dark:border-zinc-400 text-gray-800">
           <div class="inline-flex ml-3 text-base">
             <div class="mr-7 flex justify-center items-center">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4  group-hover:text-neutral-800 dark:group-hover:text-gray-50">
@@ -238,9 +241,9 @@
           </div>
         </a>
 
-        <a class="relative w-full h-12  text-zinc-500 dark:text-zinc-300  rounded-lg flex items-center  cursor-pointer group hover:bg-gray-50 dark:hover:bg-zinc-400/30"
+        <a class="relative w-full h-12  text-zinc-500 dark:text-zinc-300  flex items-center  cursor-pointer group hover:bg-gray-50 dark:hover:bg-zinc-400/30"
         routerLink="auth/liste-suivi-execution"
-        routerLinkActive="bg-gray-100 dark:bg-zinc-400/20 text-gray-800" >
+        routerLinkActive="border-l-2 border-zinc-400 dark:border-zinc-400 text-gray-800">
          <div class="inline-flex ml-3 text-base">
            <div class="mr-7 flex justify-center items-center">
              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4  group-hover:text-neutral-800 dark:group-hover:text-gray-50">
@@ -255,9 +258,9 @@
          </div>
        </a>
 
-        <a class="relative w-full h-12  text-zinc-500 dark:text-zinc-300  rounded-lg flex items-center  cursor-pointer group hover:bg-gray-50 dark:hover:bg-zinc-400/30"
+        <a class="relative w-full h-12  text-zinc-500 dark:text-zinc-300  flex items-center  cursor-pointer group hover:bg-gray-50 dark:hover:bg-zinc-400/30"
          routerLink="auth/liste-autre-document"
-         routerLinkActive="bg-gray-100 dark:bg-zinc-400/20 text-gray-800" >
+         routerLinkActive="border-l-2 border-zinc-400 dark:border-zinc-400 text-gray-800">
           <div class="inline-flex ml-3 text-base">
             <div class="mr-7 flex justify-center items-center">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4 t group-hover:text-neutral-800 dark:group-hover:text-gray-50">
@@ -274,10 +277,9 @@
         </a>
 
         <div class="relative">
-          <button class="relative w-full h-12 text-zinc-500 dark:text-zinc-300  rounded-lg flex items-center cursor-pointer group hover:bg-gray-50 dark:hover:bg-zinc-400/30"
+          <button class="relative w-full h-12 text-zinc-500 dark:text-zinc-300  flex items-center cursor-pointer group hover:bg-gray-50 dark:hover:bg-zinc-400/30"
             routerLink="auth/liste-reunion"
-            routerLinkActive="bg-gray-100 dark:bg-zinc-400/20 text-gray-800"
-            [routerLinkActiveOptions]="{ exact: false }">
+            routerLinkActive="border-l-2 border-zinc-400 dark:border-zinc-400 text-gray-800"            [routerLinkActiveOptions]="{ exact: false }">
             <div class="inline-flex ml-3 text-base">
               <div class="mr-7 flex justify-center items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4  group-hover:text-neutral-800 dark:group-hover:text-gray-50">
@@ -293,9 +295,9 @@
           </button>
         </div>
 
-        <a class="relative w-full h-12  text-zinc-500 dark:text-zinc-300  rounded-lg flex items-center  cursor-pointer group hover:bg-gray-50 dark:hover:bg-zinc-400/30"
-         routerLink="auth/dashboard"
-         routerLinkActive="bg-gray-100 dark:bg-zinc-400/20 text-gray-800" >
+        <a  class="relative w-full h-12  text-zinc-500 dark:text-zinc-300  flex items-center  cursor-pointer group hover:bg-gray-50 dark:hover:bg-zinc-400/30"
+         routerLink="dashboard"
+         routerLinkActive="border-l-2 border-zinc-400 dark:border-zinc-400 text-gray-800" >
           <div class="inline-flex ml-3 text-base">
             <div class="mr-7 flex justify-center items-center">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4  group-hover:text-neutral-800 dark:group-hover:text-gray-50">
@@ -309,6 +311,7 @@
             </div>
           </div>
         </a>
+
       </div>
     </div>
   </div>

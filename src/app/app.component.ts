@@ -100,12 +100,16 @@ export class AppComponent implements OnInit {
 
   isDarkMode = false;
 
-  toggleDarkMode() {
-    this.isDarkMode = !this.isDarkMode;
-    if (this.isDarkMode) {
-      document.documentElement.classList.add('dark');
+  toggleDarkMode(): void {
+
+    const isDarkMode = document.documentElement.classList.contains('dark');
+        this.isDarkMode = !this.isDarkMode;
+
+    if (isDarkMode) {
+      document.documentElement.classList.remove('dark'); 
     } else {
-      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.add('dark'); 
     }
   }
+
 }

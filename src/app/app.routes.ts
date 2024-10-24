@@ -29,12 +29,18 @@ import { OrganizationalChartComponent } from './organizational-chart/organizatio
 import { UserListComponent } from './user/user-list/user-list.component';
 import { ChartComponent } from './chart/chart.component';
 import { MeetingweekComponent } from './meeting/meetingweek/meetingweek.component';
+import { AuthAdminGuard } from './services/authAdmin.guard';
+import { AccesDeniedComponent } from './user/acces-denied/acces-denied.component';
 
 export const routes: Routes = [
     {
       path: 'home',
       component: HomeComponent
     },
+    { path: 'auth/liste-livret', component: ListeLivretComponent },
+
+    { path: 'auth/liste-pta', component: ListePtaComponent },
+
     {
       path: 'auth',
       canActivate: [AuthGuard],
@@ -45,14 +51,11 @@ export const routes: Routes = [
         { path: 'archivage-courrier', component: ArchivageCourrierComponent },
         { path: 'liste-reunion/planification', component: PlanifierReunionComponent },
         { path: 'liste-reunion', component: ListeReunionComponent },
-        { path: 'liste-livret', component: ListeLivretComponent },
         { path: 'liste-texte', component: ListeTexteComponent },
-        { path: 'liste-pta', component: ListePtaComponent },
         { path: 'liste-autre-document', component: ListeAutreDocumentComponent },
         { path: 'liste-activite', component: ListeActiviteComponent },
         { path: 'liste-suivi-execution', component: ListeTableauDeBordEBComponent },
         { path: 'uc-presentation', component: UcPresentaionComponent },
-        { path: 'dashboard', component: DashboardComponent },
         { path: 'ptas-list', component: PtasListComponent },
         { path: 'tableau-de-bord-list', component: TableauDeBordListComponent },
         { path: 'liste-activite-chef', component: ActiviteListComponent},
@@ -60,8 +63,13 @@ export const routes: Routes = [
         { path: 'organigramme', component: OrganizationalChartComponent},
         { path: 'liste-utilisateur', component: UserListComponent},
         { path: 'chart', component: ChartComponent},
-        { path: 'semaine-reunion', component: MeetingweekComponent}
+        { path: 'semaine-reunion', component: MeetingweekComponent},
+        { path: 'acces-denied', component: AccesDeniedComponent}
       ]
+    },
+    {
+      path: 'dashboard', component: DashboardComponent,
+      canActivate: [AuthAdminGuard]
     },
     {
       path: 'create-account',

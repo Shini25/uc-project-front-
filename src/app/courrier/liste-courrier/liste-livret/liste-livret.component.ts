@@ -47,6 +47,8 @@ export class ListeLivretComponent implements OnInit, AfterViewInit {
   successMessage: string = '';
   errorMessage: string = '';
   isZoomed: boolean = false;
+  userId: string | null = null;
+  userFilter: string | null = null;
   
   constructor(
     private livretService: LivretService, 
@@ -67,6 +69,21 @@ export class ListeLivretComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.getAllLivrets();
     this.getUserNumero(); 
+    this.userService.getUserInfo().subscribe(user => {
+      this.user = user;
+      console.log('User retrieved:', this.user.username);
+      this.userId = this.user.username;
+
+      console.log('egs userId', this.userId);
+      if(this.user.username ){
+        this.userService.getUserByNumero(this.user.username).subscribe(finalUser => {
+          this.userFilter = finalUser.accountType;
+
+          console.log('egs userfilter', this.userFilter)
+        });
+      }
+    });
+
   }
 
   ngAfterViewInit(): void {
@@ -274,6 +291,19 @@ export class ListeLivretComponent implements OnInit, AfterViewInit {
   } 
 
   updateLivret(): void { 
+
+    if (this.userFilter === 'SIMPLE') {
+      this.isLoading = true;
+      setTimeout(() => {
+        this.isLoading = false;
+        this.errorMessage = 'Vous n\'êtes pas autorisé à effectuer cette action';
+        setTimeout(() => {
+          this.closeModalErrorMessage();
+        }, 2500);
+      }, 2000);
+      return;
+    }
+    
     if (this.updateForm.valid && this.selectedFile) {
       this.closeUpdateForm();
       this.isLoading = true;
@@ -321,5 +351,9 @@ export class ListeLivretComponent implements OnInit, AfterViewInit {
     this.livretAuditService.getAllLivretsAuditByCourrierId(livret.idCourrier).subscribe((data: LivretAudit[]) => {
       this.livretsAudit = data;
     });
+  }
+
+  closeModalErrorMessage(): void{
+    this.errorMessage = '';
   }
 }

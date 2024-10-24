@@ -1,12 +1,12 @@
-<div class="h-full w-full flex flex-col justify-center items-center z-1 backdrop-blur-sm   ">
+<div class="h-full w-full flex flex-col justify-center items-center z-1 backdrop-blur-sm ">
   <div class="h-32 w-full  "></div>
       <div class="flex flex-1  w-full justify-center items-center z-6 p-2">
-        <div class="h-full w-full md:w-1/2 bg-white dark:bg-transparent  border border-gray-100 dark:border-zinc-600  rounded-xl shadow-lg p-4">
+        <div class="h-full w-full md:w-1/2 bg-white dark:bg-sky-900  border border-zinc-400/30 dark:border-zinc-200/30  rounded-xl shadow-xl p-4">
             <form [formGroup]="courrierForm" (ngSubmit)="onSubmit()">
-            <h6 class="text-center text-2xl mb-4 font-bold"><span class="font-medium dark:text-gray-50">Informations de courriers</span></h6>
+            <h6 class="text-center text-2xl mb-4 "><span class="font-medium text-zinc-600 dark:text-zinc-100 mb-6">Informations de courriers</span></h6>
               <div class="h-12 w-full flex flex-row justify-center items-center space-x-0">
                 <div class="w-auto ">
-                  <select id="document_type_select" (change)="onDocumentTypeChange($event)" class="py-2.5 px-4 w-full text-sm text-gray-700 dark:bg-zinc-100  border border-gray-300 rounded-s-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer">
+                  <select id="document_type_select" (change)="onDocumentTypeChange($event)" class="py-2.5 px-4 w-full text-sm text-zinc-600 dark:text-zinc-100 bg-zinc-50 dark:bg-sky-950 border border-zinc-400/30 rounded-s-md shadow-sm focus:outline-none focus:ring-1 focus:border-sky-900 cursor-pointer">
                     <option value="LIVRET" selected>LIVRETS</option>
                     <option value="PTA">PTAS</option>
                     <option value="TABLEAU_DE_BORD">SUIVIS D'EXECUTION</option>
@@ -17,8 +17,8 @@
                 </div>
                 <div class="flex-1">
 
-                  <div *ngIf="selectedDocumentType === 'LIVRET'" >
-                    <select id="livret_select" formControlName="type" class="py-2.5 px-4 w-full text-sm text-gray-700 bg-white dark:bg-zinc-100 border border-gray-300 rounded-e-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer">
+                  <div *ngIf="selectedDocumentType === 'LIVRET'"  >
+                    <select id="livret_select" formControlName="type"  class="py-2.5 px-4 w-full text-sm text-zinc-500 dark:text-zinc-100 bg-zinc-50 dark:bg-sky-950 border border-zinc-400/30 rounded-e-md shadow-sm focus:outline-none focus:ring-1 focus:border-sky-900 cursor-pointer">
                       <option value="GUIDE_AUX_USAGERS" selected>GUIDE AUX USAGERS</option>
                       <option value="CIRCUIT_DE_TRAITEMENT">CIRCUITS DE TRAITEMENT</option>
                       <option value="MANUELS_DE_PROCEDURES">MANUELS DE PROCÉDURES</option>
@@ -28,7 +28,7 @@
                   </div>
 
                   <div *ngIf="selectedDocumentType === 'TEXTE'">
-                            <select id="texte_select" formControlName="type" class="block py-2.5 px-4 w-full text-sm text-gray-700 bg-white dark:bg-zinc-100 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer">
+                            <select id="texte_select" formControlName="type" class="py-2.5 px-4 w-full text-sm text-zinc-500 dark:text-zinc-100 bg-zinc-50 dark:bg-sky-950 border border-zinc-400/30 rounded-e-md shadow-sm focus:outline-none focus:ring-1 focus:border-sky-900 cursor-pointer">
                               <option value="TEXTES_REGLEMENTAIRES" selected>Textes réglementaires</option>
                               <option value="REMARQUES_OBSERVATIONS">Remarques & observations</option>
                               <option value="LETTRES_NOTES">Lettres & notes</option>
@@ -37,7 +37,7 @@
                             </select>
                   </div>
                   <div *ngIf="selectedDocumentType === 'TABLEAU_DE_BORD'">
-                    <select id="tableau_select" formControlName="type" class="block py-2.5 px-4 w-full text-sm text-gray-700 bg-white dark:bg-zinc-100 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer">
+                    <select id="tableau_select" formControlName="type" class="py-2.5 px-4 w-full text-sm text-zinc-500 dark:text-zinc-100 bg-zinc-50 dark:bg-sky-950 border border-zinc-400/30 rounded-e-md shadow-sm focus:outline-none focus:ring-1 focus:border-sky-900 cursor-pointer">
                       <option value="TABLEAU_DE_BORD" selected>TABLEAU DE BORD</option>
                       <option value="EXECUTION_DAF">EXECUTION DAF</option>
                       <option value="EXECUTION_SSB">EXECUTION SSB</option>
@@ -46,7 +46,7 @@
                   </div>
 
                   <div *ngIf="selectedDocumentType === 'AUTRE_DOCUMENT'">
-                    <select id="autre_doc_select" formControlName="type" class="block py-2.5 px-4 w-full text-sm text-gray-700 bg-white dark:bg-zinc-100 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer">
+                    <select id="autre_doc_select" formControlName="type" class="py-2.5 px-4 w-full text-sm text-zinc-500 dark:text-zinc-100 bg-zinc-50 dark:bg-sky-950 border border-zinc-400/30 rounded-e-md shadow-sm focus:outline-none focus:ring-1 focus:border-sky-900 cursor-pointer">
                       <option value="CALENDRIER_SOLDE_PENSION" selected>Calendrier de la solde & pension</option>
                       <option value="FEUILLE_DE_ROUTE">Feuille de route</option>
                       <option value="PIP">PIP</option>
@@ -58,7 +58,7 @@
                   </div>
 
                   <div *ngIf="selectedDocumentType === 'ACTIVITE'">
-                    <select id="activite_select" formControlName="type" class="block py-2.5 px-4 w-full text-sm text-gray-700 bg-white dark:bg-zinc-100 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer">
+                    <select id="activite_select" formControlName="type" class="py-2.5 px-4 w-full text-sm text-zinc-500 dark:text-zinc-100 bg-zinc-50 dark:bg-sky-950 border border-zinc-400/30 rounded-e-md shadow-sm focus:outline-none focus:ring-1 focus:border-sky-900 cursor-pointer">
                       <option value="REFORMES" selected>Réformes</option>
                       <option value="HEBDOMADAIRE">Hebdomadaire</option>
                       <option value="MENSUEL">Mensuel</option>
@@ -68,16 +68,16 @@
                       <option value="GRANDES_REALISATIONS">Grandes réalisations</option>
                     </select>
                   </div>
-                  
-                  <div *ngIf="selectedDocumentType === 'PTA'" class="ml-2">
-                    <div class="flex space-x-4 flex-row justify-between ">
-                      <label class="inline-flex items-center">
-                        <input type="radio" formControlName="sousType" value="SERVICE" (change)="onSousTypeChange('SERVICE')" class="form-radio text-blue-600">
-                        <span class="ml-2 text-gray-700">SERVICE</span>
+
+                  <div *ngIf="selectedDocumentType === 'PTA'" class="ml-2 mt-3" >
+                    <div class="flex space-x-4 flex-row justify-center items-center gap-2 ">
+                      <label class="inline-flex items-center self-center">
+                        <input type="radio" formControlName="sousType" value="SERVICE" (change)="onSousTypeChange('SERVICE')" class="form-radio text-sky-900">
+                        <span class="ml-2 text-zinc-500 dark:text-zinc-200">SERVICE</span>
                       </label>
-                      <label class="inline-flex items-center">
-                        <input type="radio" formControlName="sousType" value="DGBF" (change)="onSousTypeChange('DGBF')" class="form-radio text-blue-600">
-                        <span class="ml-2 text-gray-700">DGBF</span>
+                      <label class="inline-flex items-center self-center">
+                        <input type="radio" formControlName="sousType" value="DGBF" (change)="onSousTypeChange('DGBF')" class="form-radio text-sky-900">
+                        <span class="ml-2 text-zinc-500 dark:text-zinc-200">DGBF</span>
                       </label>
                     </div>
                   </div>
@@ -85,8 +85,8 @@
                 </div>
               </div>
 
-              <div *ngIf="selectedSousType === 'SERVICE'">
-                <select id="service_select" formControlName="type" class="block py-2.5 px-4 w-full text-sm text-gray-700 bg-white dark:bg-zinc-100 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer">
+              <div *ngIf="selectedSousType === 'SERVICE' " class="mt-3">
+                <select id="service_select" formControlName="type" class="py-2.5 px-4 w-full text-sm text-zinc-500 dark:text-zinc-100 bg-zinc-50 dark:bg-sky-950 border border-zinc-400/30 rounded-e-md shadow-sm focus:outline-none focus:ring-1 focus:border-sky-900 cursor-pointer">
                   <option value="SLP">SLP</option>
                   <option value="SODP">SODP</option>
                   <option value="SSDO">SSDO</option>
@@ -99,8 +99,8 @@
                 </select>
               </div>
               
-              <div *ngIf="selectedSousType === 'DGBF'">
-                <select id="global_select" formControlName="type" class="block py-2.5 px-4 w-full text-sm text-gray-700 bg-white dark:bg-zinc-100 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer">
+              <div *ngIf="selectedSousType === 'DGBF'" class="mt-3">
+                <select id="global_select" formControlName="type" class="py-2.5 px-4 w-full text-sm text-zinc-500 dark:text-zinc-100 bg-zinc-50 dark:bg-sky-950 border border-zinc-400/30 rounded-e-md shadow-sm focus:outline-none focus:ring-1 focus:border-sky-900 cursor-pointer">
                   <option value="DSP">DSP</option>
                   <option value="DGBF">DGBF</option>
                   <option value="MEF">MEF</option>
@@ -108,24 +108,32 @@
                 </select>
               </div>
 
-              <div class="w-full mt-4 h- ">
-                <input class="w-full p-2 dark:bg-zinc-100  border rounded" id="titre" type="text" placeholder="Titre du courrier" formControlName="titre">
-              </div>
-              
-              <div class="w-full mt-4 h- ">
-                <input (change)="onFileChange($event)" class="block w-full mb-5 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="small_size" type="file">
-
+              <div class="w-full mt-3  ">
+                <input class="w-full p-2 bg-zinc-50 dark:bg-sky-950 dark:text-zinc-500 border focus:outline-none focus:ring-1 focus:border-sky-900 border-zinc-400/30 rounded" id="titre" type="text" placeholder="Titre du courrier" formControlName="titre">
               </div>
 
+              <div class="flex items-center mt-3 justify-center w-full">
+                <label for="small_size" class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-sky-950 dark:border-zinc-400/30 dark:hover:border-zinc-200/30 hover:bg-gray-100">
+                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                      <svg class="w-8 h-8 mb-4 text-zinc-500 dark:text-zinc-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                    </svg>
+                        <p class="mb-2 text-sm text-zinc-500 dark:text-zinc-400"><span class="font-semibold">Sélectionner un fichier</span></p>
+                        <p class="text-xs text-zinc-500 dark:text-zinc-400">{{ selectedFileName }}</p>
+
+                    </div>
+                    <input (change)="onFileChange($event)" id="small_size" type="file" class="hidden" />
+                </label>
+              </div>
+  
               <div class="w-full mt-4 h-auto ">
-                <button type="submit"  class="w-full text-white dark:text-zinc-800 bg-sky-950 hover:bg-sky-900 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-zinc-50 dark:hover:bg-zinc-100 focus:outline-none dark:focus:ring-blue-800">Archiver</button>
+                <button type="submit"  class="w-full text-white dark:text-zinc-100 bg-sky-800  hover:bg-sky-900 focus:ring-4 focus:ring-sky-950 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-sky-800 focus:outline-none dark:focus:ring-sky-950">Archiver</button>
               </div>
             </form>
           </div>          
       </div>
   <div class="h-32 w-full"></div>
 </div>
-
 
 <!-- Spinner -->
 <div class="text-center h-full w-full bg-black/10 !z-[1000] fixed inset-0 flex items-center justify-center  " *ngIf="isLoading">

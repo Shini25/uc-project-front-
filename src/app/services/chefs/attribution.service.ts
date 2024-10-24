@@ -2,11 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { UcAttribution } from '../../models/chefs.model';
+import { environment } from '../../../environment/environment';
+
 @Injectable({
   providedIn: 'root'
 })
 export class attributionService {
-  private apiUrl = 'http://localhost:8080/api/chefs';
+  private apiUrl = `${environment.apiUrl}/api/chefs`;
 
   constructor(private http: HttpClient) {}
 

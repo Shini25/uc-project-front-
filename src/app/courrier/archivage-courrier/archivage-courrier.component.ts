@@ -1,15 +1,8 @@
 import { Component, EventEmitter, Output, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { CourrierService } from '../../services/courrier/courrier.service';
-import { MatDialog } from '@angular/material/dialog';
-import { SuccessDialogComponent } from '../../chef-form/success-dialog/success-dialog.component';
 import { Location } from '@angular/common';
-import { UserSessionService } from '../../services/userSessionService';
 import { UserService } from '../../services/user.service';
 
 
@@ -18,10 +11,6 @@ import { UserService } from '../../services/user.service';
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    MatInputModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatIconModule,
     CommonModule
   ],
   templateUrl: './archivage-courrier.component.html',
@@ -36,28 +25,26 @@ export class ArchivageCourrierComponent implements OnInit {
   fileType: string | null = null;
   selectedDocumentType: string = 'LIVRET'; 
   selectedSousType: string | null = null;
-  errorMessage: string | null = null;
   allowedFileTypes: string[] = ['application/pdf', 'image/jpeg', 'image/png'];
   maxFileSize: number = 100 * 1024 * 1024; // 100 MB
   user: any;
   successMessage: string | null = null;
   isLoading: boolean = false;
-  userFilter: string | null = null; // Declare userFilter at the class level
+  errorMessage: string | null = null;
+  userFilter: string | null = null; 
+  userId: string | null = null;
 
   constructor(
     private fb: FormBuilder,
     private courrierService: CourrierService,
-    public dialog: MatDialog,
     private location: Location,
-    private userSessionService: UserSessionService,
     private userService: UserService,
   ) {
-    const userId = this.userSessionService.getNumero();
-    console.log('Retrieved userId in ArchivageCourrierComponent:', userId); // Debug log
+
     this.courrierForm = this.fb.group({
       titre: ['', Validators.required],
       type: ['', Validators.required],
-      userId: [userId],
+      userId: [''],
       sousType: ['']
     });
   }
@@ -66,6 +53,9 @@ export class ArchivageCourrierComponent implements OnInit {
     this.userService.getUserInfo().subscribe(user => {
       this.user = user;
       console.log('User retrieved:', this.user.username);
+      this.userId = this.user.username;
+
+      console.log('egs userId', this.userId);
       if(this.user.username ){
         this.userService.getUserByNumero(this.user.username).subscribe(finalUser => {
           this.userFilter = finalUser.accountType;
@@ -96,7 +86,7 @@ export class ArchivageCourrierComponent implements OnInit {
       this.selectedFile = file;
       this.selectedFileName = file.name;
       this.fileType = file.type;
-      this.errorMessage = null; // Clear previous error messages
+      this.errorMessage = null; 
     }
   }
 
@@ -108,29 +98,31 @@ export class ArchivageCourrierComponent implements OnInit {
   }
 
   onSubmit(): void {
+
+    if (this.userFilter === 'SIMPLE') {
+      this.isLoading = true;
+      setTimeout(() => {
+        this.isLoading = false;
+        this.errorMessage = 'Vous n\'êtes pas autorisé à effectuer cette action';
+        setTimeout(() => {
+          this.closeModalErrorMessage();
+        }, 2500);
+      }, 2000);
+      return;
+    }
+    
     if (this.courrierForm.valid && this.selectedFile) {
       console.log('egs userfilter', this.userFilter);
 
-      if (this.userFilter === 'SIMPLE') {
-        this.isLoading = true;
-        setTimeout(() => {
-          this.isLoading = false;
-          this.errorMessage = 'Vous n\'êtes pas autorisé à effectuer cette action';
-          setTimeout(() => {
-            this.closeModalErrorMessage();
-          }, 2500);
-        }, 2000);
-        return;
-      }
-
       this.isLoading = true;
-      const { titre, type, userId, sousType } = this.courrierForm.value;
+      console.log('egs courrierForm', this.courrierForm.value);
+      const { titre, type, sousType } = this.courrierForm.value;
       const formData = new FormData();
       formData.append('titre', titre);
       formData.append('contenu', this.selectedFile);
       formData.append('type', type);
       formData.append('typeDeContenu', this.fileType!);
-      formData.append('userId', userId);
+      formData.append('userId', this.userId!);
       formData.append('sousType', sousType);
 
       const handleResponse = (successMessage: string, errorMessage: string) => {
@@ -140,6 +132,9 @@ export class ArchivageCourrierComponent implements OnInit {
               this.isLoading = false;
               this.successMessage = successMessage;
               this.courrierForm.reset();
+              this.selectedFile = null;
+              this.selectedFileName =''; 
+              this.fileType = null; 
               setTimeout(() => {
                 this.successMessage = '';
               }, 3000);
@@ -160,28 +155,28 @@ export class ArchivageCourrierComponent implements OnInit {
 
       switch (this.selectedDocumentType) {
         case 'LIVRET':
-          this.courrierService.creationLivret(titre, this.selectedFile, type, this.fileType!, userId)
+          this.courrierService.creationLivret(titre, this.selectedFile, type, this.fileType!, this.userId!)
             .subscribe(handleResponse('Livret créé avec succès', 'Erreur lors de la création du livret'));
           break;
         case 'PTA':
-          this.courrierService.creationPta(titre, this.selectedFile, type, sousType, this.fileType!, userId)
+          this.courrierService.creationPta(titre, this.selectedFile, type, sousType, this.fileType!, this.userId!)
             .subscribe(handleResponse('Pta créé avec succès', 'Erreur lors de la création du PTA'));
           break;
         case 'ACTIVITE':
-          this.courrierService.createActivite(titre, this.selectedFile, type, this.fileType!, userId)
+          this.courrierService.createActivite(titre, this.selectedFile, type, this.fileType!, this.userId!)
             .subscribe(handleResponse('Activité créée avec succès', 'Erreur lors de la création de l\'activité'));
           break;
         case 'TEXTE':
-          this.courrierService.createTexte(titre, this.selectedFile, type, this.fileType!, userId)
+          this.courrierService.createTexte(titre, this.selectedFile, type, this.fileType!, this.userId!)
             .subscribe(handleResponse('Texte créé avec succès', 'Erreur lors de la création du texte'));
           break;
         case 'AUTRE_DOCUMENT':
-          this.courrierService.createAutreDocument(titre, this.selectedFile, type, this.fileType!, userId)
-            .subscribe(response => this.handleSuccess(response));
+          this.courrierService.createAutreDocument(titre, this.selectedFile, type, this.fileType!, this.userId!)
+            .subscribe(handleResponse('Document créé avec succès', 'Erreur lors de la création du document'));
           break;
         case 'TABLEAU_DE_BORD':
-          this.courrierService.createTableauDeBord(titre, this.selectedFile, type, this.fileType!, userId)
-            .subscribe(response => this.handleSuccess(response));
+          this.courrierService.createTableauDeBord(titre, this.selectedFile, type, this.fileType!, this.userId!)
+            .subscribe(handleResponse('Document créé avec succès', 'Erreur lors de la création du document'));
           break;
         default:
           console.error('Type de document inconnu');
@@ -191,12 +186,6 @@ export class ArchivageCourrierComponent implements OnInit {
     }
   }
   
-
-  handleSuccess(response: any): void {
-    console.log('Document créé avec succès', response);
-    this.dialog.open(SuccessDialogComponent);
-    this.courrierArchived.emit(); // Émettre l'événement
-  }
 
   goBack(): void {
     this.location.back();

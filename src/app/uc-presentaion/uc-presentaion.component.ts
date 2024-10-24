@@ -146,7 +146,7 @@ export class UcPresentaionComponent implements OnInit {
       chef.attributions = attributions.map(attr => ({ attribution: attr }));
     });
     this.visibleChefs = [chef];
-    this.filteredChefs = []; // Clear the search results
+    this.filteredChefs = []; 
     this.searchActive = false;
   }
 
@@ -185,6 +185,13 @@ export class UcPresentaionComponent implements OnInit {
       this.selectedFileName = this.selectedFile.name;
       this.fileType = this.selectedFile.type;
     }
+  }
+
+  getUcChefs() {
+    return this.getDisplayChefs().filter(chef => chef.sousType === 'CHEF');
+  }
+  getUcMembers() {
+    return this.getDisplayChefs().filter(chef => chef.sousType === 'MEMBRES');
   }
 
 }

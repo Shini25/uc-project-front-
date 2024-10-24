@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Texte } from '../../models/courriers/texte.model';
-
+import { environment } from '../../../environment/environment';
 @Injectable({
   providedIn: 'root'
 })
 
 export class TexteService {
-  private apiUrl = 'http://localhost:8080/api/textes';
+  private apiUrl = `${environment.apiUrl}/api/textes`;
 
   constructor(private http: HttpClient) {}
 

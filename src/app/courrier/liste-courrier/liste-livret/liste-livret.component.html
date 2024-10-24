@@ -66,11 +66,10 @@
       </thead>
       <tbody  class="bg-white dark:bg-sky-900">
         <ng-container *ngFor="let livret of paginatedLivrets; let i = index">
-        <tr class="border-b dark:border-gray-700 whitespace-nowrap" >
-          <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ livret.titre }}</th>
-          <!-- if datemodification = null show livret.date.insertion else date.modification -->
+          <tr class="hover:bg-zinc-100 dark:hover:bg-sky-950 transition-all duration-150 border-b whitespace-nowrap dark:border-gray-700  text-zinc-400">
+            <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ livret.titre }}</th>
               <td class="px-4 py-3">{{ livret.dateModification ? (livret.dateModification | date:'short') : (livret.dateInsertion | date:'short') }}</td>
-              <td class="px-4 py-3 text-yellow-500 font-medium whitespace-nowrap">{{ livret.type.toString() | replaceUnderscore }}</td>
+              <td class="px-4 py-3">{{ livret.type.toString() | replaceUnderscore }}</td>
               <td class="px-4 py-3">{{ livret.user_account.numero }}</td>
 
               <td class="px-4 py-3">
@@ -81,7 +80,7 @@
                     </svg>
                   </button>
 
-                  <button class=" text-zinc-100 bg-zinc-400   rounded-md shadow-md" (click)="previewLivret(livret)">
+                  <button class=" text-zinc-100 bg-yellow-500   rounded-md shadow-md" (click)="previewLivret(livret)">
                   <div class=" flex flex-row gap-2 items-center justify-center px-2 py-1 rounded-md">
                     <div>
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">

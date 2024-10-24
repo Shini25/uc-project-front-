@@ -3,14 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User_account } from '../models/user.model';
 import { AuthService } from './auth.service';
-
+import { environment } from '../../environment/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = 'http://localhost:8080/api/users';
+  private apiUrl = `${environment.apiUrl}/api/users`;
   private numeroKey = 'userNumero';
-  
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
@@ -38,7 +37,7 @@ export class UserService {
   getNumero(): string | null {
     if (typeof localStorage !== 'undefined') {
       const numero = localStorage.getItem(this.numeroKey);
-      console.log('Numero retrieved from UserService:', numero); // Log the retrieved numero
+      console.log('Numero retrieved from UserService:', numero);
       return numero;
     } else {
       console.error('localStorage is not available');
@@ -47,18 +46,7 @@ export class UserService {
   }
 
   getUserByNumero(numero: string): Observable<User_account> {
-    // header token
-    const token = this.authService.getToken();
-    console.log('Token ito ilay  token:', token);
-    if (!token) {
-      console.error('No token found');
-      throw new Error('No token found');
-    }
-    return this.http.get<User_account>(`${this.apiUrl}/${numero}`, {
-      headers: {
-        Authorization: `Bearer ${token}`  // Ajout du token dans l'en-tête
-      } 
-    });
+    return this.http.get<User_account>(`${this.apiUrl}/${numero}`);
   }
 
   getUserInfo(): Observable<User_account> {
@@ -67,7 +55,6 @@ export class UserService {
       throw new Error('No token found');
     }
 
-    // Ajout du token à l'entête de la requête
     return this.http.get<User_account>(`${this.apiUrl}/user-info`, {
       headers: {
         Authorization: `Bearer ${token}` 

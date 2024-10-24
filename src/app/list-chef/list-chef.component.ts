@@ -11,7 +11,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { UserSessionService } from '../services/userSessionService';
 import { Router } from '@angular/router';
 import { OrganizationalChartService } from '../services/chefs/organizationalChart.service';
-
+import { UserService } from '../services/user.service';
 @Component({
   selector: 'app-list-chef',
   standalone: true,
@@ -47,6 +47,9 @@ export class ListChefComponent implements OnInit {
   isLoading: boolean = false;
   successMessage: string = '';
   errorMessage: string = '';
+  user: any;
+  userId: string | null = null;
+  userFilter: string | null = null;
 
   constructor(
     private chefService: InfoBaseChefService,
@@ -58,7 +61,8 @@ export class ListChefComponent implements OnInit {
     private chefMotDuChefService: motDuChefService,
     private flowbiteService: FlowbiteService,
     private userSessionService: UserSessionService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private userService: UserService
   ) {
 
     const userId = this.userSessionService.getNumero();
@@ -73,6 +77,22 @@ export class ListChefComponent implements OnInit {
       console.log('Flowbite loaded:', flowbite);
     });
     this.fetchChefsByType(this.selectedType);
+
+    this.userService.getUserInfo().subscribe(user => {
+      this.user = user;
+      console.log('User retrieved:', this.user.username);
+      this.userId = this.user.username;
+
+      console.log('egs userId', this.userId);
+      if(this.user.username ){
+        this.userService.getUserByNumero(this.user.username).subscribe(finalUser => {
+          this.userFilter = finalUser.accountType;
+
+          console.log('egs userfilter', this.userFilter)
+        });
+      }
+    });
+
 
   }
 
@@ -204,6 +224,18 @@ export class ListChefComponent implements OnInit {
     }
   }
   onSubmitOrganizationalChart(): void {
+    if (this.userFilter === 'SIMPLE') {
+      this.isLoading = true;
+      setTimeout(() => {
+        this.isLoading = false;
+        this.errorMessage = 'Vous n\'êtes pas autorisé à effectuer cette action';
+        setTimeout(() => {
+          this.closeModalErrorMessage();
+        }, 2500);
+      }, 2000);
+      return;
+    }
+    
     if (this.organizationalChartForm.valid && this.selectedFile) {
       this.isLoading = true;
       const { type, addBy } = this.organizationalChartForm.value;
@@ -230,5 +262,9 @@ export class ListChefComponent implements OnInit {
     } else {
       console.error('Formulaire invalide ou fichier manquant');
     }
+  }
+
+  closeModalErrorMessage(): void{
+    this.errorMessage = '';
   }
 }

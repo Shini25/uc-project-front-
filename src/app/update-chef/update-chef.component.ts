@@ -6,7 +6,7 @@ import { Chefs } from '../models/chefs.model';
 import { MatDialog } from '@angular/material/dialog';
 import { FlowbiteService } from '../services/flowbite.service';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
-
+import { UserService } from '../services/user.service';
 export const matchFieldsValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
   const numero = control.get('numero');
   const contact = control.get('contact');
@@ -30,7 +30,7 @@ export const matchFieldsValidator: ValidatorFn = (control: AbstractControl): Val
   ]
 })
 
-export class UpdateChefComponent implements AfterViewInit {
+export class UpdateChefComponent implements AfterViewInit, OnInit {
   chefsForm: FormGroup;
   firstFormGroup: FormGroup;
   selectedPhoto: File | null = null;
@@ -40,8 +40,11 @@ export class UpdateChefComponent implements AfterViewInit {
   successMessage: string = '';
   sousTypeOptions: string[] = [];
   errorMessage: string = '';
+  user: any;
+  userId: string | null = null;
+  userFilter: string | null = null;
 
-  constructor(private fb: FormBuilder, private chefcService: InfoBaseChefService, public dialog: MatDialog, private flowbiteService: FlowbiteService) {
+  constructor(private fb: FormBuilder, private chefcService: InfoBaseChefService, public dialog: MatDialog, private flowbiteService: FlowbiteService, private userService: UserService) {
     this.chefsForm = this.fb.group({
       ancienContact: ['', Validators.required],
       numero: ['', [Validators.required, Validators.pattern('^[0-9]+$')]], 
@@ -71,7 +74,23 @@ export class UpdateChefComponent implements AfterViewInit {
       motDuChefs: this.fb.array([]),
 
     }, { validators: matchFieldsValidator });
+  }
 
+  ngOnInit(): void {
+    this.userService.getUserInfo().subscribe(user => {
+      this.user = user;
+      console.log('User retrieved:', this.user.username);
+      this.userId = this.user.username;
+
+      console.log('egs userId', this.userId);
+      if(this.user.username ){
+        this.userService.getUserByNumero(this.user.username).subscribe(finalUser => {
+          this.userFilter = finalUser.accountType;
+
+          console.log('egs userfilter', this.userFilter)
+        });
+      }
+    });
   }
 
   ngAfterViewInit(): void {
@@ -128,12 +147,21 @@ export class UpdateChefComponent implements AfterViewInit {
   }
 
   onSubmit(): void {
+    if (this.userFilter === 'SIMPLE') {
+      this.isLoading = true;
+      setTimeout(() => {
+        this.isLoading = false;
+        this.errorMessage = 'Vous n\'êtes pas autorisé à effectuer cette action';
+        setTimeout(() => {
+          this.closeModalErrorMessage();
+        }, 2500);
+      }, 2000);
+      return;
+    }
+
     if (this.firstFormGroup.valid) {
-      // Automatically set sousType based on typeChef
       const typeChef = this.firstFormGroup.get('typeChef')?.value;
-      if (typeChef === 'UC') {
-        this.firstFormGroup.get('sousType')?.setValue('UC');
-      } else if (typeChef === 'DG') {
+      if (typeChef === 'DG') {
         this.firstFormGroup.get('sousType')?.setValue('DGFAG');
       }
   
@@ -228,6 +256,9 @@ export class UpdateChefComponent implements AfterViewInit {
       case 'DIRECTEURS_PRMP':
         this.sousTypeOptions = ['DB', 'DSP', 'PRMP', 'DGEAE', 'DPE'];
         break;
+      case 'UC':
+        this.sousTypeOptions = ['MEMBRES', 'UC'];
+        break;
       default:
         this.sousTypeOptions = [];
     }
@@ -245,5 +276,10 @@ export class UpdateChefComponent implements AfterViewInit {
     if (motDuChefs.length > 0) {
       motDuChefs.removeAt(motDuChefs.length - 1);
     }
+  }
+
+
+  closeModalErrorMessage(): void{
+    this.errorMessage = '';
   }
 }

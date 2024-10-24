@@ -3,11 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { InfoMeetingBase } from '../../models/infoMeetingBase.model';
 import { ParticipantOrganizerDTO } from '../../models/participantOrganizerDTO.model';
+import { environment } from '../../../environment/environment';
+
 @Injectable({
   providedIn: 'root'
 })
 export class MeetingService {
-  private apiUrl = 'http://localhost:8080/api/meetings';
+  private apiUrl = `${environment.apiUrl}/api/meetings`;
 
   constructor(private http: HttpClient) {}
     scheduleMeeting(

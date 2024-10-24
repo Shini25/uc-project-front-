@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { OrganizationalChart } from '../../models/organizationalChart.model';
-
+import { environment } from '../../../environment/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class OrganizationalChartService {
-    private apiUrl = 'http://localhost:8080/api/organizational-charts';
+    private apiUrl =    `${environment.apiUrl}/api/organizational-charts`;
 
     constructor(private http: HttpClient) {}
 

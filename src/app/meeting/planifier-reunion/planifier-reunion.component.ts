@@ -5,7 +5,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { MeetingService } from '../../services/meeting/meeting.service';
 import { InfoBaseChefService } from '../../services/chefs/infoBaseChef.service';
 import { Chefs } from '../../models/chefs.model';
-import { UserSessionService } from '../../services/userSessionService';
 import { UserService } from '../../services/user.service';
 
 function duplicateEmailValidator(formArray: AbstractControl): ValidationErrors | null {
@@ -35,19 +34,18 @@ export class PlanifierReunionComponent implements OnInit {
   selectedNames: string[] = [] ;
   cdr: any;
   user: any;
+  userId: string | null = null;
+  userFilter: string | null = null;
 
   constructor(
     private fb: FormBuilder,
     private meetingService: MeetingService,
     private chefService: InfoBaseChefService,
-    private userSessionService: UserSessionService,
     private userService: UserService
   ) {
   }
 
-// Modifiez la méthode addNewForm pour inclure l'utilisateur actuel
 addNewForm(): void {
-  // Assurez-vous que l'utilisateur est défini avant d'ajouter le formulaire
   const addBy = this.user ? this.user.username : '';
 
   const newForm = this.fb.group({
@@ -69,10 +67,7 @@ ngOnInit(): void {
   this.userService.getUserInfo().subscribe(user => {
     this.user = user;
     console.log('User retrieved:', this.user.username);
-
-    this.addNewForm();  // Initialiser le formulaire ici
-
-    // S'abonner aux changements dans le champ 'meetingType'
+    this.addNewForm();  
     if (this.forms[0]) {
       this.forms[0].get('meetingType')?.valueChanges.subscribe(value => {
         if (value === 'interne') {
@@ -168,7 +163,6 @@ ngOnInit(): void {
       name: ['', Validators.required]
     }));
   
-    // Appliquer la validation personnalisée
     organizersMailArray.setValidators(duplicateEmailValidator);
     organizersMailArray.updateValueAndValidity();
   }
@@ -186,9 +180,18 @@ ngOnInit(): void {
   }
 
   onSubmit(index: number): void {
+    if (this.userFilter === 'SIMPLE') {
+      this.isLoading = true;
+      setTimeout(() => {
+        this.isLoading = false;
+        this.errorMessage = 'Vous n\'êtes pas autorisé à effectuer cette action';
+        setTimeout(() => {
+          this.closeModalErrorMessage();
+        }, 2500);
+      }, 2000);
+      return;
+    }
     const form = this.forms[index];
-  
-    // Vérification des emails dupliqués (comme dans votre précédent code)
     const organizersEmails = form.value.organizersMail.map((organizer: any) => organizer.email);
     const participantsEmails = form.value.participantsMail.map((participant: any) => participant.email);
     const allEmails = [...organizersEmails, ...participantsEmails];
@@ -202,9 +205,8 @@ ngOnInit(): void {
       return;
     }
   
-    // Si le formulaire est valide, on désactive les champs et on affiche un indicateur de chargement
     if (form.valid) {
-      this.isLoading = true; // Active l'indicateur de chargement et désactive le formulaire
+      this.isLoading = true; 
       this.successMessage = '';
       this.errorMessage = '';
   
@@ -223,9 +225,9 @@ ngOnInit(): void {
         response => {
           console.log('Réunion planifiée avec succès', response);
           setTimeout(() => {
-            this.isLoading = false;  // Cache l'indicateur de chargement
-            form.enable();           // Réactive le formulaire après soumission
-            form.reset();            // Réinitialise le formulaire
+            this.isLoading = false;  
+            form.enable();          
+            form.reset();           
             this.successMessage = 'Réunion planifiée avec succès!';
             setTimeout(() => {
               this.successMessage = '';
@@ -233,8 +235,8 @@ ngOnInit(): void {
           }, 2000);
         }, error => {
           console.error('Erreur lors de la planification de la réunion:', error);
-          this.isLoading = false; // Cache l'indicateur de chargement
-          form.enable();          // Réactive le formulaire en cas d'erreur
+          this.isLoading = false; 
+          form.enable();          
           this.errorMessage = 'Erreur lors de la planification de la réunion. Veuillez réessayer.';
           setTimeout(() => {
             this.errorMessage = '';
@@ -287,11 +289,9 @@ ngOnInit(): void {
     const participantsMailControl = this.getParticipantsMail(i).at(j);
     const selectedEmail = participantsMailControl.get('email')?.value;
   
-    // Rechercher le chef correspondant à l'email sélectionné
     const selectedChef = this.chefs.find(chef => chef.email === selectedEmail);
   
     if (selectedChef) {
-      // Mettre à jour le champ "name" dans le formulaire pour ce participant
       participantsMailControl.patchValue({
         name: `${selectedChef.nom} ${selectedChef.prenoms}`
       });
@@ -302,11 +302,9 @@ ngOnInit(): void {
     const organizersMailControl = this.getOrganizersMail(i).at(j);
     const selectedEmail = organizersMailControl.get('email')?.value;
   
-    // Rechercher le chef correspondant à l'email sélectionné
     const selectedChef = this.chefs.find(chef => chef.email === selectedEmail);
   
     if (selectedChef) {
-      // Mettre à jour le champ "name" dans le formulaire pour ce participant
       organizersMailControl.patchValue({
         name: `${selectedChef.nom} ${selectedChef.prenoms}`
       });
@@ -324,5 +322,8 @@ ngOnInit(): void {
   }
 
   
+  closeModalErrorMessage(): void{
+    this.errorMessage = '';
+  }
 
 }

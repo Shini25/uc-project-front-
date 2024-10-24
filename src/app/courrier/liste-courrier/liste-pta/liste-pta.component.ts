@@ -58,6 +58,8 @@ export class ListePtaComponent implements OnInit, AfterViewInit {
   isLoading: boolean = false;
   successMessage: string = '';
   errorMessage: string = '';
+  userFilter: string | null = null;
+  userId: string | null = null;
   
   constructor(
     private ptaService: PtaService, 
@@ -84,6 +86,21 @@ export class ListePtaComponent implements OnInit, AfterViewInit {
     this.currentSousTypes = this.sousTypesService;
     this.getAllPtas();
     this.getUserNumero(); 
+
+    this.userService.getUserInfo().subscribe(user => {
+      this.user = user;
+      console.log('User retrieved:', this.user.username);
+      this.userId = this.user.username;
+
+      console.log('egs userId', this.userId);
+      if(this.user.username ){
+        this.userService.getUserByNumero(this.user.username).subscribe(finalUser => {
+          this.userFilter = finalUser.accountType;
+
+          console.log('egs userfilter', this.userFilter)
+        });
+      }
+    });
   }
 
   ngAfterViewInit(): void {
@@ -313,6 +330,19 @@ export class ListePtaComponent implements OnInit, AfterViewInit {
   } 
 
   updatePta(): void { 
+
+    if (this.userFilter === 'SIMPLE') {
+      this.isLoading = true;
+      setTimeout(() => {
+        this.isLoading = false;
+        this.errorMessage = 'Vous n\'êtes pas autorisé à effectuer cette action';
+        setTimeout(() => {
+          this.closeModalErrorMessage();
+        }, 2500);
+      }, 2000);
+      return;
+    }
+
     if (this.updateForm.valid && this.selectedFile) {
       this.closeUpdateForm();
       this.isLoading = true;
@@ -375,6 +405,10 @@ export class ListePtaComponent implements OnInit, AfterViewInit {
       this.validerPta(this.ptaToValidate);
       this.closeConfirmModal();
     }
+  }
+
+  closeModalErrorMessage(): void{
+    this.errorMessage = '';
   }
 }
 

@@ -20,14 +20,13 @@
       <tbody class="bg-white dark:bg-transparent">
         <ng-container *ngFor="let user of paginatedUsers; let i = index">
           <tr class="border-b dark:border-gray-700 whitespace-nowrap">
-            <td class="px-4 py-3 font-medium text-gray-800">{{ user.numero }}</td>
+            <td class="px-4 py-3 font-medium text-gray-800 dark:text-zinc-100">{{ user.numero }}</td>
             <td class="px-4 py-3">
             <div *ngIf="user.accountStatus === 'OFFLINE'" >
               <div class="w-3 h-3 bg-gray-500 rounded-full"></div>
             </div>
             <div *ngIf="user.accountStatus === 'ONLINE'" >
               <div class="w-3 h-3 bg-green-500 rounded-full"></div>
-              <span class="text-sm">ONLINE</span>
             </div>
           </td>
           <td class="px-4 py-3">

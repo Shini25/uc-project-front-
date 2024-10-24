@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-
+import { environment } from '../../environment/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class SendMailService {
-    private apiUrl = 'http://localhost:8080/api/send-mail';
+    private apiUrl = `${environment.apiUrl}/api/send-mail`;
 
     constructor(private http: HttpClient) {}
 

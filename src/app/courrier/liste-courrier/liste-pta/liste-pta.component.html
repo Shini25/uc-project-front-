@@ -75,11 +75,10 @@
       </thead>
       <tbody  class="bg-white dark:bg-sky-900">
         <ng-container *ngFor="let pta of paginatedPtas; let i = index">
-        <tr class="border-b dark:border-gray-700 whitespace-nowrap" >
-          <th scope="row" class="px-4 py-3 font-medium text-zinc-800 whitespace-nowrap dark:text-white">{{ pta.titre }}</th>
-          <!-- if datemodification = null show pta.date.insertion else date.modification -->
-              <td class="px-4 py-3 ">{{ pta.dateModification ? (pta.dateModification | date:'short') : (pta.dateInsertion | date:'short') }}</td>
-              <td class="px-4 py-3  text-yellow-500">{{ pta.sousType | replaceUnderscore }}</td>
+          <tr class="hover:bg-zinc-100 dark:hover:bg-sky-950 transition-all duration-150 border-b whitespace-nowrap dark:border-gray-700  text-zinc-400">
+            <th scope="row" class="px-4 py-3 font-medium text-zinc-800 whitespace-nowrap dark:text-white">{{ pta.titre }}</th>
+              <td class="px-4 py-3">{{ pta.dateModification ? (pta.dateModification | date:'short') : (pta.dateInsertion | date:'short') }}</td>
+              <td class="px-4 py-3">{{ pta.sousType | replaceUnderscore }}</td>
 
               <td class="px-4 py-3">
                 <div class="flex flex-row gap-2">

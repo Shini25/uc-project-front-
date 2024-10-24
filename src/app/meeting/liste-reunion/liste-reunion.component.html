@@ -137,7 +137,7 @@
             </td>
             <td class="px-4 py-3">
               <div class="flex flex-row gap-2">
-                <svg *ngIf="!meeting.reminder" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                <svg *ngIf="!meeting.reminder" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 text-red-600">
                   <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
                 </svg>
                 <svg *ngIf="meeting.reminder" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-green-500">
@@ -153,11 +153,9 @@
               </button>
             </td>
           </tr>
-          <!-- Expandable row -->
           <tr *ngIf="expandedRowIndex === i">
             <td colspan="8" class="px-4 py-3 bg-white dark:bg-sky-950">
               <div class="border border-gray-300 dark:border-zinc-500 rounded-md p-4 mb-3 flex flex-row justify-between">
-                <!-- basic info -->
                 <div class="flex flex-col gap-4">
                   <div class="flex flex-row gap-2 items-center">
                     <div>
@@ -186,7 +184,7 @@
 
                   <div class="flex flex-col gap-2 p-2 border border-gray-300 rounded-md">
                     <div>
-                      <p class="font-bold text-sm text-black dark:text-zinc-100">Fiche de présence</p>
+                      <p class="font-medium text-sm text-black dark:text-zinc-100">Fiche de présence</p>
                     </div>
                     <div class="flex flex-row gap-2">
                       <button class=" text-sky-900 dark:text-zinc-100 px-2 py-1 rounded" (click)="downloadAttendanceSheet(meeting.attendanceSheet, meeting.fileType, meeting.objet)">
@@ -212,36 +210,36 @@
                 </div>
                 <!-- logistics -->
                 <div>
-                  <p class="font-bold text-sm text-black dark:text-zinc-100">Logistique</p>
+                  <p class="font-medium text-sm text-black dark:text-zinc-300">Logistique</p>
                   <ul class="list-disc list-inside">
-                    <li *ngFor="let item of logistique" class="text-gray-700 dark:text-zinc-300">
+                    <li *ngFor="let item of logistique" class="text-gray-700 dark:text-zinc-100">
                       {{ item }}
                     </li>
                   </ul>
                 </div>
                 <!-- organisateur -->
                  <div>
-                  <p class="font-bold text-sm text-black dark:text-zinc-100">Organisateur</p>
+                  <p class="font-medium text-sm text-black dark:text-zinc-300">Organisateur</p>
                   <ul class="list-disc list-inside">
-                    <li *ngFor="let responsable of responsables" class="text-gray-700 dark:text-zinc-300">
+                    <li *ngFor="let responsable of responsables" class="text-gray-700 dark:text-zinc-100">
                       {{ responsable.name }}
                     </li>
                   </ul>
                  </div>
                 <!-- participants -->
                 <div>
-                  <p class="font-bold text-sm text-black dark:text-zinc-100">Participants</p>
+                  <p class="font-medium text-sm text-black dark:text-zinc-300">Participants</p>
                   <ul class="list-disc list-inside">
-                    <li *ngFor="let participant of participants" class="text-gray-700 dark:text-zinc-300">
+                    <li *ngFor="let participant of participants" class="text-gray-700 dark:text-zinc-100">
                       {{ participant.name }}
                     </li>
                   </ul>
                 </div>
                 <!-- observation -->
                 <div>
-                  <p class="font-bold text-sm text-black dark:text-zinc-100">Observation</p>
+                  <p class="font-medium text-sm text-black dark:text-zinc-300">Observation</p>
                   <ul class="list-disc list-inside">
-                    <li *ngFor="let observation of observation" class="text-gray-700 dark:text-zinc-300">
+                    <li *ngFor="let observation of observation" class="text-gray-700 dark:text-zinc-100">
                       {{ observation }}
                     </li>
                   </ul>

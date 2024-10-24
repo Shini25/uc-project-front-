@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PtaAudit } from '../../models/courriers/ptaAudit.model';
-
+import { environment } from '../../../environment/environment';
 @Injectable({
   providedIn: 'root'
 })  
 
 export class PtaAuditService {
-  private apiUrl = 'http://localhost:8080/api/pta-audit';
+  private apiUrl = `${environment.apiUrl}/api/pta-audit`;
 
   constructor(private http: HttpClient) {}
 

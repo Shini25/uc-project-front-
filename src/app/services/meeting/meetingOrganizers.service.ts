@@ -2,11 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ParticipantOrganizerDTO } from '../../models/participantOrganizerDTO.model';
+import { environment } from '../../../environment/environment';
+
 @Injectable({
   providedIn: 'root'
 })
 export class MeetingOrganizersService {
-  private apiUrl = 'http://localhost:8080/api/meetingOrganizers';
+  private apiUrl = `${environment.apiUrl}/api/meetingOrganizers`;
 
   constructor(private http: HttpClient) {}
 
